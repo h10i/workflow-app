@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class WorkflowApplication
 
 fun main(args: Array<String>) {
-	runApplication<WorkflowApplication>(*args)
+    runApplication<WorkflowApplication>(*args)
 }
