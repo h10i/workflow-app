@@ -1,7 +1,9 @@
 package com.example.workflow.controller
 
 import com.example.workflow.model.TokenRequest
+import com.example.workflow.model.TokenResponse
 import com.example.workflow.service.TokenService
+import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +16,7 @@ class TokenController(
     private val tokenService: TokenService,
 ) {
     @PostMapping("/token")
-    fun token(@RequestBody request: TokenRequest): Map<String, String> {
+    fun token(@RequestBody request: TokenRequest): ResponseEntity<TokenResponse> {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(request.mailAddress, request.password)
         )
@@ -23,6 +25,8 @@ class TokenController(
             userId = authentication.name,
             scope = listOf("message:read")
         )
-        return mapOf("token" to token)
+
+        val tokenResponse = TokenResponse(token)
+        return ResponseEntity.ok().body(tokenResponse)
     }
 }
