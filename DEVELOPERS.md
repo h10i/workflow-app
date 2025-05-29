@@ -22,3 +22,16 @@
       -p 5432:5432 \
       docker.io/library/postgres:17
     ```
+
+## Testing Memo
+
+### Auth
+
+```
+curl -X POST -H "Content-Type: application/json" -d '{"mailAddress": "test@example.com", "password": "PASSWORD"}' http://localhost:8080/token
+
+$JWT = ""
+
+curl -v -H "Authorization: Bearer $JWT" http://localhost:8080/messages
+curl -v http://localhost:8080/messages -H "Authorization: Bearer $JWT" -H "Content-Type: text/plain" -d "Hello World"
+```
