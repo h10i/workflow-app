@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity
 @Table(name = "auth_user")
-class AuthUser(
+data class AuthUser(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, unique = true)
