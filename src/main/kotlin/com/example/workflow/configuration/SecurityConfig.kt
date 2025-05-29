@@ -34,7 +34,7 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
         http {
             authorizeHttpRequests {
                 authorize("/token", permitAll)
-                authorize("/messages/**", hasScope("message:read"))
+                authorize("/messages/**", hasScope("USER"))
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer {

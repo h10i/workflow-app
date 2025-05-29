@@ -17,9 +17,12 @@ data class AuthUser(
     private val mailAddress: String,
 
     @Column(name = "password", nullable = false)
-    private val password: String
+    private val password: String,
+
+    @OneToMany(mappedBy = "authUser", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val userRoles: MutableList<UserRole> = mutableListOf(),
 ) : UserDetails {
     override fun getUsername(): String = mailAddress
     override fun getPassword(): String = password
-    override fun getAuthorities(): Collection<GrantedAuthority> = listOf(GrantedAuthority { "ROLE_USER" })
+    override fun getAuthorities(): Collection<GrantedAuthority> = userRoles
 }

@@ -5,6 +5,7 @@ import com.example.workflow.model.TokenResponse
 import com.example.workflow.service.AuthenticationService
 import com.example.workflow.service.TokenService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -16,11 +17,13 @@ class TokenController(
 ) {
     @PostMapping("/token")
     fun token(@RequestBody request: TokenRequest): ResponseEntity<TokenResponse> {
-        val authentication = authenticationService.authenticate(request.mailAddress, request.password)
+        val authentication: Authentication = authenticationService.authenticate(
+            request.mailAddress, request.password
+        )
 
         val token = tokenService.generateToken(
             userId = authentication.name,
-            scope = listOf("message:read")
+            scope = authentication.authorities.map { it.authority.toString() }
         )
 
         val tokenResponse = TokenResponse(token)
