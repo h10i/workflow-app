@@ -15,5 +15,5 @@ data class Role(
     val name: String,
 
     @OneToMany(mappedBy = "role", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val userRoles: MutableList<UserRole> = mutableListOf()
+    val accountRoles: MutableList<AccountRole> = mutableListOf()
 )

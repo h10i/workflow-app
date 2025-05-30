@@ -1,7 +1,8 @@
 package com.example.workflow.service
 
-import com.example.workflow.model.AuthUser
-import com.example.workflow.repository.AuthUserRepository
+import com.example.workflow.model.Account
+import com.example.workflow.model.AccountRole
+import com.example.workflow.repository.AccountRepository
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.*
@@ -9,13 +10,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import kotlin.test.assertEquals
 
 class CustomUserDetailsServiceTest {
-    private lateinit var authUserRepository: AuthUserRepository
+    private lateinit var accountRepository: AccountRepository
     private lateinit var customUserDetailsService: CustomUserDetailsService
 
     @BeforeEach
     fun setUp() {
-        authUserRepository = mockk()
-        customUserDetailsService = CustomUserDetailsService(authUserRepository)
+        accountRepository = mockk()
+        customUserDetailsService = CustomUserDetailsService(accountRepository)
     }
 
     @AfterEach
@@ -28,16 +29,20 @@ class CustomUserDetailsServiceTest {
         fun `returns UserDetails when mail address exists`() {
             // Arrange
             val mailAddress = "user@example.com"
-            val authUser: AuthUser = mockk()
+            val password = "testpassword"
+            val accountRoles: MutableList<AccountRole> = mockk()
+            val account: Account = Account(mailAddress = mailAddress, password = password, roles = accountRoles)
             every {
-                authUserRepository.findByMailAddress(mailAddress)
-            } returns authUser
+                accountRepository.findByMailAddress(mailAddress)
+            } returns account
 
             // Act
             val result = customUserDetailsService.loadUserByUsername(mailAddress)
 
             // Assert
-            assertEquals(authUser, result)
+            assertEquals(mailAddress, result.username)
+            assertEquals(password, result.password)
+            assertEquals(accountRoles, result.authorities)
         }
 
         @Test
@@ -45,7 +50,7 @@ class CustomUserDetailsServiceTest {
             // Arrange
             val mailAddress = "user@example.com"
             every {
-                authUserRepository.findByMailAddress(mailAddress)
+                accountRepository.findByMailAddress(mailAddress)
             } returns null
 
             // Act
