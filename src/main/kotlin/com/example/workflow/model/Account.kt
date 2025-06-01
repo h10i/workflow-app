@@ -20,3 +20,9 @@ data class Account(
     @OneToMany(mappedBy = "account", cascade = [CascadeType.ALL], orphanRemoval = true)
     val roles: MutableList<AccountRole> = mutableListOf(),
 )
+
+fun Account.toViewDto(): AccountViewDto = AccountViewDto(
+    id = id,
+    mailAddress = mailAddress,
+    roleNames = roles.map { it.role.name }
+)
