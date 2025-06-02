@@ -1,6 +1,6 @@
 package com.example.workflow
 
-import com.example.workflow.security.RsaKeyProperties
+import com.example.workflow.infra.security.model.RsaKeyProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
