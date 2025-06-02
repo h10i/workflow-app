@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.*
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import java.util.*
 import kotlin.test.assertEquals
 
 class CustomUserDetailsServiceTest {
@@ -28,10 +29,12 @@ class CustomUserDetailsServiceTest {
         @Test
         fun `returns UserDetails when mail address exists`() {
             // Arrange
+            val id = UUID.randomUUID()
             val mailAddress = "user@example.com"
             val password = "testpassword"
             val accountRoles: MutableList<AccountRole> = mockk()
-            val account: Account = Account(mailAddress = mailAddress, password = password, roles = accountRoles)
+            val account: Account =
+                Account(id = id, mailAddress = mailAddress, password = password, roles = accountRoles)
             every {
                 accountRepository.findByMailAddress(mailAddress)
             } returns account
@@ -40,7 +43,7 @@ class CustomUserDetailsServiceTest {
             val result = customUserDetailsService.loadUserByUsername(mailAddress)
 
             // Assert
-            assertEquals(mailAddress, result.username)
+            assertEquals(id.toString(), result.username)
             assertEquals(password, result.password)
             assertEquals(accountRoles, result.authorities)
         }
@@ -58,7 +61,7 @@ class CustomUserDetailsServiceTest {
             val exception = assertThrows<UsernameNotFoundException> {
                 customUserDetailsService.loadUserByUsername(mailAddress)
             }
-            assertEquals("User not found: $mailAddress", exception.message)
+            assertEquals("Account not found: $mailAddress", exception.message)
         }
     }
 
