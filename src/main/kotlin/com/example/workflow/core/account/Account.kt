@@ -1,5 +1,6 @@
 package com.example.workflow.core.account
 
+import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.feature.account.model.AccountViewDto
 import jakarta.persistence.*
 import java.util.*
@@ -20,6 +21,9 @@ data class Account(
 
     @OneToMany(mappedBy = "account", cascade = [CascadeType.ALL], orphanRemoval = true)
     val roles: MutableList<AccountRole> = mutableListOf(),
+
+    @OneToMany(mappedBy = "account", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val refreshTokens: MutableList<RefreshToken> = mutableListOf(),
 )
 
 fun Account.toViewDto(): AccountViewDto = AccountViewDto(
