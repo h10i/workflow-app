@@ -42,4 +42,14 @@ class RefreshTokenService(
         }
         return refreshToken
     }
+
+    @Transactional
+    fun revokeRefreshToken(accountId: UUID, value: String): Int {
+        return refreshTokenRepository.deleteByAccountIdAndValue(accountId, value)
+    }
+
+    @Transactional
+    fun revokeAllRefreshToken(accountId: UUID): Int {
+        return refreshTokenRepository.deleteByAccountId(accountId)
+    }
 }

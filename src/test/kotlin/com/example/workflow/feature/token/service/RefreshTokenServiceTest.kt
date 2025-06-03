@@ -136,4 +136,51 @@ class RefreshTokenServiceTest {
             assertNull(actual)
         }
     }
+
+    @Nested
+    inner class RevokeRefreshToken {
+        @Test
+        fun `returns deleted count`() {
+            // Arrange
+            val accountId: UUID = UUID.randomUUID()
+            val refreshTokenValue: String = UUID.randomUUID().toString()
+            val expectedCount: Int = 1
+
+            every {
+                refreshTokenRepositoryMock.deleteByAccountIdAndValue(
+                    accountId,
+                    refreshTokenValue
+                )
+            } returns expectedCount
+
+            // Act
+            val actual: Int = refreshTokenService.revokeRefreshToken(accountId, refreshTokenValue)
+
+            // Assert
+            assertEquals(expectedCount, actual)
+        }
+    }
+
+    @Nested
+    inner class RevokeAllRefreshToken {
+        @Test
+        fun `returns deleted count`() {
+            // Arrange
+            val accountId: UUID = UUID.randomUUID()
+            val refreshTokenValue: String = UUID.randomUUID().toString()
+            val expectedCount: Int = 2
+
+            every {
+                refreshTokenRepositoryMock.deleteByAccountId(
+                    accountId,
+                )
+            } returns expectedCount
+
+            // Act
+            val actual: Int = refreshTokenService.revokeAllRefreshToken(accountId)
+
+            // Assert
+            assertEquals(expectedCount, actual)
+        }
+    }
 }

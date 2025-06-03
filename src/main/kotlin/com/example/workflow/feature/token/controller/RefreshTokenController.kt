@@ -1,17 +1,21 @@
 package com.example.workflow.feature.token.controller
 
 import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.service.TokenService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CookieValue
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
 @RestController
 class RefreshTokenController(
+    private val accountService: AccountService,
     private val tokenService: TokenService,
     private val refreshTokenService: RefreshTokenService,
 ) {
@@ -29,5 +33,23 @@ class RefreshTokenController(
         )
 
         return ResponseEntity<TokenResponse>.ok().body(TokenResponse(accessToken))
+    }
+
+    @DeleteMapping("/revoke")
+    fun revokeRefreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<Void> {
+        val accountId: UUID = accountService.getCurrentAccountId()
+
+        refreshTokenService.revokeRefreshToken(accountId, refreshTokenValue)
+
+        return ResponseEntity.noContent().build()
+    }
+
+    @DeleteMapping("/revoke/all")
+    fun revokeAllRefreshToken(): ResponseEntity<Void> {
+        val accountId: UUID = accountService.getCurrentAccountId()
+
+        refreshTokenService.revokeAllRefreshToken(accountId)
+
+        return ResponseEntity.noContent().build()
     }
 }
