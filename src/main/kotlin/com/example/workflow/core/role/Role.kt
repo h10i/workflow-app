@@ -8,7 +8,6 @@ import java.util.*
 @Table(name = "role")
 data class Role(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, unique = true)
     val id: UUID = UUID.randomUUID(),
 

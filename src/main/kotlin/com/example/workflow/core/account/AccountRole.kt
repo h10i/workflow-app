@@ -9,7 +9,6 @@ import java.util.*
 @Table(name = "account_role")
 data class AccountRole(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, unique = true)
     val id: UUID = UUID.randomUUID(),
 
