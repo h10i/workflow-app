@@ -32,6 +32,9 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
+                authorize("/v3/api-docs/**", permitAll)
+                authorize("/swagger-ui.html", permitAll)
+                authorize("/swagger-ui/**", permitAll)
                 authorize("/v1/auth/token", permitAll)
                 authorize("/v1/auth/refresh-token", permitAll)
                 authorize(anyRequest, authenticated)
