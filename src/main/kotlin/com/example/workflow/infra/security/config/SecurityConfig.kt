@@ -33,8 +33,8 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                authorize("/token", permitAll)
-                authorize("/refresh-token", permitAll)
+                authorize("/v1/auth/token", permitAll)
+                authorize("/v1/auth/refresh-token", permitAll)
                 authorize("/messages/**", OAuth2AuthorizationManagers.hasScope("USER"))
                 authorize(anyRequest, authenticated)
             }

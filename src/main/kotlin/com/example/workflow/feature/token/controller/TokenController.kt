@@ -13,10 +13,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
+@RequestMapping("/v1/auth")
 class TokenController(
     private val authenticationService: AuthenticationService,
     private val tokenService: TokenService,
@@ -38,7 +40,7 @@ class TokenController(
             .from("refreshToken", refreshToken.value)
             .httpOnly(true)
             .secure(true)
-            .path("/refresh-token")
+            .path("/v1/auth/refresh-token")
             .domain("localhost")
             .maxAge(30 * 24 * 60 * 60)
             .sameSite("None")
