@@ -17,7 +17,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.core.authorization.OAuth2AuthorizationManagers
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
@@ -35,7 +34,6 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
             authorizeHttpRequests {
                 authorize("/v1/auth/token", permitAll)
                 authorize("/v1/auth/refresh-token", permitAll)
-                authorize("/messages/**", OAuth2AuthorizationManagers.hasScope("USER"))
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer {
