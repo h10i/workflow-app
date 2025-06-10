@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service
 class CustomUserDetailsService(
     private val accountRepository: AccountRepository
 ) : UserDetailsService {
-    override fun loadUserByUsername(mailAddress: String): UserDetails {
-        val account: Account = accountRepository.findByMailAddress(mailAddress)
-            ?: throw UsernameNotFoundException("Account not found: $mailAddress")
+    override fun loadUserByUsername(emailAddress: String): UserDetails {
+        val account: Account = accountRepository.findByEmailAddress(emailAddress)
+            ?: throw UsernameNotFoundException("Account not found: $emailAddress")
         return AuthUser(account)
     }
 }

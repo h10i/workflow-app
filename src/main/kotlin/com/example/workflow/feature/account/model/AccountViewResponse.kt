@@ -4,6 +4,6 @@ import java.util.*
 
 data class AccountViewResponse(
     val id: UUID,
-    val mailAddress: String,
+    val emailAddress: String,
     val roleNames: List<String>,
 )

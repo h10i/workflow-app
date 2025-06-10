@@ -4,12 +4,12 @@ import java.util.*
 
 data class AccountViewDto(
     val id: UUID,
-    val mailAddress: String,
+    val emailAddress: String,
     val roleNames: List<String>,
 )
 
 fun AccountViewDto.toViewResponse(): AccountViewResponse = AccountViewResponse(
     id = id,
-    mailAddress = mailAddress,
+    emailAddress = emailAddress,
     roleNames = roleNames,
 )

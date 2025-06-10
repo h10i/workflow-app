@@ -12,8 +12,8 @@ data class Account(
     @Column(name = "id", nullable = false, unique = true)
     val id: UUID = UUID.randomUUID(),
 
-    @Column(name = "mail_address", nullable = false, unique = true)
-    val mailAddress: String,
+    @Column(name = "email_address", nullable = false, unique = true)
+    val emailAddress: String,
 
     @Column(name = "password", nullable = false)
     val password: String,
@@ -27,6 +27,6 @@ data class Account(
 
 fun Account.toViewDto(): AccountViewDto = AccountViewDto(
     id = id,
-    mailAddress = mailAddress,
+    emailAddress = emailAddress,
     roleNames = roles.map { it.role.name }
 )

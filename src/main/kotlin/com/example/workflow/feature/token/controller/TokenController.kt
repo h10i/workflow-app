@@ -28,7 +28,7 @@ class TokenController(
     @PostMapping("/token")
     fun token(@Valid @RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
         val authentication: Authentication = authenticationService.authenticate(
-            request.mailAddress, request.password
+            request.emailAddress, request.password
         )
 
         val token = tokenService.generateToken(

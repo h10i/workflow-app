@@ -27,20 +27,20 @@ class CustomUserDetailsServiceTest {
     @Nested
     inner class LoadUserByUsername {
         @Test
-        fun `returns UserDetails when mail address exists`() {
+        fun `returns UserDetails when email address exists`() {
             // Arrange
             val id = UUID.randomUUID()
-            val mailAddress = "user@example.com"
+            val emailAddress = "user@example.com"
             val password = "testpassword"
             val accountRoles: MutableList<AccountRole> = mockk()
             val account: Account =
-                Account(id = id, mailAddress = mailAddress, password = password, roles = accountRoles)
+                Account(id = id, emailAddress = emailAddress, password = password, roles = accountRoles)
             every {
-                accountRepository.findByMailAddress(mailAddress)
+                accountRepository.findByEmailAddress(emailAddress)
             } returns account
 
             // Act
-            val result = customUserDetailsService.loadUserByUsername(mailAddress)
+            val result = customUserDetailsService.loadUserByUsername(emailAddress)
 
             // Assert
             assertEquals(id.toString(), result.username)
@@ -49,19 +49,19 @@ class CustomUserDetailsServiceTest {
         }
 
         @Test
-        fun `throws UsernameNotFoundException when mail address not exists`() {
+        fun `throws UsernameNotFoundException when email address not exists`() {
             // Arrange
-            val mailAddress = "user@example.com"
+            val emailAddress = "user@example.com"
             every {
-                accountRepository.findByMailAddress(mailAddress)
+                accountRepository.findByEmailAddress(emailAddress)
             } returns null
 
             // Act
             // Assert
             val exception = assertThrows<UsernameNotFoundException> {
-                customUserDetailsService.loadUserByUsername(mailAddress)
+                customUserDetailsService.loadUserByUsername(emailAddress)
             }
-            assertEquals("Account not found: $mailAddress", exception.message)
+            assertEquals("Account not found: $emailAddress", exception.message)
         }
     }
 

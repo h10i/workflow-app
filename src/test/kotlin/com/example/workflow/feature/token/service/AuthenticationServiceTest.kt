@@ -28,18 +28,18 @@ class AuthenticationServiceTest {
         @Test
         fun `returns Authentication when credentials are valid`() {
             // Arrange
-            val mailAddress = "user@example.com"
+            val emailAddress = "user@example.com"
             val password = "securepassword"
             val expectedAuth = mockk<Authentication>()
 
             every {
                 authenticationManager.authenticate(
-                    UsernamePasswordAuthenticationToken(mailAddress, password)
+                    UsernamePasswordAuthenticationToken(emailAddress, password)
                 )
             } returns expectedAuth
 
             // Act
-            val result = authenticationService.authenticate(mailAddress, password)
+            val result = authenticationService.authenticate(emailAddress, password)
 
             // Assert
             Assertions.assertEquals(expectedAuth, result)
@@ -48,19 +48,19 @@ class AuthenticationServiceTest {
         @Test
         fun `throws AuthenticationException when credentials are invalid`() {
             // Arrange
-            val mailAddress = "user@example.com"
+            val emailAddress = "user@example.com"
             val password = "wrongpassword"
 
             every {
                 authenticationManager.authenticate(
-                    UsernamePasswordAuthenticationToken(mailAddress, password)
+                    UsernamePasswordAuthenticationToken(emailAddress, password)
                 )
             } throws BadCredentialsException("Invalid credentials")
 
             // Act
             // Assert
             assertThrows<AuthenticationException> {
-                authenticationService.authenticate(mailAddress, password)
+                authenticationService.authenticate(emailAddress, password)
             }
         }
     }

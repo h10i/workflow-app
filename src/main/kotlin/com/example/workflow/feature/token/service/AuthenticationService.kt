@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class AuthenticationService(
     private val authenticationManager: AuthenticationManager,
 ) {
-    fun authenticate(mailAddress: String, password: String): Authentication {
-        return authenticationManager.authenticate(UsernamePasswordAuthenticationToken(mailAddress, password))
+    fun authenticate(emailAddress: String, password: String): Authentication {
+        return authenticationManager.authenticate(UsernamePasswordAuthenticationToken(emailAddress, password))
     }
 }
