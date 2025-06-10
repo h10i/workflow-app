@@ -7,6 +7,7 @@ import com.example.workflow.feature.token.service.AuthenticationService
 import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.service.TokenService
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.Valid
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
@@ -25,7 +26,7 @@ class TokenController(
     private val refreshTokenService: RefreshTokenService,
 ) {
     @PostMapping("/token")
-    fun token(@RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
+    fun token(@Valid @RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
         val authentication: Authentication = authenticationService.authenticate(
             request.mailAddress, request.password
         )
