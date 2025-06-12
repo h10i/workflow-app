@@ -33,7 +33,7 @@ class CustomUserDetailsServiceTest {
             val emailAddress = "user@example.com"
             val password = "testpassword"
             val accountRoles: MutableList<AccountRole> = mockk()
-            val account: Account =
+            val account =
                 Account(id = id, emailAddress = emailAddress, password = password, roles = accountRoles)
             every {
                 accountRepository.findByEmailAddress(emailAddress)

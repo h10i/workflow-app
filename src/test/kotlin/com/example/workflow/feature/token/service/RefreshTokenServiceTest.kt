@@ -144,7 +144,7 @@ class RefreshTokenServiceTest {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val refreshTokenValue: String = UUID.randomUUID().toString()
-            val expectedCount: Int = 1
+            val expectedCount = 1
 
             every {
                 refreshTokenRepositoryMock.deleteByAccountIdAndValue(
@@ -167,7 +167,7 @@ class RefreshTokenServiceTest {
         fun `returns deleted count`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
-            val expectedCount: Int = 2
+            val expectedCount = 2
 
             every {
                 refreshTokenRepositoryMock.deleteByAccountId(
