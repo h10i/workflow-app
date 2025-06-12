@@ -162,7 +162,7 @@ class RefreshTokenServiceTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshToken {
+    inner class RevokeAllRefreshTokens {
         @Test
         fun `returns deleted count`() {
             // Arrange
@@ -177,7 +177,7 @@ class RefreshTokenServiceTest {
             } returns expectedCount
 
             // Act
-            val actual: Int = refreshTokenService.revokeAllRefreshToken(accountId)
+            val actual: Int = refreshTokenService.revokeAllRefreshTokens(accountId)
 
             // Assert
             assertEquals(expectedCount, actual)

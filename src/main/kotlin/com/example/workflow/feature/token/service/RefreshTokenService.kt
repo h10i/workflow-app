@@ -49,7 +49,7 @@ class RefreshTokenService(
     }
 
     @Transactional
-    fun revokeAllRefreshToken(accountId: UUID): Int {
+    fun revokeAllRefreshTokens(accountId: UUID): Int {
         return refreshTokenRepository.deleteByAccountId(accountId)
     }
 }

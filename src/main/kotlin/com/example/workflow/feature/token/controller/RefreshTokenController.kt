@@ -105,10 +105,10 @@ class RefreshTokenController(
         ],
     )
     @DeleteMapping("/revoke/all")
-    fun revokeAllRefreshToken(): ResponseEntity<Void> {
+    fun revokeAllRefreshTokens(): ResponseEntity<Void> {
         val accountId: UUID = accountService.getCurrentAccountId()
 
-        refreshTokenService.revokeAllRefreshToken(accountId)
+        refreshTokenService.revokeAllRefreshTokens(accountId)
 
         return ResponseEntity.noContent().build()
     }
