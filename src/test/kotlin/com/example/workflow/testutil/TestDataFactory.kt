@@ -4,6 +4,9 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.token.RefreshToken
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.time.Instant
 import java.util.*
 
@@ -68,5 +71,12 @@ object TestDataFactory {
         )
         account.refreshTokens.add(token)
         return token
+    }
+
+    fun createAuthentication(
+        account: Account = createAccount()
+    ): Authentication {
+        val authorities = account.roles.map { SimpleGrantedAuthority(it.role.name) }
+        return UsernamePasswordAuthenticationToken(account.id.toString(), null, authorities)
     }
 }
