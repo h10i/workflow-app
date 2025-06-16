@@ -1,6 +1,7 @@
 package com.example.workflow.feature.token.controller
 
 import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.feature.token.factory.RefreshTokenCookieFactory
 import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.service.AuthenticationService
@@ -13,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpHeaders
-import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
@@ -28,6 +28,7 @@ class TokenController(
     private val authenticationService: AuthenticationService,
     private val tokenService: TokenService,
     private val refreshTokenService: RefreshTokenService,
+    private val refreshTokenCookieFactory: RefreshTokenCookieFactory
 ) {
     @Operation(
         summary = "Authenticate user and issue tokens",
@@ -72,15 +73,7 @@ class TokenController(
         )
 
         val refreshToken: RefreshToken = refreshTokenService.createRefreshToken(UUID.fromString(authentication.name))
-        val responseCookie = ResponseCookie
-            .from("refreshToken", refreshToken.value)
-            .httpOnly(true)
-            .secure(true)
-            .path("/v1/auth/refresh-token")
-            .domain("localhost")
-            .maxAge(30 * 24 * 60 * 60)
-            .sameSite("None")
-            .build()
+        val responseCookie = refreshTokenCookieFactory.create(refreshToken.value)
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString())
 
         val tokenResponse = TokenResponse(token)
