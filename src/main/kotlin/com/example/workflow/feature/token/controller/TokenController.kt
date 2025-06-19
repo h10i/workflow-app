@@ -1,12 +1,8 @@
 package com.example.workflow.feature.token.controller
 
-import com.example.workflow.core.token.RefreshToken
-import com.example.workflow.feature.token.factory.RefreshTokenCookieFactory
 import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
-import com.example.workflow.feature.token.service.AuthenticationService
-import com.example.workflow.feature.token.service.RefreshTokenService
-import com.example.workflow.feature.token.service.TokenService
+import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -15,20 +11,15 @@ import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
 
 @RestController
 @RequestMapping("/v1/auth")
 class TokenController(
-    private val authenticationService: AuthenticationService,
-    private val tokenService: TokenService,
-    private val refreshTokenService: RefreshTokenService,
-    private val refreshTokenCookieFactory: RefreshTokenCookieFactory
+    private val issueTokenUseCase: IssueTokenUseCase,
 ) {
     @Operation(
         summary = "Authenticate user and issue tokens",
@@ -63,20 +54,11 @@ class TokenController(
     )
     @PostMapping("/token")
     fun token(@Valid @RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
-        val authentication: Authentication = authenticationService.authenticate(
-            request.emailAddress, request.password
-        )
+        val result: IssueTokenUseCase.Result = issueTokenUseCase.execute(request)
 
-        val token = tokenService.generateToken(
-            userId = authentication.name,
-            scope = authentication.authorities.map { it.authority.toString() }
-        )
+        response.addHeader(HttpHeaders.SET_COOKIE, result.refreshTokenCookie.toString())
 
-        val refreshToken: RefreshToken = refreshTokenService.createRefreshToken(UUID.fromString(authentication.name))
-        val responseCookie = refreshTokenCookieFactory.create(refreshToken.value)
-        response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString())
-
-        val tokenResponse = TokenResponse(token)
+        val tokenResponse = TokenResponse(result.accessToken)
         return ResponseEntity.ok().body(tokenResponse)
     }
 }
