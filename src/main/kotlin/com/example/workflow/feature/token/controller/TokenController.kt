@@ -2,6 +2,7 @@ package com.example.workflow.feature.token.controller
 
 import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/auth")
 class TokenController(
     private val issueTokenUseCase: IssueTokenUseCase,
+    private val tokenPresenter: TokenPresenter,
 ) {
     @Operation(
         summary = "Authenticate user and issue tokens",
@@ -54,11 +56,11 @@ class TokenController(
     )
     @PostMapping("/token")
     fun token(@Valid @RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
-        val result: IssueTokenUseCase.Result = issueTokenUseCase.execute(request)
+        val useCaseResult: IssueTokenUseCase.Result = issueTokenUseCase.execute(request)
+        val presenterResult: TokenPresenter.Result = tokenPresenter.toResponse(useCaseResult)
 
-        response.addHeader(HttpHeaders.SET_COOKIE, result.refreshTokenCookie.toString())
+        response.addHeader(HttpHeaders.SET_COOKIE, presenterResult.refreshTokenCookie.toString())
 
-        val tokenResponse = TokenResponse(result.accessToken)
-        return ResponseEntity.ok().body(tokenResponse)
+        return ResponseEntity.ok().body(presenterResult.response)
     }
 }

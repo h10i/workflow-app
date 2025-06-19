@@ -2,6 +2,7 @@ package com.example.workflow.feature.token.controller
 
 import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -19,13 +20,16 @@ import kotlin.test.assertEquals
 
 class TokenControllerTest {
     private lateinit var issueTokenUseCase: IssueTokenUseCase
+    private lateinit var tokenPresenter: TokenPresenter
     private lateinit var tokenController: TokenController
 
     @BeforeEach
     fun setUp() {
         issueTokenUseCase = mockk()
+        tokenPresenter = mockk()
         tokenController = TokenController(
             issueTokenUseCase = issueTokenUseCase,
+            tokenPresenter = tokenPresenter,
         )
     }
 
@@ -42,10 +46,15 @@ class TokenControllerTest {
             val response: HttpServletResponse = mockk(relaxed = true)
             val responseCookie = ResponseCookie.from("refreshToken", "dummy").build()
             val accessToken = "test-access-token"
-            val expectedTokenResponse = TokenResponse(accessToken)
-            val issueTokenResult = IssueTokenUseCase.Result(accessToken, responseCookie)
+            val tokenResponse = TokenResponse(accessToken)
+            val useCaseResult = IssueTokenUseCase.Result(accessToken, responseCookie)
+            val presenterResult = TokenPresenter.Result(
+                response = tokenResponse,
+                refreshTokenCookie = responseCookie,
+            )
 
-            every { issueTokenUseCase.execute(request) } returns issueTokenResult
+            every { issueTokenUseCase.execute(request) } returns useCaseResult
+            every { tokenPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
             val actual: ResponseEntity<TokenResponse> = tokenController.token(request, response)
@@ -53,7 +62,7 @@ class TokenControllerTest {
             // Assert
             verify { response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString()) }
             assertEquals(HttpStatus.OK, actual.statusCode)
-            assertEquals(expectedTokenResponse, actual.body)
+            assertEquals(tokenResponse, actual.body)
         }
     }
 

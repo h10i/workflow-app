@@ -1,6 +1,8 @@
 package com.example.workflow.feature.token.controller
 
 import com.example.workflow.feature.token.model.TokenRequest
+import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -34,10 +36,16 @@ class TokenControllerApiTest {
     @Autowired
     private lateinit var issueTokenUseCase: IssueTokenUseCase
 
+    @Autowired
+    private lateinit var tokenPresenter: TokenPresenter
+
     @TestConfiguration
     class MockConfig {
         @Bean
         fun issueTokenUseCase(): IssueTokenUseCase = mockk(relaxed = true)
+
+        @Bean
+        fun tokenPresenter(): TokenPresenter = mockk(relaxed = true)
     }
 
     @BeforeEach
@@ -59,12 +67,18 @@ class TokenControllerApiTest {
             val password = "P4sSw0rd!"
             val accessToken = "test-access-token"
             val refreshToken = "test-refresh-token"
-            val issueTokenResult = IssueTokenUseCase.Result(
+            val responseCookie = ResponseCookie.from("refreshToken", refreshToken).build()
+            val useCaseResult = IssueTokenUseCase.Result(
                 accessToken,
-                ResponseCookie.from("refreshToken", refreshToken).build(),
+                responseCookie,
+            )
+            val presenterResult = TokenPresenter.Result(
+                TokenResponse(accessToken),
+                responseCookie,
             )
 
-            every { issueTokenUseCase.execute(any()) } returns issueTokenResult
+            every { issueTokenUseCase.execute(any()) } returns useCaseResult
+            every { tokenPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
