@@ -3,7 +3,8 @@ package com.example.workflow.feature.account.controller
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.toViewResponse
-import com.example.workflow.feature.account.service.AccountService
+import com.example.workflow.feature.account.presenter.GetAccountPresenter
+import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -13,17 +14,21 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import java.util.*
 import kotlin.test.assertEquals
 
 class AccountControllerTest {
-    private lateinit var accountServiceMock: AccountService
+    private lateinit var getAccountUseCase: GetAccountUseCase
+    private lateinit var getAccountPresenter: GetAccountPresenter
     private lateinit var accountController: AccountController
 
     @BeforeEach
     fun setUp() {
-        accountServiceMock = mockk()
-        accountController = AccountController(accountServiceMock)
+        getAccountUseCase = mockk()
+        getAccountPresenter = mockk()
+        accountController = AccountController(
+            getAccountUseCase,
+            getAccountPresenter,
+        )
     }
 
     @AfterEach
@@ -45,20 +50,25 @@ class AccountControllerTest {
         @Test
         fun `get should return account view response`() {
             // Arrange
-            val accountId = UUID.randomUUID()
             val accountViewDtoMock = mockk<AccountViewDto>()
-            val accountViewResponseMock = mockk<AccountViewResponse>()
+            val useCaseResult = GetAccountUseCase.Result(
+                accountViewDto = accountViewDtoMock,
+            )
 
-            every { accountServiceMock.getCurrentAccountId() } returns accountId
-            every { accountServiceMock.getAccount(accountId) } returns accountViewDtoMock
-            every { accountViewDtoMock.toViewResponse() } returns accountViewResponseMock
+            val accountViewResponseMock = mockk<AccountViewResponse>()
+            val presenterResult = GetAccountPresenter.Result(
+                response = accountViewResponseMock
+            )
+
+            every { getAccountUseCase.execute() } returns useCaseResult
+            every { getAccountPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
-            val response = accountController.get()
+            val actual = accountController.get()
 
             // Assert
-            assertEquals(HttpStatus.OK, response.statusCode)
-            assertEquals(accountViewResponseMock, response.body)
+            assertEquals(HttpStatus.OK, actual.statusCode)
+            assertEquals(accountViewResponseMock, actual.body)
         }
     }
 }

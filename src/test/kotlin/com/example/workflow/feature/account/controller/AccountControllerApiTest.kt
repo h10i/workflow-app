@@ -1,7 +1,9 @@
 package com.example.workflow.feature.account.controller
 
 import com.example.workflow.feature.account.model.AccountViewDto
-import com.example.workflow.feature.account.service.AccountService
+import com.example.workflow.feature.account.model.AccountViewResponse
+import com.example.workflow.feature.account.presenter.GetAccountPresenter
+import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -27,12 +29,18 @@ class AccountControllerApiTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     @Autowired
-    private lateinit var accountService: AccountService
+    private lateinit var getAccountUseCase: GetAccountUseCase
+
+    @Autowired
+    private lateinit var getAccountPresenter: GetAccountPresenter
 
     @TestConfiguration
     class MockConfig {
         @Bean
-        fun accountService(): AccountService = mockk()
+        fun getAccountUseCase(): GetAccountUseCase = mockk()
+
+        @Bean
+        fun getAccountPresenter(): GetAccountPresenter = mockk()
     }
 
     @BeforeEach
@@ -51,14 +59,23 @@ class AccountControllerApiTest {
             // Arrange
             val accountId = UUID.randomUUID()
             val emailAddress = "user@example.com"
-            val accountViewDto = AccountViewDto(
+
+            val accountViewDtoMock = mockk<AccountViewDto>()
+            val useCaseResult = GetAccountUseCase.Result(
+                accountViewDto = accountViewDtoMock,
+            )
+
+            val accountViewResponse = AccountViewResponse(
                 id = accountId,
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
+            val presenterResult = GetAccountPresenter.Result(
+                response = accountViewResponse
+            )
 
-            every { accountService.getCurrentAccountId() } returns accountId
-            every { accountService.getAccount(accountId) } returns accountViewDto
+            every { getAccountUseCase.execute() } returns useCaseResult
+            every { getAccountPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester

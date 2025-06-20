@@ -1,9 +1,8 @@
 package com.example.workflow.feature.account.controller
 
-import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
-import com.example.workflow.feature.account.model.toViewResponse
-import com.example.workflow.feature.account.service.AccountService
+import com.example.workflow.feature.account.presenter.GetAccountPresenter
+import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -13,12 +12,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
 
 @RestController
 @RequestMapping("/v1/accounts")
 class AccountController(
-    private val accountService: AccountService,
+    private val getAccountUseCase: GetAccountUseCase,
+    private val getAccountPresenter: GetAccountPresenter,
 ) {
     @Operation(
         summary = "Get your account information",
@@ -49,9 +48,8 @@ class AccountController(
     )
     @GetMapping("/me")
     fun get(): ResponseEntity<AccountViewResponse> {
-        val accountId: UUID = accountService.getCurrentAccountId()
-        val accountViewDto: AccountViewDto = accountService.getAccount(accountId)
-        val accountViewResponse: AccountViewResponse = accountViewDto.toViewResponse()
-        return ResponseEntity.ok().body(accountViewResponse)
+        val useCaseResult: GetAccountUseCase.Result = getAccountUseCase.execute()
+        val presenterResult: GetAccountPresenter.Result = getAccountPresenter.toResponse(useCaseResult)
+        return ResponseEntity.ok().body(presenterResult.response)
     }
 }
