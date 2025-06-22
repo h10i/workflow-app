@@ -1,39 +1,34 @@
 package com.example.workflow.feature.token.controller
 
 import com.example.workflow.common.exception.UnauthorizedException
-import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
-import com.example.workflow.feature.token.service.RefreshTokenService
-import com.example.workflow.feature.token.service.TokenService
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
-import io.mockk.every
-import io.mockk.mockk
+import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
+import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
+import io.mockk.*
 import org.junit.jupiter.api.*
 import org.springframework.http.HttpStatus
-import java.util.*
 import kotlin.test.assertEquals
 
 class RefreshTokenControllerTest {
     private lateinit var refreshTokenUseCase: RefreshTokenUseCase
     private lateinit var refreshTokenPresenter: RefreshTokenPresenter
-    private lateinit var accountServiceMock: AccountService
-    private lateinit var tokenServiceMock: TokenService
-    private lateinit var refreshTokenServiceMock: RefreshTokenService
+    private lateinit var revokeRefreshTokenUseCase: RevokeRefreshTokenUseCase
+    private lateinit var revokeAllRefreshTokensUseCase: RevokeAllRefreshTokensUseCase
     private lateinit var refreshTokenController: RefreshTokenController
 
     @BeforeEach
     fun setUp() {
         refreshTokenUseCase = mockk()
         refreshTokenPresenter = mockk()
-        accountServiceMock = mockk()
-        tokenServiceMock = mockk()
-        refreshTokenServiceMock = mockk()
+        revokeRefreshTokenUseCase = mockk()
+        revokeAllRefreshTokensUseCase = mockk()
         refreshTokenController = RefreshTokenController(
             refreshTokenUseCase = refreshTokenUseCase,
             refreshTokenPresenter = refreshTokenPresenter,
-            accountService = accountServiceMock,
-            refreshTokenService = refreshTokenServiceMock
+            revokeRefreshTokenUseCase = revokeRefreshTokenUseCase,
+            revokeAllRefreshTokensUseCase = revokeAllRefreshTokensUseCase,
         )
     }
 
@@ -92,15 +87,14 @@ class RefreshTokenControllerTest {
         fun `revoke refresh token succeeds`() {
             // Arrange
             val tokenValue = "revoked-token"
-            val accountId = UUID.randomUUID()
 
-            every { accountServiceMock.getCurrentAccountId() } returns accountId
-            every { refreshTokenServiceMock.revokeRefreshToken(accountId, tokenValue) } returns 1
+            every { revokeRefreshTokenUseCase.execute(tokenValue) } just Runs
 
             // Act
             val actual = refreshTokenController.revokeRefreshToken(tokenValue)
 
             // Assert
+            verify { revokeRefreshTokenUseCase.execute(tokenValue) }
             assertEquals(HttpStatus.NO_CONTENT, actual.statusCode)
         }
     }
@@ -110,15 +104,13 @@ class RefreshTokenControllerTest {
         @Test
         fun `revoke all refresh tokens succeeds`() {
             // Arrange
-            val accountId = UUID.randomUUID()
-
-            every { accountServiceMock.getCurrentAccountId() } returns accountId
-            every { refreshTokenServiceMock.revokeAllRefreshTokens(accountId) } returns 2
+            every { revokeAllRefreshTokensUseCase.execute() } just Runs
 
             // Act
             val actual = refreshTokenController.revokeAllRefreshTokens()
 
             // Assert
+            verify { revokeAllRefreshTokensUseCase.execute() }
             assertEquals(HttpStatus.NO_CONTENT, actual.statusCode)
         }
     }
