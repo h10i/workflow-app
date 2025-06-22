@@ -1,10 +1,9 @@
 package com.example.workflow.feature.token.controller
 
-import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
-import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
+import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
 import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -21,8 +19,7 @@ class RefreshTokenController(
     private val refreshTokenUseCase: RefreshTokenUseCase,
     private val refreshTokenPresenter: RefreshTokenPresenter,
     private val revokeRefreshTokenUseCase: RevokeRefreshTokenUseCase,
-    private val accountService: AccountService,
-    private val refreshTokenService: RefreshTokenService,
+    private val revokeAllRefreshTokensUseCase: RevokeAllRefreshTokensUseCase,
 ) {
     @Operation(
         summary = "Issue a new access token",
@@ -94,10 +91,7 @@ class RefreshTokenController(
     )
     @DeleteMapping("/revoke/all")
     fun revokeAllRefreshTokens(): ResponseEntity<Void> {
-        val accountId: UUID = accountService.getCurrentAccountId()
-
-        refreshTokenService.revokeAllRefreshTokens(accountId)
-
+        revokeAllRefreshTokensUseCase.execute()
         return ResponseEntity.noContent().build()
     }
 }
