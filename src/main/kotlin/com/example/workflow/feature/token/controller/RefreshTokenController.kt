@@ -5,6 +5,7 @@ import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
+import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -19,6 +20,7 @@ import java.util.*
 class RefreshTokenController(
     private val refreshTokenUseCase: RefreshTokenUseCase,
     private val refreshTokenPresenter: RefreshTokenPresenter,
+    private val revokeRefreshTokenUseCase: RevokeRefreshTokenUseCase,
     private val accountService: AccountService,
     private val refreshTokenService: RefreshTokenService,
 ) {
@@ -69,10 +71,7 @@ class RefreshTokenController(
     )
     @DeleteMapping("/revoke")
     fun revokeRefreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<Void> {
-        val accountId: UUID = accountService.getCurrentAccountId()
-
-        refreshTokenService.revokeRefreshToken(accountId, refreshTokenValue)
-
+        revokeRefreshTokenUseCase.execute(refreshTokenValue)
         return ResponseEntity.noContent().build()
     }
 
