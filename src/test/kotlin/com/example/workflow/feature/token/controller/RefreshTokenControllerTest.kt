@@ -1,22 +1,22 @@
 package com.example.workflow.feature.token.controller
 
-import com.example.workflow.core.account.Account
-import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.common.exception.UnauthorizedException
 import com.example.workflow.feature.account.service.AccountService
+import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.service.TokenService
-import com.example.workflow.testutil.TestDataFactory
+import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.springframework.http.HttpStatus
 import java.util.*
 import kotlin.test.assertEquals
 
 class RefreshTokenControllerTest {
+    private lateinit var refreshTokenUseCase: RefreshTokenUseCase
+    private lateinit var refreshTokenPresenter: RefreshTokenPresenter
     private lateinit var accountServiceMock: AccountService
     private lateinit var tokenServiceMock: TokenService
     private lateinit var refreshTokenServiceMock: RefreshTokenService
@@ -24,12 +24,15 @@ class RefreshTokenControllerTest {
 
     @BeforeEach
     fun setUp() {
+        refreshTokenUseCase = mockk()
+        refreshTokenPresenter = mockk()
         accountServiceMock = mockk()
         tokenServiceMock = mockk()
         refreshTokenServiceMock = mockk()
         refreshTokenController = RefreshTokenController(
+            refreshTokenUseCase = refreshTokenUseCase,
+            refreshTokenPresenter = refreshTokenPresenter,
             accountService = accountServiceMock,
-            tokenService = tokenServiceMock,
             refreshTokenService = refreshTokenServiceMock
         )
     }
@@ -43,23 +46,25 @@ class RefreshTokenControllerTest {
         @Test
         fun `refresh succeeds when valid token is provided`() {
             // Arrange
-            val tokenValue = "valid-refresh-token"
-            val account: Account = TestDataFactory.createAccount()
-            val refreshTokenMock: RefreshToken = mockk()
+            val refreshTokenValue = "valid-refresh-token"
             val expectedAccessTokenValue = "new-access-token-value"
+            val useCaseResult = RefreshTokenUseCase.Result(
+                refreshToken = mockk(),
+                accessToken = expectedAccessTokenValue,
+            )
 
-            every { refreshTokenServiceMock.getRefreshTokenByValue(tokenValue) } returns refreshTokenMock
-            every { refreshTokenServiceMock.verifyExpiration(refreshTokenMock) } returns refreshTokenMock
-            every { refreshTokenMock.account } returns account
-            every {
-                tokenServiceMock.generateToken(
-                    userId = account.id.toString(),
-                    scope = account.roles.map { it.role.name }
-                )
-            } returns expectedAccessTokenValue
+            val tokenResponse = TokenResponse(
+                accessToken = expectedAccessTokenValue
+            )
+            val presenterResult = RefreshTokenPresenter.Result(
+                response = tokenResponse
+            )
+
+            every { refreshTokenUseCase.execute(refreshTokenValue) } returns useCaseResult
+            every { refreshTokenPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
-            val actual = refreshTokenController.refreshToken(tokenValue)
+            val actual = refreshTokenController.refreshToken(refreshTokenValue)
 
             // Assert
             assertEquals(HttpStatus.OK, actual.statusCode)
@@ -67,33 +72,17 @@ class RefreshTokenControllerTest {
         }
 
         @Test
-        fun `returns 401 when refresh token not found`() {
+        fun `throws Unauthorized Exception when invalid credentials`() {
             // Arrange
-            val tokenValue = "missing-token"
+            val refreshTokenValue = "invalid-token"
 
-            every { refreshTokenServiceMock.getRefreshTokenByValue(tokenValue) } returns null
+            every { refreshTokenUseCase.execute(refreshTokenValue) } throws UnauthorizedException()
 
             // Act
-            val actual = refreshTokenController.refreshToken(tokenValue)
-
             // Assert
-            assertEquals(HttpStatus.UNAUTHORIZED, actual.statusCode)
-        }
-
-        @Test
-        fun `returns 401 when refresh token is expired`() {
-            // Arrange
-            val tokenValue = "expired-token"
-            val expiredToken: RefreshToken = mockk()
-
-            every { refreshTokenServiceMock.getRefreshTokenByValue(tokenValue) } returns expiredToken
-            every { refreshTokenServiceMock.verifyExpiration(expiredToken) } returns null
-
-            // Act
-            val actual = refreshTokenController.refreshToken(tokenValue)
-
-            // Assert
-            assertEquals(HttpStatus.UNAUTHORIZED, actual.statusCode)
+            assertThrows<UnauthorizedException> {
+                refreshTokenController.refreshToken(refreshTokenValue)
+            }
         }
     }
 

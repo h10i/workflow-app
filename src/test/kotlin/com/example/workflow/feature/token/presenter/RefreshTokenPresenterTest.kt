@@ -1,0 +1,44 @@
+package com.example.workflow.feature.token.presenter
+
+import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
+import com.example.workflow.testutil.TestDataFactory
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+
+class RefreshTokenPresenterTest {
+    private lateinit var refreshTokenPresenter: RefreshTokenPresenter
+
+    @BeforeEach
+    fun setUp() {
+        refreshTokenPresenter = RefreshTokenPresenter()
+    }
+
+    @AfterEach
+    fun tearDown() {
+    }
+
+    @Nested
+    inner class ToResponse {
+        @Test
+        fun `toResponse returns presenter result`() {
+            // Arrange
+            val accessToken = "test-access-token"
+            val refreshToken = TestDataFactory.createRefreshToken()
+            val useCaseResult = RefreshTokenUseCase.Result(
+                refreshToken = refreshToken,
+                accessToken = accessToken,
+            )
+            val response = TokenResponse(accessToken)
+
+            // Act
+            val actual = refreshTokenPresenter.toResponse(useCaseResult)
+
+            // Assert
+            assertEquals(response, actual.response)
+        }
+    }
+}

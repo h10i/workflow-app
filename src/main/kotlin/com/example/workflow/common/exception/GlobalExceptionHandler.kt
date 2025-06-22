@@ -1,5 +1,6 @@
 package com.example.workflow.common.exception
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -15,5 +16,10 @@ class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest()
             .body(mapOf("errors" to errors))
+    }
+
+    @ExceptionHandler(UnauthorizedException::class)
+    fun handleUnauthorizedErrors(ex: UnauthorizedException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 }

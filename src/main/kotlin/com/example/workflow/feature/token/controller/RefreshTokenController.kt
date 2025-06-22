@@ -1,16 +1,15 @@
 package com.example.workflow.feature.token.controller
 
-import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.service.RefreshTokenService
-import com.example.workflow.feature.token.service.TokenService
+import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -18,14 +17,14 @@ import java.util.*
 @RestController
 @RequestMapping("/v1/auth")
 class RefreshTokenController(
+    private val refreshTokenUseCase: RefreshTokenUseCase,
+    private val refreshTokenPresenter: RefreshTokenPresenter,
     private val accountService: AccountService,
-    private val tokenService: TokenService,
     private val refreshTokenService: RefreshTokenService,
 ) {
     @Operation(
         summary = "Issue a new access token",
         description = "Issues a new access token using a valid refresh token. The refresh token is provided as an HTTP cookie.",
-        // The refresh token endpoint is typically secured by the refresh token itself, not by a JWT, so no security requirement is added here.
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -46,18 +45,9 @@ class RefreshTokenController(
     )
     @PostMapping("/refresh-token")
     fun refreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<TokenResponse> {
-        val refreshToken: RefreshToken = refreshTokenService.getRefreshTokenByValue(refreshTokenValue)
-            ?: return ResponseEntity<TokenResponse>.status(HttpStatus.UNAUTHORIZED).build()
-
-        val verifiedRefreshToken: RefreshToken = refreshTokenService.verifyExpiration(refreshToken)
-            ?: return ResponseEntity<TokenResponse>.status(HttpStatus.UNAUTHORIZED).build()
-
-        val accessToken: String = tokenService.generateToken(
-            userId = verifiedRefreshToken.account.id.toString(),
-            scope = verifiedRefreshToken.account.roles.map { it.role.name },
-        )
-
-        return ResponseEntity<TokenResponse>.ok().body(TokenResponse(accessToken))
+        val useCaseResult = refreshTokenUseCase.execute(refreshTokenValue)
+        val presenterResult = refreshTokenPresenter.toResponse(useCaseResult)
+        return ResponseEntity<TokenResponse>.ok().body(presenterResult.response)
     }
 
     @Operation(
@@ -68,14 +58,13 @@ class RefreshTokenController(
             ApiResponse(
                 responseCode = "204",
                 description = "Refresh token successfully revoked (no content)",
-                content = [Content()] // For 204 No Content, content is empty
+                content = [Content()]
             ),
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid",
                 content = [Content()]
             ),
-            // Add 404 or other responses as needed
         ],
     )
     @DeleteMapping("/revoke")
@@ -95,7 +84,7 @@ class RefreshTokenController(
             ApiResponse(
                 responseCode = "204",
                 description = "All refresh tokens successfully revoked (no content)",
-                content = [Content()] // For 204 No Content, content is empty
+                content = [Content()]
             ),
             ApiResponse(
                 responseCode = "401",
