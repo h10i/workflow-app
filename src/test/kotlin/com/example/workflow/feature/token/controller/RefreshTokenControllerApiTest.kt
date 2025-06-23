@@ -1,6 +1,7 @@
 package com.example.workflow.feature.token.controller
 
 import com.example.workflow.common.exception.UnauthorizedException
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
@@ -86,7 +87,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("/v1/auth/refresh-token")
+                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}")
                 .cookie(Cookie("refreshToken", refreshTokenValue))
                 .exchange()
 
@@ -118,7 +119,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("/v1/auth/refresh-token")
+                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}")
                 .cookie(Cookie("refreshToken", refreshTokenValue))
                 .exchange()
 
@@ -140,7 +141,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .delete()
-                .uri("/v1/auth/revoke")
+                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}")
                 .cookie(Cookie("refreshToken", refreshTokenValue))
                 .exchange()
 
@@ -165,7 +166,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .delete()
-                .uri("/v1/auth/revoke/all")
+                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}")
                 .exchange()
 
             // Assert

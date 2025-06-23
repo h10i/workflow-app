@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.controller
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
@@ -14,7 +15,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping(ApiPath.RefreshToken.BASE)
 class RefreshTokenController(
     private val refreshTokenUseCase: RefreshTokenUseCase,
     private val refreshTokenPresenter: RefreshTokenPresenter,
@@ -42,7 +43,7 @@ class RefreshTokenController(
             )
         ],
     )
-    @PostMapping("/refresh-token")
+    @PostMapping(ApiPath.RefreshToken.REFRESH_TOKEN)
     fun refreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<TokenResponse> {
         val useCaseResult = refreshTokenUseCase.execute(refreshTokenValue)
         val presenterResult = refreshTokenPresenter.toResponse(useCaseResult)
@@ -66,7 +67,7 @@ class RefreshTokenController(
             ),
         ],
     )
-    @DeleteMapping("/revoke")
+    @DeleteMapping(ApiPath.RefreshToken.REVOKE)
     fun revokeRefreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<Void> {
         revokeRefreshTokenUseCase.execute(refreshTokenValue)
         return ResponseEntity.noContent().build()
@@ -89,7 +90,7 @@ class RefreshTokenController(
             ),
         ],
     )
-    @DeleteMapping("/revoke/all")
+    @DeleteMapping(ApiPath.RefreshToken.REVOKE_ALL)
     fun revokeAllRefreshTokens(): ResponseEntity<Void> {
         revokeAllRefreshTokensUseCase.execute()
         return ResponseEntity.noContent().build()

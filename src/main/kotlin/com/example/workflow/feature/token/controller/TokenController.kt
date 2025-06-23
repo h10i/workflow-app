@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.controller
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping(ApiPath.Token.BASE)
 class TokenController(
     private val issueTokenUseCase: IssueTokenUseCase,
     private val tokenPresenter: TokenPresenter,
@@ -54,7 +55,7 @@ class TokenController(
             )
         ],
     )
-    @PostMapping("/token")
+    @PostMapping(ApiPath.Token.TOKEN)
     fun token(@Valid @RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
         val useCaseResult: IssueTokenUseCase.Result = issueTokenUseCase.execute(request)
         val presenterResult: TokenPresenter.Result = tokenPresenter.toResponse(useCaseResult)

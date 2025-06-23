@@ -1,5 +1,6 @@
 package com.example.workflow.feature.account.controller
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
@@ -81,7 +82,7 @@ class AccountControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .get()
-                .uri("/v1/accounts/me")
+                .uri("${ApiPath.Account.BASE}${ApiPath.Account.ME}")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
 

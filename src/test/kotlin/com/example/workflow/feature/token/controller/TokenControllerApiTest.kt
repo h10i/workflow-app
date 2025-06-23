@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.controller
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
@@ -77,7 +78,7 @@ class TokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("/v1/auth/token")
+                .uri("${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """

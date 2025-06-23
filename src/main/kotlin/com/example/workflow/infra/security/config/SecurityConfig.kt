@@ -1,5 +1,6 @@
 package com.example.workflow.infra.security.config
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.infra.security.model.RsaKeyProperties
 import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jose.jwk.JWKSet
@@ -35,8 +36,8 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
                 authorize("/v3/api-docs/**", permitAll)
                 authorize("/swagger-ui.html", permitAll)
                 authorize("/swagger-ui/**", permitAll)
-                authorize("/v1/auth/token", permitAll)
-                authorize("/v1/auth/refresh-token", permitAll)
+                authorize("${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}", permitAll)
+                authorize("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer {

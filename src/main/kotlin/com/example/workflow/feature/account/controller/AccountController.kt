@@ -1,5 +1,6 @@
 package com.example.workflow.feature.account.controller
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/accounts")
+@RequestMapping(ApiPath.Account.BASE)
 class AccountController(
     private val getAccountUseCase: GetAccountUseCase,
     private val getAccountPresenter: GetAccountPresenter,
@@ -46,7 +47,7 @@ class AccountController(
             )
         ],
     )
-    @GetMapping("/me")
+    @GetMapping(ApiPath.Account.ME)
     fun get(): ResponseEntity<AccountViewResponse> {
         val useCaseResult: GetAccountUseCase.Result = getAccountUseCase.execute()
         val presenterResult: GetAccountPresenter.Result = getAccountPresenter.toResponse(useCaseResult)
