@@ -4,6 +4,7 @@ import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
+import com.example.workflow.testconfig.NoSecurityConfig
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -20,15 +21,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseCookie
-import org.springframework.security.test.context.support.WithMockUser
-import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.assertj.MockMvcTester
 import org.springframework.test.web.servlet.assertj.MvcTestResult
 import kotlin.test.assertEquals
 
 @WebMvcTest(TokenController::class)
-@Import(TokenControllerApiTest.MockConfig::class)
+@Import(TokenControllerApiTest.MockConfig::class, NoSecurityConfig::class)
 class TokenControllerApiTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
@@ -50,7 +48,6 @@ class TokenControllerApiTest {
 
     @BeforeEach
     fun setUp() {
-        mockMvcTester.apply { springSecurity() }
     }
 
     @AfterEach
@@ -60,7 +57,6 @@ class TokenControllerApiTest {
     @Nested
     inner class TokenMethod {
         @Test
-        @WithMockUser
         fun `GET v1_auth_token should return access token and set cookie to refresh token`() {
             // Arrange
             val emailAddress = "user@example.com"
@@ -84,7 +80,6 @@ class TokenControllerApiTest {
             val testResult: MvcTestResult = mockMvcTester
                 .post()
                 .uri("/v1/auth/token")
-                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """

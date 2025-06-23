@@ -4,6 +4,7 @@ import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
+import com.example.workflow.testconfig.NoSecurityConfig
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -17,13 +18,12 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.assertj.MockMvcTester
 import org.springframework.test.web.servlet.assertj.MvcTestResult
 import java.util.*
 
 @WebMvcTest(AccountController::class)
-@Import(AccountControllerApiTest.MockConfig::class)
+@Import(AccountControllerApiTest.MockConfig::class, NoSecurityConfig::class)
 class AccountControllerApiTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
@@ -54,7 +54,6 @@ class AccountControllerApiTest {
     @Nested
     inner class Get {
         @Test
-        @WithMockUser
         fun `GET v1_accounts_me should return account information`() {
             // Arrange
             val accountId = UUID.randomUUID()
