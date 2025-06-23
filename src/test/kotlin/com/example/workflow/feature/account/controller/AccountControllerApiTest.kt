@@ -5,6 +5,7 @@ import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.testconfig.NoSecurityConfig
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -49,6 +50,7 @@ class AccountControllerApiTest {
 
     @AfterEach
     fun tearDown() {
+        clearAllMocks()
     }
 
     @Nested

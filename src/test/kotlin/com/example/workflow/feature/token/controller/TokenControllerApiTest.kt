@@ -5,10 +5,7 @@ import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import com.example.workflow.testconfig.NoSecurityConfig
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -52,6 +49,7 @@ class TokenControllerApiTest {
 
     @AfterEach
     fun tearDown() {
+        clearAllMocks()
     }
 
     @Nested
