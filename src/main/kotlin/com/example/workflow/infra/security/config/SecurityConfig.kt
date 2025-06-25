@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -28,6 +29,7 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties(RsaKeyProperties::class)
 class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
