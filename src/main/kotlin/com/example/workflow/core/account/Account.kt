@@ -18,10 +18,10 @@ data class Account(
     @Column(name = "password", nullable = false)
     val password: String,
 
-    @OneToMany(mappedBy = "account", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val roles: MutableList<AccountRole> = mutableListOf(),
 
-    @OneToMany(mappedBy = "account", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = [CascadeType.REMOVE])
     val refreshTokens: MutableList<RefreshToken> = mutableListOf(),
 )
 

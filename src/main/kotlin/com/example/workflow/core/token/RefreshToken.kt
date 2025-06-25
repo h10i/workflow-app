@@ -18,7 +18,7 @@ data class RefreshToken(
     @Column(name = "value", nullable = false)
     val value: String,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     val account: Account,
 
