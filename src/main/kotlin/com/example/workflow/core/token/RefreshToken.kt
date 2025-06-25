@@ -8,14 +8,14 @@ import java.util.*
 @Entity
 @Table(
     name = "refresh_token",
-    uniqueConstraints = [UniqueConstraint(columnNames = ["account_id", "value"])]
+    uniqueConstraints = [UniqueConstraint(columnNames = ["account_id", "token_value"])]
 )
 data class RefreshToken(
     @Id
     @Column(name = "id", nullable = false, unique = true)
     val id: UUID = UUID.randomUUID(),
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "token_value", nullable = false)
     val value: String,
 
     @ManyToOne
