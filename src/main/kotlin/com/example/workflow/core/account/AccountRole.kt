@@ -20,6 +20,23 @@ data class AccountRole(
     @JoinColumn(name = "role_id")
     val role: Role
 ) : GrantedAuthority {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AccountRole
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return "AccountRole(id=$id, account=${account.id}, role=${role.id})"
+    }
+
     override fun getAuthority(): String? {
         return role.name
     }
