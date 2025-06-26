@@ -64,7 +64,7 @@ object TestDataFactory {
 
     fun registerRefreshToken(
         id: UUID = UUID.randomUUID(),
-        value: String = "refresh-token-value",
+        value: String = UUID.randomUUID().toString(),
         account: Account,
         expiryDate: Instant = Instant.now().plusSeconds(3600)
     ): RefreshToken {
