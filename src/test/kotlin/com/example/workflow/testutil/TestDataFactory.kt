@@ -18,15 +18,15 @@ object TestDataFactory {
         return Role(
             id = id,
             name = name,
-            accountRoles = mutableListOf()
         )
     }
 
     fun createAccount(
         id: UUID = UUID.randomUUID(),
         emailAddress: String = "test@example.com",
-        password: String = "hashed-password",
-        roles: List<Role> = listOf(createRole())
+        password: String = "test-password",
+        roles: List<Role> = listOf(),
+        refreshTokenValues: List<String> = listOf(),
     ): Account {
         val account = Account(
             id = id,
@@ -37,30 +37,35 @@ object TestDataFactory {
         )
 
         roles.forEach { role ->
-            val accountRole = createAccountRole(account = account, role = role)
-            account.roles.add(accountRole)
-            role.accountRoles.add(accountRole)
+            registerAccountRole(account = account, role = role)
+        }
+
+        refreshTokenValues.forEach { refreshTokenValue ->
+            registerRefreshToken(account = account, value = refreshTokenValue)
         }
 
         return account
     }
 
-    fun createAccountRole(
+    fun registerAccountRole(
         id: UUID = UUID.randomUUID(),
         account: Account,
         role: Role
     ): AccountRole {
-        return AccountRole(
+        val accountRole = AccountRole(
             id = id,
             account = account,
             role = role
         )
+        account.roles.add(accountRole)
+        role.accountRoles.add(accountRole)
+        return accountRole
     }
 
-    fun createRefreshToken(
+    fun registerRefreshToken(
         id: UUID = UUID.randomUUID(),
         value: String = "refresh-token-value",
-        account: Account = createAccount(),
+        account: Account,
         expiryDate: Instant = Instant.now().plusSeconds(3600)
     ): RefreshToken {
         val token = RefreshToken(
@@ -74,7 +79,9 @@ object TestDataFactory {
     }
 
     fun createAuthentication(
-        account: Account = createAccount()
+        account: Account = createAccount(
+            roles = listOf(createRole())
+        )
     ): Authentication {
         val authorities = account.roles.map { SimpleGrantedAuthority(it.role.name) }
         return UsernamePasswordAuthenticationToken(account.id.toString(), null, authorities)

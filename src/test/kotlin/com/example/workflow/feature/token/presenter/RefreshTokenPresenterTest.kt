@@ -1,5 +1,7 @@
 package com.example.workflow.feature.token.presenter
 
+import com.example.workflow.core.account.Account
+import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
 import com.example.workflow.testutil.TestDataFactory
@@ -27,7 +29,8 @@ class RefreshTokenPresenterTest {
         fun `toResponse returns presenter result`() {
             // Arrange
             val accessToken = "test-access-token"
-            val refreshToken = TestDataFactory.createRefreshToken()
+            val account: Account = TestDataFactory.createAccount()
+            val refreshToken: RefreshToken = TestDataFactory.registerRefreshToken(account = account)
             val useCaseResult = RefreshTokenUseCase.Result(
                 refreshToken = refreshToken,
                 accessToken = accessToken,

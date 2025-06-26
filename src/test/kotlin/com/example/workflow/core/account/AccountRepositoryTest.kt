@@ -39,14 +39,13 @@ class AccountRepositoryTest {
             val role = TestDataFactory.createRole()
             entityManager.persist(role)
 
-            account = TestDataFactory.createAccount(
-                roles = listOf(role),
-            )
+            account = TestDataFactory.createAccount()
             entityManager.persist(account)
 
-            val refreshToken = TestDataFactory.createRefreshToken(
-                account = account,
-            )
+            val accountRole = TestDataFactory.registerAccountRole(account = account, role = role)
+            entityManager.persist(accountRole)
+
+            val refreshToken = TestDataFactory.registerRefreshToken(account = account)
             entityManager.persist(refreshToken)
 
             entityManager.flush()

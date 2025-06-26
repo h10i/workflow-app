@@ -57,7 +57,7 @@ class IssueTokenUseCaseTest {
             )
             val request = TokenRequest(emailAddress, password)
             val authentication: Authentication = TestDataFactory.createAuthentication(account)
-            val refreshToken: RefreshToken = TestDataFactory.createRefreshToken()
+            val refreshToken: RefreshToken = TestDataFactory.registerRefreshToken(account = account)
             val responseCookie = ResponseCookie.from("refreshToken", "dummy").build()
             val accessToken = "test-access-token"
 
