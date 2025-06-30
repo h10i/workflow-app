@@ -1,4 +1,4 @@
-package com.example.workflow.testconfig
+package com.example.workflow.test.config
 
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration
 import java.time.Instant

@@ -5,7 +5,7 @@ import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
-import com.example.workflow.testconfig.NoSecurityConfig
+import com.example.workflow.test.config.NoSecurityConfig
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk

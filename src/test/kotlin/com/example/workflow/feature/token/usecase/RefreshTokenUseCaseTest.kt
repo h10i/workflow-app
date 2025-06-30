@@ -6,7 +6,7 @@ import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.service.TokenService
-import com.example.workflow.testutil.TestDataFactory
+import com.example.workflow.test.util.TestDataFactory
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.*

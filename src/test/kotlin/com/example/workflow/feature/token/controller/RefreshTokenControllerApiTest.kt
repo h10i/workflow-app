@@ -7,7 +7,7 @@ import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
 import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
 import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
-import com.example.workflow.testconfig.NoSecurityConfig
+import com.example.workflow.test.config.NoSecurityConfig
 import io.mockk.*
 import jakarta.servlet.http.Cookie
 import org.assertj.core.api.Assertions.assertThat
