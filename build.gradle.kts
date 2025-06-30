@@ -31,6 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "org.mockito", module = "mockito-core")
     }
     testImplementation("org.springframework.security:spring-security-test")
@@ -47,5 +48,9 @@ kotlin {
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        if (project.hasProperty("includeTags")) {
+            includeTags(*project.property("includeTags").toString().split(",").toTypedArray())
+        }
+    }
 }
