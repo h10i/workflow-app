@@ -5,7 +5,7 @@ import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
-import com.example.workflow.testconfig.NoSecurityConfig
+import com.example.workflow.test.config.NoSecurityConfig
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach

@@ -4,7 +4,7 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
-import com.example.workflow.testutil.TestDataFactory
+import com.example.workflow.test.util.TestDataFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

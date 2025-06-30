@@ -1,4 +1,4 @@
-package com.example.workflow.testconfig
+package com.example.workflow.test.config
 
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean

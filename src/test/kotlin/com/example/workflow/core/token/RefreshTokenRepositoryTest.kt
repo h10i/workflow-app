@@ -1,8 +1,8 @@
 package com.example.workflow.core.token
 
 import com.example.workflow.core.account.Account
-import com.example.workflow.testconfig.AssertJComparisonConfig
-import com.example.workflow.testutil.TestDataFactory
+import com.example.workflow.test.config.AssertJComparisonConfig
+import com.example.workflow.test.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

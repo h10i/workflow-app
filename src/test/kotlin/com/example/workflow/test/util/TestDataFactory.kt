@@ -1,4 +1,4 @@
-package com.example.workflow.testutil
+package com.example.workflow.test.util
 
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
