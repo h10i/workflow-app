@@ -3,6 +3,7 @@ package com.example.workflow.infra.security.service
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.AccountRole
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.*
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import java.util.*
 import kotlin.test.assertEquals
 
+@UnitTest
 class CustomUserDetailsServiceTest {
     private lateinit var accountRepository: AccountRepository
     private lateinit var customUserDetailsService: CustomUserDetailsService

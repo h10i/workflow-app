@@ -1,6 +1,7 @@
 package com.example.workflow.core.token
 
 import com.example.workflow.core.account.Account
+import com.example.workflow.test.annotation.IntegrationTest
 import com.example.workflow.test.config.AssertJComparisonConfig
 import com.example.workflow.test.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
@@ -16,6 +17,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
+@IntegrationTest
 @DataJpaTest
 class RefreshTokenRepositoryTest {
     @Autowired

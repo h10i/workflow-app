@@ -3,6 +3,7 @@ package com.example.workflow.feature.account.presenter
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.toViewResponse
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
+import com.example.workflow.test.annotation.UnitTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
 
+@UnitTest
 class GetAccountPresenterTest {
     private lateinit var getAccountPresenter: GetAccountPresenter
 

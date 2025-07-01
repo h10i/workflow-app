@@ -4,6 +4,7 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.core.token.RefreshTokenRepository
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.*
 import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.*
@@ -15,6 +16,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@UnitTest
 class RefreshTokenServiceTest {
     private lateinit var refreshTokenRepositoryMock: RefreshTokenRepository
     private lateinit var accountRepositoryMock: AccountRepository

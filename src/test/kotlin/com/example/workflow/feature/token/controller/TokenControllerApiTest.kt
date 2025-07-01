@@ -5,6 +5,7 @@ import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
+import com.example.workflow.test.annotation.IntegrationTest
 import com.example.workflow.test.config.NoSecurityConfig
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester
 import org.springframework.test.web.servlet.assertj.MvcTestResult
 import kotlin.test.assertEquals
 
+@IntegrationTest
 @WebMvcTest(TokenController::class)
 @Import(TokenControllerApiTest.MockConfig::class, NoSecurityConfig::class)
 class TokenControllerApiTest {

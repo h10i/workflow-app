@@ -6,11 +6,13 @@ import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
 import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
 import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.*
 import org.junit.jupiter.api.*
 import org.springframework.http.HttpStatus
 import kotlin.test.assertEquals
 
+@UnitTest
 class RefreshTokenControllerTest {
     private lateinit var refreshTokenUseCase: RefreshTokenUseCase
     private lateinit var refreshTokenPresenter: RefreshTokenPresenter

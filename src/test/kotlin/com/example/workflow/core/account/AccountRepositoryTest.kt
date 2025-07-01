@@ -1,5 +1,6 @@
 package com.example.workflow.core.account
 
+import com.example.workflow.test.annotation.IntegrationTest
 import com.example.workflow.test.config.AssertJComparisonConfig
 import com.example.workflow.test.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
+@IntegrationTest
 @DataJpaTest
 class AccountRepositoryTest {
     @Autowired

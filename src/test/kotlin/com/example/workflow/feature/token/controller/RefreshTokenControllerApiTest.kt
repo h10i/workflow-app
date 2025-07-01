@@ -7,6 +7,7 @@ import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
 import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
 import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
+import com.example.workflow.test.annotation.IntegrationTest
 import com.example.workflow.test.config.NoSecurityConfig
 import io.mockk.*
 import jakarta.servlet.http.Cookie
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester
 import org.springframework.test.web.servlet.assertj.MvcTestResult
 import kotlin.test.assertEquals
 
+@IntegrationTest
 @WebMvcTest(RefreshTokenController::class)
 @Import(RefreshTokenControllerApiTest.MockConfig::class, NoSecurityConfig::class)
 class RefreshTokenControllerApiTest {

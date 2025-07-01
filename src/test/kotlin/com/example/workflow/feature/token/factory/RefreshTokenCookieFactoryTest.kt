@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.factory
 
+import com.example.workflow.test.annotation.UnitTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -8,6 +9,7 @@ import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@UnitTest
 class RefreshTokenCookieFactoryTest {
     private lateinit var refreshTokenCookieFactory: RefreshTokenCookieFactory
 

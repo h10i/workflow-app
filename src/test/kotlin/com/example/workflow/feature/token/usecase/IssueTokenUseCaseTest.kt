@@ -6,6 +6,7 @@ import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.service.AuthenticationService
 import com.example.workflow.feature.token.service.RefreshTokenService
 import com.example.workflow.feature.token.service.TokenService
+import com.example.workflow.test.annotation.UnitTest
 import com.example.workflow.test.util.TestDataFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseCookie
 import org.springframework.security.core.Authentication
 import java.util.*
 
+@UnitTest
 class IssueTokenUseCaseTest {
     private lateinit var authenticationServiceMock: AuthenticationService
     private lateinit var tokenServiceMock: TokenService

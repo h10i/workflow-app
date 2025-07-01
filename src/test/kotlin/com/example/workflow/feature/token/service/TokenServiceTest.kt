@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.service
 
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.*
 import org.junit.jupiter.api.*
 import org.springframework.security.oauth2.jwt.Jwt
@@ -10,6 +11,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 
+@UnitTest
 class TokenServiceTest {
     private lateinit var jwtEncoderMock: JwtEncoder
     private lateinit var tokenService: TokenService

@@ -2,6 +2,7 @@ package com.example.workflow.feature.token.presenter
 
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
+import com.example.workflow.test.annotation.UnitTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.ResponseCookie
 import kotlin.test.assertEquals
 
+@UnitTest
 class TokenPresenterTest {
     private lateinit var tokenPresenter: TokenPresenter
 

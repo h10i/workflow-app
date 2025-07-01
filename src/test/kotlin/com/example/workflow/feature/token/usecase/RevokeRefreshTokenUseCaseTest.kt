@@ -2,6 +2,7 @@ package com.example.workflow.feature.token.usecase
 
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.token.service.RefreshTokenService
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.*
 
+@UnitTest
 class RevokeRefreshTokenUseCaseTest {
     private lateinit var accountServiceMock: AccountService
     private lateinit var refreshTokenServiceMock: RefreshTokenService

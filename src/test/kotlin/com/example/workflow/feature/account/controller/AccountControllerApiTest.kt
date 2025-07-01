@@ -5,6 +5,7 @@ import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
+import com.example.workflow.test.annotation.IntegrationTest
 import com.example.workflow.test.config.NoSecurityConfig
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester
 import org.springframework.test.web.servlet.assertj.MvcTestResult
 import java.util.*
 
+@IntegrationTest
 @WebMvcTest(AccountController::class)
 @Import(AccountControllerApiTest.MockConfig::class, NoSecurityConfig::class)
 class AccountControllerApiTest {

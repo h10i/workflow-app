@@ -4,6 +4,7 @@ import com.example.workflow.feature.token.model.TokenRequest
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import kotlin.test.assertEquals
 
+@UnitTest
 class TokenControllerTest {
     private lateinit var issueTokenUseCase: IssueTokenUseCase
     private lateinit var tokenPresenter: TokenPresenter

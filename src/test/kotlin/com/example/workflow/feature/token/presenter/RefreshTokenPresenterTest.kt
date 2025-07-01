@@ -4,6 +4,7 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
+import com.example.workflow.test.annotation.UnitTest
 import com.example.workflow.test.util.TestDataFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+@UnitTest
 class RefreshTokenPresenterTest {
     private lateinit var refreshTokenPresenter: RefreshTokenPresenter
 

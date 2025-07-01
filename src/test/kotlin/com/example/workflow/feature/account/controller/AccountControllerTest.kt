@@ -5,6 +5,7 @@ import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.toViewResponse
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import kotlin.test.assertEquals
 
+@UnitTest
 class AccountControllerTest {
     private lateinit var getAccountUseCase: GetAccountUseCase
     private lateinit var getAccountPresenter: GetAccountPresenter

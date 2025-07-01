@@ -4,6 +4,7 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.toViewDto
 import com.example.workflow.feature.account.model.AccountViewDto
+import com.example.workflow.test.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import java.util.*
 import kotlin.test.assertEquals
 
+@UnitTest
 class AccountServiceTest {
     private lateinit var accountService: AccountService
     private lateinit var accountRepositoryMock: AccountRepository
