@@ -14,9 +14,6 @@ import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import java.security.KeyPair
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
 
 @UnitTest
 class SecurityConfigTest {
@@ -25,8 +22,7 @@ class SecurityConfigTest {
 
     @BeforeEach
     fun setUp() {
-        val keyPair: KeyPair = TestDataFactory.generateTestRsaKeyPair()
-        rsaKeyProperties = RsaKeyProperties(keyPair.public as RSAPublicKey, keyPair.private as RSAPrivateKey)
+        rsaKeyProperties = TestDataFactory.createRsaKeyProperties()
         securityConfig = SecurityConfig(rsaKeyProperties)
     }
 

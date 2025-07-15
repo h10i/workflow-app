@@ -4,9 +4,13 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.infra.security.model.RsaKeyProperties
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.security.KeyPairGenerator
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 import java.time.Instant
 import java.util.*
 
@@ -85,5 +89,15 @@ object TestDataFactory {
     ): Authentication {
         val authorities = account.roles.map { SimpleGrantedAuthority(it.role.name) }
         return UsernamePasswordAuthenticationToken(account.id.toString(), null, authorities)
+    }
+
+    fun createRsaKeyProperties(): RsaKeyProperties {
+        val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
+        keyPairGenerator.initialize(2048)
+        val keyPair = keyPairGenerator.generateKeyPair()
+        return RsaKeyProperties(
+            publicKey = keyPair.public as RSAPublicKey,
+            privateKey = keyPair.private as RSAPrivateKey
+        )
     }
 }
