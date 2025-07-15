@@ -1,5 +1,6 @@
 package com.example.workflow.test.extension
 
+import com.example.workflow.test.annotation.E2ETest
 import com.example.workflow.test.annotation.IntegrationTest
 import com.example.workflow.test.annotation.UnitTest
 import org.junit.jupiter.api.extension.ConditionEvaluationResult
@@ -11,6 +12,7 @@ class RequiredTestTypeAnnotationCondition : ExecutionCondition {
     private val allowedAnnotations: Set<KClass<out Annotation>> = setOf(
         UnitTest::class,
         IntegrationTest::class,
+        E2ETest::class,
     )
 
     override fun evaluateExecutionCondition(context: ExtensionContext): ConditionEvaluationResult {
