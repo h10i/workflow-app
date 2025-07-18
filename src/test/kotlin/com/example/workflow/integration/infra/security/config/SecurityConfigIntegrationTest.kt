@@ -20,12 +20,14 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.assertj.MockMvcTester
 import org.springframework.test.web.servlet.assertj.MvcTestResult
 
 @IntegrationTest
 @WebMvcTest(SecurityConfigTestController::class)
 @Import(SecurityConfig::class, SecurityConfigIntegrationTest.MockConfig::class)
+@ActiveProfiles("security-test-controller")
 class SecurityConfigIntegrationTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
