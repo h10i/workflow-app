@@ -1,5 +1,6 @@
 package com.example.workflow.e2e.feature.token
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.config.TestcontainersConfiguration
 import com.example.workflow.e2e.test.util.CookieUtil
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
@@ -41,7 +42,7 @@ class TokenApiTest(
             // Act
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
-                path = "/v1/auth/token",
+                path = "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
                 body = json
             )
 
@@ -65,7 +66,7 @@ class TokenApiTest(
             // Act
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
-                path = "/v1/auth/token",
+                path = "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
                 body = json
             )
 

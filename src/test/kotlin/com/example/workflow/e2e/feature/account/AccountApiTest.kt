@@ -1,5 +1,6 @@
 package com.example.workflow.e2e.feature.account
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.config.TestcontainersConfiguration
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.support.annotation.E2ETest
@@ -35,7 +36,7 @@ class AccountApiTest(
             // Act
             val response = restTemplate.get(
                 responseType = String::class.java,
-                path = "/v1/accounts/me",
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
                 accessToken = authResult.accessToken
             )
 
@@ -64,7 +65,7 @@ class AccountApiTest(
             // Act
             val response = restTemplate.get(
                 responseType = String::class.java,
-                path = "/v1/accounts/me",
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
             )
 
             // Assert

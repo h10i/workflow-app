@@ -1,5 +1,6 @@
 package com.example.workflow.e2e.feature.token
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.config.TestcontainersConfiguration
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.feature.token.model.TokenResponse
@@ -36,7 +37,7 @@ class RefreshTokenApiTest(
             // Act
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
-                path = "/v1/auth/refresh-token",
+                path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
                 body = "",
                 cookie = cookie,
             )
@@ -55,7 +56,7 @@ class RefreshTokenApiTest(
             // Act
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
-                path = "/v1/auth/refresh-token",
+                path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
                 body = "",
                 cookie = cookie,
             )
@@ -77,7 +78,7 @@ class RefreshTokenApiTest(
             // Act
             val response = restTemplate.delete(
                 responseType = String::class.java,
-                path = "/v1/auth/revoke",
+                path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
                 accessToken = authResult.accessToken,
                 cookie = cookie,
             )
@@ -97,7 +98,7 @@ class RefreshTokenApiTest(
             // Act
             val response = restTemplate.delete(
                 responseType = String::class.java,
-                path = "/v1/auth/revoke",
+                path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
                 accessToken = "invalid-access-token",
                 cookie = cookie,
             )
@@ -118,7 +119,7 @@ class RefreshTokenApiTest(
             // Act
             val response = restTemplate.delete(
                 responseType = String::class.java,
-                path = "/v1/auth/revoke/all",
+                path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
                 accessToken = authResult.accessToken,
             )
 
@@ -135,7 +136,7 @@ class RefreshTokenApiTest(
             // Act
             val response = restTemplate.delete(
                 responseType = String::class.java,
-                path = "/v1/auth/revoke/all",
+                path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
                 accessToken = "invalid-access-token",
             )
 
