@@ -1,0 +1,31 @@
+name: Deploy (staging)
+
+on:
+  push:
+    branches:
+      - 'hotfix/**'
+      - 'release/**'
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/reusable-test-and-build.yml
+    with:
+      upload-jar-artifact: true
+      jar-artifact-name: package-staging
+    permissions:
+      contents: read
+    secrets: inherit
+
+  deploy-staging:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: staging-artifact
+
+      # TODO: Add STAGING deployment logic here
+      - name: Deploy to STAGING
+        run: echo "Deploying $(ls build/libs) to STAGING environment..."
