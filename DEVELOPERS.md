@@ -25,13 +25,22 @@
 
 ## Testing Memo
 
+### API
+
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
 ### Auth
 
-```
-curl -X POST -H "Content-Type: application/json" -d '{"mailAddress": "test@example.com", "password": "PASSWORD"}' http://localhost:8080/token
-
+```shell
+curl -v -X POST -H "Content-Type: application/json" -d '{"emailAddress": "test@example.com", "password": "PASSWORD"}' http://localhost:8080/v1/auth/token
 $JWT = ""
 
-curl -v -H "Authorization: Bearer $JWT" http://localhost:8080/messages
-curl -v http://localhost:8080/messages -H "Authorization: Bearer $JWT" -H "Content-Type: text/plain" -d "Hello World"
+curl -v -H "Authorization: Bearer $JWT" http://localhost:8080/v1/accounts/me
+```
+
+```shell
+$refreshToken = ""
+curl -v -X POST --cookie "refreshToken=$refreshToken" http://localhost:8080/v1/auth/refresh-token
+curl -v -X DELETE --cookie "refreshToken=$refreshToken" -H "Authorization: Bearer $JWT" http://localhost:8080/v1/auth/revoke
+curl -v -X DELETE -H "Authorization: Bearer $JWT" http://localhost:8080/v1/revoke/all
 ```
