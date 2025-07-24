@@ -1,13 +1,12 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/localdb}
-    username: ${SPRING_DATASOURCE_USERNAME:localuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:localpass}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
-    defer-datasource-initialization: true
+      ddl-auto: none
 rsa:
-  private-key: file:/etc/workflow-app/certs/private.pem
-  public-key: file:/etc/workflow-app/certs/public.pem
+  private-key: file:${RSA_PRIVATE_KEY_PATH}
+  public-key: file:${RSA_PUBLIC_KEY_PATH}

@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/localdb}
+    username: ${SPRING_DATASOURCE_USERNAME:localuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:localpass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+rsa:
+  private-key: file:${RSA_PRIVATE_KEY_PATH:./src/main/resources/certs/dev-private.pem}
+  public-key: file:${RSA_PUBLIC_KEY_PATH:./src/main/resources/certs/dev-public.pem}
