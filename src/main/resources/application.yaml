@@ -9,5 +9,5 @@ spring:
       ddl-auto: update
     defer-datasource-initialization: true
 rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+  private-key: file:/etc/workflow-app/certs/private.pem
+  public-key: file:/etc/workflow-app/certs/public.pem
