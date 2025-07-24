@@ -1,4 +1,4 @@
-package com.example.workflow.unit.core.account
+package com.example.workflow.integration.core.account
 
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
