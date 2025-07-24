@@ -1,4 +1,4 @@
-package com.example.workflow.unit.core.token
+package com.example.workflow.integration.core.token
 
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.token.RefreshToken
