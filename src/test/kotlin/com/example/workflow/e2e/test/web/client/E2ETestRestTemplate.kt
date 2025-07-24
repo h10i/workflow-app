@@ -4,9 +4,7 @@ import com.example.workflow.e2e.test.util.CookieUtil
 import com.example.workflow.feature.token.model.TokenResponse
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.*
-import org.springframework.stereotype.Component
 
-@Component
 class E2ETestRestTemplate(
     private val restTemplate: TestRestTemplate
 ) {
