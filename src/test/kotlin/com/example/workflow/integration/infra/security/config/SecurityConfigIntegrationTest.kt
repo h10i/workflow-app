@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.assertj.MvcTestResult
 @IntegrationTest
 @WebMvcTest(SecurityConfigTestController::class)
 @Import(SecurityConfig::class, SecurityConfigIntegrationTest.MockConfig::class)
-@ActiveProfiles("security-test-controller")
+@ActiveProfiles("test", "security-test-controller")
 class SecurityConfigIntegrationTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester

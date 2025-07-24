@@ -1,31 +1,23 @@
 package com.example.workflow.e2e.feature.token
 
 import com.example.workflow.common.path.ApiPath
-import com.example.workflow.e2e.test.config.TestcontainersConfiguration
+import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.annotation.E2ETest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.annotation.Transactional
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @E2ETest
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(TestcontainersConfiguration::class)
-@ActiveProfiles("test")
-@Transactional
 class RefreshTokenApiTest(
     @Autowired
     private val restTemplate: E2ETestRestTemplate
-) {
+) : AbstractE2ETest() {
     @Nested
     inner class RefreshToken() {
         @Test
