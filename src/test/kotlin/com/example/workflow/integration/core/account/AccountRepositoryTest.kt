@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -31,6 +32,21 @@ class AccountRepositoryTest {
 
     @AfterEach
     fun tearDown() {
+    }
+
+    @Nested
+    inner class Save {
+        @Test
+        fun `returns account when saving new account`() {
+            // Arrange
+            val account = TestDataFactory.createAccount()
+
+            // Act
+            val actual: Account = accountRepository.save(account)
+
+            // Assert
+            assertEquals(account, actual)
+        }
     }
 
     @Nested
