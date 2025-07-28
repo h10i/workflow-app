@@ -9,6 +9,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -35,12 +36,40 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
+                // SpringDoc
                 authorize(ApiPath.SpringDoc.API_DOCS_ALL, permitAll)
                 authorize(ApiPath.SpringDoc.SWAGGER_UI_HTML, permitAll)
                 authorize(ApiPath.SpringDoc.SWAGGER_UI_ALL, permitAll)
-                authorize("${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}", permitAll)
-                authorize("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}", permitAll)
-                authorize(anyRequest, authenticated)
+                // Account
+                authorize(
+                    HttpMethod.GET,
+                    "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                    authenticated,
+                )
+                // Token
+                authorize(
+                    HttpMethod.POST,
+                    "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
+                    permitAll,
+                )
+                // Refresh Token
+                authorize(
+                    HttpMethod.POST,
+                    "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
+                    permitAll,
+                )
+                authorize(
+                    HttpMethod.DELETE,
+                    "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
+                    authenticated,
+                )
+                authorize(
+                    HttpMethod.DELETE,
+                    "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
+                    authenticated,
+                )
+                // Others
+                authorize(anyRequest, denyAll)
             }
             oauth2ResourceServer {
                 jwt {}
