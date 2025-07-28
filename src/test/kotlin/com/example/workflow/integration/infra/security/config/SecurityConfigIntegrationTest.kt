@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.test.context.support.WithMockUser
@@ -50,12 +51,12 @@ class SecurityConfigIntegrationTest {
     inner class PermitAllPaths {
         @ParameterizedTest
         @ArgumentsSource(PermitAllPathsProvider::class)
-        fun `permit all paths returns 200 OK without Authentication`(path: String) {
+        fun `permit all paths returns 200 OK without Authentication`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
-                .get()
+                .method(method)
                 .uri(path)
                 .exchange()
 
@@ -67,12 +68,12 @@ class SecurityConfigIntegrationTest {
         @ParameterizedTest
         @ArgumentsSource(PermitAllPathsProvider::class)
         @WithMockUser
-        fun `permit all paths returns 200 OK with Authentication`(path: String) {
+        fun `permit all paths returns 200 OK with Authentication`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
-                .get()
+                .method(method)
                 .uri(path)
                 .exchange()
 
@@ -86,12 +87,12 @@ class SecurityConfigIntegrationTest {
     inner class AuthenticatedPaths {
         @ParameterizedTest
         @ArgumentsSource(AuthenticatedPathsProvider::class)
-        fun `authenticated paths returns 401 UNAUTHORIZED without Authentication`(path: String) {
+        fun `authenticated paths returns 401 UNAUTHORIZED without Authentication`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
-                .get()
+                .method(method)
                 .uri(path)
                 .exchange()
 
@@ -103,12 +104,12 @@ class SecurityConfigIntegrationTest {
         @ParameterizedTest
         @ArgumentsSource(AuthenticatedPathsProvider::class)
         @WithMockUser
-        fun `authenticated paths returns 200 OK with Authentication`(path: String) {
+        fun `authenticated paths returns 200 OK with Authentication`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
-                .get()
+                .method(method)
                 .uri(path)
                 .exchange()
 
