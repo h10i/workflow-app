@@ -3,7 +3,9 @@ package com.example.workflow.integration.test.controller
 import com.example.workflow.common.path.ApiPath
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
 @Profile("security-test-controller")
@@ -15,22 +17,27 @@ class SecurityConfigTestController {
             ApiPath.SpringDoc.API_DOCS_ALL,
             ApiPath.SpringDoc.SWAGGER_UI_HTML,
             ApiPath.SpringDoc.SWAGGER_UI_ALL,
+            // Account
+            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+        ]
+    )
+    fun get() = ResponseEntity.ok("get")
+
+    @PostMapping(
+        path = [
             // Auth
             "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
         ]
-
     )
-    fun permitAllPaths() = ResponseEntity.ok("permitAll")
+    fun post() = ResponseEntity.ok("post")
 
-    @GetMapping(
+    @DeleteMapping(
         path = [
             // auth
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
-            // account
-            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
         ]
     )
-    fun authenticatedPaths() = ResponseEntity.ok("authenticated")
+    fun delete() = ResponseEntity.ok("delete")
 }
