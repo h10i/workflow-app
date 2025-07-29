@@ -30,4 +30,10 @@ class AccountService(
             .orElseThrow { EntityNotFoundException("Account not found: $id") }
             .toViewDto()
     }
+
+    @Transactional
+    fun getAccount(emailAddress: String): AccountViewDto? {
+        return accountRepository.findByEmailAddress(emailAddress)
+            ?.toViewDto()
+    }
 }
