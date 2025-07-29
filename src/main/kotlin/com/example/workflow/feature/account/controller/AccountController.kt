@@ -2,24 +2,62 @@ package com.example.workflow.feature.account.controller
 
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.account.model.AccountViewResponse
+import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
+import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
+import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(ApiPath.Account.BASE)
 class AccountController(
+    private val registerAccountUseCase: RegisterAccountUseCase,
+    private val registerAccountPresenter: RegisterAccountPresenter,
     private val getAccountUseCase: GetAccountUseCase,
     private val getAccountPresenter: GetAccountPresenter,
 ) {
+    @Operation(
+        summary = "Create a new account",
+        description = "Registers a new user account with the system using the provided user details.",
+        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Account Information",
+            required = true,
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = RegisterAccountRequest::class)
+                )
+            ]
+        ),
+        responses = [
+            ApiResponse(
+                responseCode = "201",
+                description = "Successfully created account",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = AccountViewResponse::class)
+                    )
+                ]
+            )
+        ],
+    )
+    @PostMapping
+    fun registerAccount(@Valid @RequestBody request: RegisterAccountRequest): ResponseEntity<AccountViewResponse> {
+        val useCaseResult: RegisterAccountUseCase.Result = registerAccountUseCase.execute(request)
+        val presenterResult: RegisterAccountPresenter.Result = registerAccountPresenter.toResponse(useCaseResult)
+        return ResponseEntity.status(HttpStatus.CREATED).body(presenterResult.response)
+    }
+
     @Operation(
         summary = "Get your account information",
         description = "Retrieves the registered account information for the authenticated user. A valid JWT token is required in the Authorization header.",
