@@ -1,6 +1,7 @@
 package com.example.workflow.feature.account.usecase
 
 import com.example.workflow.core.account.Account
+import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegisteredException
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.service.AccountService
@@ -19,6 +20,9 @@ class RegisterAccountUseCase(
             emailAddress = request.emailAddress,
             password = request.password,
         )
+        if (accountService.getAccount(account.emailAddress) != null) {
+            throw EmailAddressAlreadyRegisteredException()
+        }
         val accountViewDto: AccountViewDto = accountService.saveAccount(account)
         return Result(
             accountViewDto = accountViewDto,
