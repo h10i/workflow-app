@@ -14,6 +14,7 @@ import java.util.*
 class AccountService(
     private val accountRepository: AccountRepository
 ) {
+    @Transactional
     fun saveAccount(account: Account): AccountViewDto {
         return accountRepository.save(account)
             .toViewDto()
