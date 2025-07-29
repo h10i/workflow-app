@@ -34,6 +34,35 @@ class AccountServiceTest {
     }
 
     @Nested
+    inner class SaveAccount {
+        @BeforeEach
+        fun setUp() {
+            mockkStatic(Account::toViewDto)
+        }
+
+        @AfterEach
+        fun tearDown() {
+            unmockkStatic(Account::toViewDto)
+        }
+
+        @Test
+        fun `returns account view dto when creating new account`() {
+            // Arrange
+            val accountMock: Account = mockk()
+            val expectedAccountViewDtoMock: AccountViewDto = mockk()
+
+            every { accountRepositoryMock.save(accountMock) } returns accountMock
+            every { accountMock.toViewDto() } returns expectedAccountViewDtoMock
+
+            // Act
+            val actualAccountViewDto = accountService.saveAccount(accountMock)
+
+            // Assert
+            assertEquals(expectedAccountViewDtoMock, actualAccountViewDto)
+        }
+    }
+
+    @Nested
     inner class GetCurrentAccountId {
         @BeforeEach
         fun setUp() {

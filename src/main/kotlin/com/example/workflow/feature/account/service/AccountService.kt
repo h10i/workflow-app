@@ -1,5 +1,6 @@
 package com.example.workflow.feature.account.service
 
+import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.toViewDto
 import com.example.workflow.feature.account.model.AccountViewDto
@@ -13,6 +14,11 @@ import java.util.*
 class AccountService(
     private val accountRepository: AccountRepository
 ) {
+    fun saveAccount(account: Account): AccountViewDto {
+        return accountRepository.save(account)
+            .toViewDto()
+    }
+
     fun getCurrentAccountId(): UUID {
         return UUID.fromString(SecurityContextHolder.getContext().authentication.name)
     }
