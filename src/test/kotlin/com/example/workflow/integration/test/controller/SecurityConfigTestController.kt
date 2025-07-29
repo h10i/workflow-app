@@ -25,6 +25,8 @@ class SecurityConfigTestController {
 
     @PostMapping(
         path = [
+            // Account
+            ApiPath.Account.BASE,
             // Auth
             "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",

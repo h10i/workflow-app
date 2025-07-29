@@ -46,6 +46,7 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
                     "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
                     authenticated,
                 )
+                authorize(HttpMethod.POST, ApiPath.Account.BASE, permitAll)
                 // Token
                 authorize(
                     HttpMethod.POST,

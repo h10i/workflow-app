@@ -12,6 +12,8 @@ class PermitAllPathsProvider : ArgumentsProvider {
         Arguments.of(HttpMethod.GET, "/v3/api-docs/**"),
         Arguments.of(HttpMethod.GET, "/swagger-ui.html"),
         Arguments.of(HttpMethod.GET, "/swagger-ui/**"),
+        // Account
+        Arguments.of(HttpMethod.POST, "/v1/accounts"),
         // Auth
         Arguments.of(HttpMethod.POST, "/v1/auth/token"),
         Arguments.of(HttpMethod.POST, "/v1/auth/refresh-token"),
