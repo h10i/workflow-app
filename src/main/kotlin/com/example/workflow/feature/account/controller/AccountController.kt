@@ -1,5 +1,6 @@
 package com.example.workflow.feature.account.controller
 
+import com.example.workflow.common.model.UnifiedErrorResponse
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
@@ -46,6 +47,16 @@ class AccountController(
                     Content(
                         mediaType = "application/json",
                         schema = Schema(implementation = AccountViewResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = UnifiedErrorResponse::class)
                     )
                 ]
             )
