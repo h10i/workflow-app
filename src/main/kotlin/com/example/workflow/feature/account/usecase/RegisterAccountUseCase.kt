@@ -5,11 +5,13 @@ import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegiste
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.service.AccountService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class RegisterAccountUseCase(
     private val accountService: AccountService,
+    private val passwordEncoder: PasswordEncoder,
 ) {
     data class Result(
         val accountViewDto: AccountViewDto
@@ -18,7 +20,7 @@ class RegisterAccountUseCase(
     fun execute(request: RegisterAccountRequest): Result {
         val account = Account(
             emailAddress = request.emailAddress,
-            password = request.password,
+            password = passwordEncoder.encode(request.password),
         )
         if (accountService.getAccount(account.emailAddress) != null) {
             throw EmailAddressAlreadyRegisteredException()
