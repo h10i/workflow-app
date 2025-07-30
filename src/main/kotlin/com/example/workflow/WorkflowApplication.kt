@@ -16,7 +16,7 @@ import org.springframework.boot.runApplication
     servers = [
         Server(
             description = "development",
-            url = "http://development.eaxmple.com",
+            url = "http://localhost:8080",
         ),
         Server(
             description = "staging",
