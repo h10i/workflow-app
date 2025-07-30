@@ -23,4 +23,13 @@ class GlobalExceptionHandler {
     fun handleUnauthorizedErrors(ex: UnauthorizedException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
+
+    @ExceptionHandler(BusinessException::class)
+    fun handleBusinessErrors(ex: BusinessException): ResponseEntity<UnifiedErrorResponse> {
+        val errorKey = ex.field ?: "general"
+        val errorsMap = mapOf(errorKey to ex.messages)
+        return ResponseEntity
+            .status(ex.httpStatus)
+            .body(UnifiedErrorResponse(errorsMap))
+    }
 }
