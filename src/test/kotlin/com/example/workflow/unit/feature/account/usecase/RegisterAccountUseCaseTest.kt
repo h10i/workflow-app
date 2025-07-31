@@ -7,9 +7,7 @@ import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
+import io.mockk.*
 import org.junit.jupiter.api.*
 import org.springframework.security.crypto.password.PasswordEncoder
 import kotlin.test.assertEquals
@@ -47,6 +45,7 @@ class RegisterAccountUseCaseTest {
             val accountViewDto: AccountViewDto = mockk()
             val claimsSlot = slot<Account>()
 
+            every { accountServiceMock.verifyEmailAddressAvailability(request.emailAddress) } just runs
             every { accountServiceMock.getAccountViewDto(request.emailAddress) } returns null
             every { passwordEncoder.encode(request.password) } returns encryptedPassword
             every { accountServiceMock.saveAccount(capture(claimsSlot)) } returns accountViewDto
@@ -69,10 +68,8 @@ class RegisterAccountUseCaseTest {
                 emailAddress = "user@example.com",
                 password = "test-password",
             )
-            val registeredAccount: AccountViewDto = mockk()
 
-            every { passwordEncoder.encode(request.password) } returns "encrypted-test-password"
-            every { accountServiceMock.getAccountViewDto(request.emailAddress) } returns registeredAccount
+            every { accountServiceMock.verifyEmailAddressAvailability(request.emailAddress) } throws EmailAddressAlreadyRegisteredException()
 
             // Act
             // Assert
