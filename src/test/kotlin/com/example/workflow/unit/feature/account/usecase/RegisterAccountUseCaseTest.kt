@@ -47,7 +47,7 @@ class RegisterAccountUseCaseTest {
             val accountViewDto: AccountViewDto = mockk()
             val claimsSlot = slot<Account>()
 
-            every { accountServiceMock.getAccount(request.emailAddress) } returns null
+            every { accountServiceMock.getAccountViewDto(request.emailAddress) } returns null
             every { passwordEncoder.encode(request.password) } returns encryptedPassword
             every { accountServiceMock.saveAccount(capture(claimsSlot)) } returns accountViewDto
 
@@ -72,7 +72,7 @@ class RegisterAccountUseCaseTest {
             val registeredAccount: AccountViewDto = mockk()
 
             every { passwordEncoder.encode(request.password) } returns "encrypted-test-password"
-            every { accountServiceMock.getAccount(request.emailAddress) } returns registeredAccount
+            every { accountServiceMock.getAccountViewDto(request.emailAddress) } returns registeredAccount
 
             // Act
             // Assert

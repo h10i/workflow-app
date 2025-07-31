@@ -95,7 +95,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetAccountById {
+    inner class GetAccountViewDtoById {
         @BeforeEach
         fun setUp() {
             mockkStatic(Account::toViewDto)
@@ -117,7 +117,7 @@ class AccountServiceTest {
             every { accountMock.toViewDto() } returns expectedAccountViewDtoMock
 
             // Act
-            val actualAccountViewDto = accountService.getAccount(accountId)
+            val actualAccountViewDto = accountService.getAccountViewDto(accountId)
 
             // Assert
             assertEquals(expectedAccountViewDtoMock, actualAccountViewDto)
@@ -132,14 +132,14 @@ class AccountServiceTest {
             // Act
             // Assert
             val actualException = assertThrows<EntityNotFoundException> {
-                accountService.getAccount(accountId)
+                accountService.getAccountViewDto(accountId)
             }
             assertEquals("Account not found: $accountId", actualException.message)
         }
     }
 
     @Nested
-    inner class GetAccountByEmailAddress {
+    inner class GetAccountViewDtoByEmailAddress {
         @BeforeEach
         fun setUp() {
             mockkStatic(Account::toViewDto)
@@ -161,7 +161,7 @@ class AccountServiceTest {
             every { accountMock.toViewDto() } returns expectedAccountViewDtoMock
 
             // Act
-            val actualAccountViewDto = accountService.getAccount(emailAddress)
+            val actualAccountViewDto = accountService.getAccountViewDto(emailAddress)
 
             // Assert
             assertEquals(expectedAccountViewDtoMock, actualAccountViewDto)
@@ -174,7 +174,7 @@ class AccountServiceTest {
             every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null
 
             // Act
-            val actualAccountViewDto = accountService.getAccount(emailAddress)
+            val actualAccountViewDto = accountService.getAccountViewDto(emailAddress)
 
             // Assert
             assertNull(actualAccountViewDto)

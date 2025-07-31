@@ -38,7 +38,7 @@ class GetAccountUseCaseTest {
             val accountViewDto: AccountViewDto = mockk()
 
             every { accountServiceMock.getCurrentAccountId() } returns accountId
-            every { accountServiceMock.getAccount(accountId) } returns accountViewDto
+            every { accountServiceMock.getAccountViewDto(accountId) } returns accountViewDto
 
             // Act
             val actual: GetAccountUseCase.Result = getAccountUseCase.execute()

@@ -22,7 +22,7 @@ class RegisterAccountUseCase(
             emailAddress = request.emailAddress,
             password = passwordEncoder.encode(request.password),
         )
-        if (accountService.getAccount(account.emailAddress) != null) {
+        if (accountService.getAccountViewDto(account.emailAddress) != null) {
             throw EmailAddressAlreadyRegisteredException()
         }
         val accountViewDto: AccountViewDto = accountService.saveAccount(account)

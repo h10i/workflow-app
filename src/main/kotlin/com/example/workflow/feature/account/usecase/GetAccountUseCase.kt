@@ -15,7 +15,7 @@ class GetAccountUseCase(
 
     fun execute(): Result {
         val accountId: UUID = accountService.getCurrentAccountId()
-        val accountViewDto: AccountViewDto = accountService.getAccount(accountId)
+        val accountViewDto: AccountViewDto = accountService.getAccountViewDto(accountId)
         return Result(
             accountViewDto = accountViewDto
         )
