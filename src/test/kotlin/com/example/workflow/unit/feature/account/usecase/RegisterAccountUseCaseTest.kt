@@ -1,6 +1,7 @@
 package com.example.workflow.unit.feature.account.usecase
 
 import com.example.workflow.core.account.Account
+import com.example.workflow.core.account.toViewDto
 import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegisteredException
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.RegisterAccountRequest
@@ -34,6 +35,16 @@ class RegisterAccountUseCaseTest {
 
     @Nested
     inner class ExecuteMethod {
+        @BeforeEach
+        fun setUp() {
+            mockkStatic(Account::toViewDto)
+        }
+
+        @AfterEach
+        fun tearDown() {
+            unmockkStatic(Account::toViewDto)
+        }
+
         @Test
         fun `return account with valid request`() {
             // Arrange
@@ -42,13 +53,15 @@ class RegisterAccountUseCaseTest {
                 password = "test-password",
             )
             val encryptedPassword = "encrypted-test-password"
+            val savedAccount: Account = mockk()
             val accountViewDto: AccountViewDto = mockk()
             val claimsSlot = slot<Account>()
 
             every { accountServiceMock.verifyEmailAddressAvailability(request.emailAddress) } just runs
             every { accountServiceMock.getAccountViewDto(request.emailAddress) } returns null
             every { passwordEncoder.encode(request.password) } returns encryptedPassword
-            every { accountServiceMock.saveAccount(capture(claimsSlot)) } returns accountViewDto
+            every { accountServiceMock.saveAccount(capture(claimsSlot)) } returns savedAccount
+            every { savedAccount.toViewDto() } returns accountViewDto
 
             // Act
             val actual: RegisterAccountUseCase.Result = registerAccountUseCase.execute(request)

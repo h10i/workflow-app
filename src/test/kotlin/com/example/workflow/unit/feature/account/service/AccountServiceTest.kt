@@ -45,19 +45,20 @@ class AccountServiceTest {
         }
 
         @Test
-        fun `returns account view dto when creating new account`() {
+        fun `returns account when creating a new account`() {
             // Arrange
             val accountMock: Account = mockk()
+            val savedAccountMock: Account = mockk()
             val expectedAccountViewDtoMock: AccountViewDto = mockk()
 
-            every { accountRepositoryMock.save(accountMock) } returns accountMock
-            every { accountMock.toViewDto() } returns expectedAccountViewDtoMock
+            every { accountRepositoryMock.save(accountMock) } returns savedAccountMock
+            every { savedAccountMock.toViewDto() } returns expectedAccountViewDtoMock
 
             // Act
-            val actualAccountViewDto = accountService.saveAccount(accountMock)
+            val actual = accountService.saveAccount(accountMock)
 
             // Assert
-            assertEquals(expectedAccountViewDtoMock, actualAccountViewDto)
+            assertEquals(savedAccountMock, actual)
         }
     }
 

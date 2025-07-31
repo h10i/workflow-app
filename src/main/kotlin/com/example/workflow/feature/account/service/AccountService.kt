@@ -16,9 +16,8 @@ class AccountService(
     private val accountRepository: AccountRepository
 ) {
     @Transactional
-    fun saveAccount(account: Account): AccountViewDto {
+    fun saveAccount(account: Account): Account {
         return accountRepository.save(account)
-            .toViewDto()
     }
 
     fun getCurrentAccountId(): UUID {
