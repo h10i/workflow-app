@@ -31,13 +31,6 @@ class AccountService(
     }
 
     @Transactional
-    fun getAccountViewDto(id: UUID): AccountViewDto {
-        return accountRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Account not found: $id") }
-            .toViewDto()
-    }
-
-    @Transactional
     fun getAccountViewDto(emailAddress: String): AccountViewDto? {
         return accountRepository.findByEmailAddress(emailAddress)
             ?.toViewDto()
