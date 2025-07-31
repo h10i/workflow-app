@@ -58,7 +58,6 @@ class RegisterAccountUseCaseTest {
             val claimsSlot = slot<Account>()
 
             every { accountServiceMock.verifyEmailAddressAvailability(request.emailAddress) } just runs
-            every { accountServiceMock.getAccountViewDto(request.emailAddress) } returns null
             every { passwordEncoder.encode(request.password) } returns encryptedPassword
             every { accountServiceMock.saveAccount(capture(claimsSlot)) } returns savedAccount
             every { savedAccount.toViewDto() } returns accountViewDto
