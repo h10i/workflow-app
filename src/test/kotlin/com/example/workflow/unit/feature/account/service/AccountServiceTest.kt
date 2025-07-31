@@ -95,6 +95,38 @@ class AccountServiceTest {
     }
 
     @Nested
+    inner class GetAccountById {
+        @Test
+        fun `returns account view dto when account exists`() {
+            // Arrange
+            val accountId: UUID = UUID.randomUUID()
+            val accountMock: Account = mockk()
+
+            every { accountRepositoryMock.findById(accountId) } returns Optional.of(accountMock)
+
+            // Act
+            val actualAccount: Account = accountService.getAccount(accountId)
+
+            // Assert
+            assertEquals(accountMock, actualAccount)
+        }
+
+        @Test
+        fun `throws EntityNotFoundException when account doesn't exists`() {
+            // Arrange
+            val accountId: UUID = UUID.randomUUID()
+            every { accountRepositoryMock.findById(accountId) } returns Optional.empty()
+
+            // Act
+            // Assert
+            val actualException = assertThrows<EntityNotFoundException> {
+                accountService.getAccountViewDto(accountId)
+            }
+            assertEquals("Account not found: $accountId", actualException.message)
+        }
+    }
+
+    @Nested
     inner class GetAccountViewDtoById {
         @BeforeEach
         fun setUp() {
