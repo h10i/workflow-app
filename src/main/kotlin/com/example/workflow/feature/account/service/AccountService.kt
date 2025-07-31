@@ -3,6 +3,7 @@ package com.example.workflow.feature.account.service
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.toViewDto
+import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegisteredException
 import com.example.workflow.feature.account.model.AccountViewDto
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.security.core.context.SecurityContextHolder
@@ -41,5 +42,11 @@ class AccountService(
     fun getAccountViewDto(emailAddress: String): AccountViewDto? {
         return accountRepository.findByEmailAddress(emailAddress)
             ?.toViewDto()
+    }
+
+    fun verifyEmailAddressAvailability(emailAddress: String) {
+        if (accountRepository.findByEmailAddress(emailAddress) != null) {
+            throw EmailAddressAlreadyRegisteredException()
+        }
     }
 }

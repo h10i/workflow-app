@@ -3,13 +3,11 @@ package com.example.workflow.unit.feature.account.service
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.toViewDto
+import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegisteredException
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import io.mockk.*
 import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.*
 import org.springframework.security.core.Authentication
@@ -210,6 +208,39 @@ class AccountServiceTest {
 
             // Assert
             assertNull(actualAccountViewDto)
+        }
+    }
+
+    @Nested
+    inner class VerifyEmailAddressAvailability {
+        @Test
+        fun `throws EmailAddressAlreadyRegisteredException when email address is registered`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            val accountMock: Account = mockk()
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns accountMock
+
+            // Act
+            // Assert
+            val actualException = assertThrows<EmailAddressAlreadyRegisteredException> {
+                accountService.verifyEmailAddressAvailability(emailAddress)
+            }
+            assertEquals(Account::emailAddress.name, actualException.field)
+            assertEquals("This email address is already registered.", actualException.message)
+        }
+
+        @Test
+        fun `does not throws EmailAddressAlreadyRegisteredException when email address is not registered`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null
+
+            // Act
+            // Assert
+            assertDoesNotThrow {
+                accountService.verifyEmailAddressAvailability(emailAddress)
+            }
+            verify(exactly = 1) { accountRepositoryMock.findByEmailAddress(emailAddress) }
         }
     }
 }
