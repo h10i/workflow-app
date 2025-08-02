@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @UnitTest
 class AccountServiceTest {
@@ -121,6 +122,37 @@ class AccountServiceTest {
                 accountService.getAccount(accountId)
             }
             assertEquals("Account not found: $accountId", actualException.message)
+        }
+    }
+
+    @Nested
+    inner class GetAccountByEmailAddress {
+        @Test
+        fun `returns account when account exists`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            val accountMock: Account = mockk()
+
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns accountMock
+
+            // Act
+            val actual: Account? = accountService.getAccountByEmailAddress(emailAddress)
+
+            // Assert
+            assertEquals(accountMock, actual)
+        }
+
+        @Test
+        fun `returns null when account doesn't exists`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null
+
+            // Act
+            val actual: Account? = accountService.getAccountByEmailAddress(emailAddress)
+
+            // Assert
+            assertNull(actual)
         }
     }
 

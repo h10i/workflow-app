@@ -29,6 +29,11 @@ class AccountService(
     }
 
     @Transactional
+    fun getAccountByEmailAddress(emailAddress: String): Account? {
+        return accountRepository.findByEmailAddress(emailAddress)
+    }
+
+    @Transactional
     fun verifyEmailAddressAvailability(emailAddress: String) {
         if (accountRepository.findByEmailAddress(emailAddress) != null) {
             throw EmailAddressAlreadyRegisteredException()
