@@ -95,7 +95,7 @@ class AccountServiceTest {
     @Nested
     inner class GetAccountById {
         @Test
-        fun `returns account view dto when account exists`() {
+        fun `returns account when account exists`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val accountMock: Account = mockk()
