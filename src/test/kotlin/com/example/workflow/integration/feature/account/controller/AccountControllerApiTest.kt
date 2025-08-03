@@ -5,10 +5,13 @@ import com.example.workflow.feature.account.controller.AccountController
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
+import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
+import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
+import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
 import io.mockk.*
@@ -48,6 +51,12 @@ class AccountControllerApiTest {
     @Autowired
     private lateinit var getAccountPresenter: GetAccountPresenter
 
+    @Autowired
+    private lateinit var updateAccountUseCase: UpdateAccountUseCase
+
+    @Autowired
+    private lateinit var updateAccountPresenter: UpdateAccountPresenter
+
     @TestConfiguration
     class MockConfig {
         @Bean
@@ -61,6 +70,12 @@ class AccountControllerApiTest {
 
         @Bean
         fun getAccountPresenter(): GetAccountPresenter = mockk()
+
+        @Bean
+        fun updateAccountUseCase(): UpdateAccountUseCase = mockk()
+
+        @Bean
+        fun updateAccountPresenter(): UpdateAccountPresenter = mockk()
     }
 
     @BeforeEach
@@ -235,6 +250,125 @@ class AccountControllerApiTest {
                     "roleNames": ["USER"]
                 }
                 """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class UpdateAccount {
+        @Test
+        fun `PATCH v1_accounts_me should return updated account information with valid request`() {
+            // Arrange
+            val emailAddress = "new@example.com"
+            val password = "new-test-password"
+
+            val accountViewDtoMock: AccountViewDto = mockk()
+            val useCaseResult = UpdateAccountUseCase.Result(
+                accountViewDto = accountViewDtoMock
+            )
+
+            val accountId: UUID = UUID.randomUUID()
+            val accountViewResponse = AccountViewResponse(
+                id = accountId,
+                emailAddress = emailAddress,
+                roleNames = listOf("USER"),
+            )
+            val presenterResult = UpdateAccountPresenter.Result(
+                response = accountViewResponse
+            )
+
+            every { updateAccountUseCase.execute(any()) } returns useCaseResult
+            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .patch()
+                .uri("${ApiPath.Account.BASE}${ApiPath.Account.ME}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                    "emailAddress": "$emailAddress",
+                    "password": "$password"
+                    }
+                    """.trimIndent()
+                )
+                .exchange()
+
+            // Assert
+            val request = slot<UpdateAccountRequest>()
+            verify { updateAccountUseCase.execute(capture(request)) }
+            val capturedRequest = request.captured
+            assertEquals(emailAddress, capturedRequest.emailAddress)
+            assertEquals(password, capturedRequest.password)
+
+            Assertions.assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                {
+                    "id": "$accountId",
+                    "emailAddress": "$emailAddress", 
+                    "roleNames": ["USER"]
+                }
+                """.trimIndent()
+                )
+        }
+
+        @Test
+        fun `PATCH v1_accounts_me should return errors with invalid request`() {
+            // Arrange
+            val emailAddress = "user!example.com"
+            val password = ""
+
+            val accountViewDtoMock: AccountViewDto = mockk()
+            val useCaseResult = UpdateAccountUseCase.Result(
+                accountViewDto = accountViewDtoMock
+            )
+
+            val accountId: UUID = UUID.randomUUID()
+            val accountViewResponse = AccountViewResponse(
+                id = accountId,
+                emailAddress = emailAddress,
+                roleNames = listOf("USER"),
+            )
+            val presenterResult = UpdateAccountPresenter.Result(
+                response = accountViewResponse
+            )
+
+            every { updateAccountUseCase.execute(any()) } returns useCaseResult
+            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .patch()
+                .uri("${ApiPath.Account.BASE}${ApiPath.Account.ME}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                    "emailAddress": "$emailAddress",
+                    "password": "$password"
+                    }
+                    """.trimIndent()
+                )
+                .exchange()
+
+            // Assert
+            Assertions.assertThat(testResult)
+                .hasStatus(HttpStatus.BAD_REQUEST)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                    {
+                        "errors": {
+                            "emailAddress": [
+                                "Invalid email address format"
+                            ]
+                        }
+                    }
+                    """.trimIndent()
                 )
         }
     }
