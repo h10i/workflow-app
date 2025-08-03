@@ -110,7 +110,16 @@ class AccountApiTest(
         @Test
         fun `GET account with valid credentials returns 200 OK`() {
             // Arrange
-            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate()
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            val registeredAccount = restTemplate.registerAccount(
+                emailAddress = emailAddress,
+                password = password,
+            )
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate(
+                emailAddress = emailAddress,
+                password = password,
+            )
 
             // Act
             val response = restTemplate.get(
@@ -126,9 +135,9 @@ class AccountApiTest(
             val expectedBody = mapper.readTree(
                 """
                 {
-                    "id":"15101d3d-0b10-4e5a-aae1-b21ccdf06b34",
-                    "emailAddress":"test@example.com",
-                    "roleNames":["USER","ADMIN"]
+                    "id":"${registeredAccount.id}",
+                    "emailAddress":"${registeredAccount.emailAddress}",
+                    "roleNames":${registeredAccount.roleNames}
                 }
                 """
             )
