@@ -151,4 +151,12 @@ class E2ETestRestTemplate(
             refreshToken,
         )
     }
+
+    fun registerAccountAndAuthenticate(
+        emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
+        password: String = TestDataFactory.getValidTestPassword(),
+    ): AuthResult {
+        registerAccount(emailAddress = emailAddress, password = password)
+        return authenticate(emailAddress = emailAddress, password = password)
+    }
 }
