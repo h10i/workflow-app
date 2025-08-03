@@ -6,8 +6,10 @@ import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.feature.account.service.AccountService
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Service
 import java.util.*
 
+@Service
 class UpdateAccountUseCase(
     private val accountService: AccountService,
     private val passwordEncoder: PasswordEncoder,
