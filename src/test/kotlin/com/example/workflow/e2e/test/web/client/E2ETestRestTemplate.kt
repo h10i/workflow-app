@@ -83,6 +83,15 @@ class E2ETestRestTemplate(
         headers: HttpHeaders = HttpHeaders()
     ): JsonResponse<T> = exchange(responseType, HttpMethod.PUT, path, body, accessToken, cookie, headers)
 
+    fun <T> patch(
+        responseType: Class<T>,
+        path: String,
+        body: Any,
+        accessToken: String? = null,
+        cookie: String? = null,
+        headers: HttpHeaders = HttpHeaders()
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.PATCH, path, body, accessToken, cookie, headers)
+
     fun <T> delete(
         responseType: Class<T>,
         path: String,
