@@ -3,10 +3,7 @@ package com.example.workflow.integration.test.controller
 import com.example.workflow.common.path.ApiPath
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @Profile("security-test-controller")
 @RestController
@@ -33,6 +30,14 @@ class SecurityConfigTestController {
         ]
     )
     fun post() = ResponseEntity.ok("post")
+
+    @PatchMapping(
+        path = [
+            // Account
+            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+        ]
+    )
+    fun patch() = ResponseEntity.ok("patch")
 
     @DeleteMapping(
         path = [
