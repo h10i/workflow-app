@@ -1,14 +1,13 @@
 package com.example.workflow.unit.feature.account.controller
 
 import com.example.workflow.feature.account.controller.AccountController
-import com.example.workflow.feature.account.model.AccountViewDto
-import com.example.workflow.feature.account.model.AccountViewResponse
-import com.example.workflow.feature.account.model.RegisterAccountRequest
-import com.example.workflow.feature.account.model.toViewResponse
+import com.example.workflow.feature.account.model.*
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
+import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
+import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
@@ -27,6 +26,8 @@ class AccountControllerTest {
     private lateinit var registerAccountPresenter: RegisterAccountPresenter
     private lateinit var getAccountUseCase: GetAccountUseCase
     private lateinit var getAccountPresenter: GetAccountPresenter
+    private lateinit var updateAccountUseCase: UpdateAccountUseCase
+    private lateinit var updateAccountPresenter: UpdateAccountPresenter
     private lateinit var accountController: AccountController
 
     @BeforeEach
@@ -35,11 +36,15 @@ class AccountControllerTest {
         registerAccountPresenter = mockk()
         getAccountUseCase = mockk()
         getAccountPresenter = mockk()
+        updateAccountUseCase = mockk()
+        updateAccountPresenter = mockk()
         accountController = AccountController(
             registerAccountUseCase = registerAccountUseCase,
             registerAccountPresenter = registerAccountPresenter,
             getAccountUseCase = getAccountUseCase,
             getAccountPresenter = getAccountPresenter,
+            updateAccountUseCase = updateAccountUseCase,
+            updateAccountPresenter = updateAccountPresenter,
         )
     }
 
@@ -118,6 +123,47 @@ class AccountControllerTest {
 
             // Act
             val actual = accountController.get()
+
+            // Assert
+            assertEquals(HttpStatus.OK, actual.statusCode)
+            assertEquals(accountViewResponseMock, actual.body)
+        }
+    }
+
+    @Nested
+    inner class UpdateAccount() {
+        @BeforeEach
+        fun setUp() {
+            mockkStatic(AccountViewDto::toViewResponse)
+        }
+
+        @AfterEach
+        fun tearDown() {
+            unmockkStatic(AccountViewDto::toViewResponse)
+        }
+
+        @Test
+        fun `returns account view response`() {
+            // Arrange
+            val request = UpdateAccountRequest(
+                emailAddress = "new@example.com",
+                password = "new-test-password",
+            )
+            val accountViewDtoMock = mockk<AccountViewDto>()
+            val useCaseResult = UpdateAccountUseCase.Result(
+                accountViewDto = accountViewDtoMock,
+            )
+
+            val accountViewResponseMock: AccountViewResponse = mockk()
+            val presenterResult = UpdateAccountPresenter.Result(
+                response = accountViewResponseMock
+            )
+
+            every { updateAccountUseCase.execute(request) } returns useCaseResult
+            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+
+            // Act
+            val actual = accountController.updateAccount(request)
 
             // Assert
             assertEquals(HttpStatus.OK, actual.statusCode)
