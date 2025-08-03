@@ -4,8 +4,10 @@ import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.support.annotation.E2ETest
+import com.example.workflow.support.util.TestDataFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -142,6 +144,138 @@ class AccountApiTest(
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+    }
+
+    @Nested
+    inner class UpdateAccount {
+        @Test
+        @Transactional
+        fun `PATCH valid request returns 200 OK`() {
+            // Arrange
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            val accountViewResponse = restTemplate.registerAccount(
+                emailAddress = emailAddress,
+                password = password,
+            )
+            val accountId = accountViewResponse.id
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate(
+                emailAddress = emailAddress,
+                password = password,
+            )
+
+            val newEmailAddress = TestDataFactory.createUniqueEmailAddress()
+            val newPassword = "new-${password}"
+            val json = """
+            {
+              "emailAddress": "$newEmailAddress",
+              "password": "$newPassword"
+            }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.patch(
+                responseType = String::class.java,
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                body = json,
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.OK, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val actualBody = mapper.readTree(response.body)
+
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "id":"$accountId",
+                    "emailAddress":"$newEmailAddress",
+                    "roleNames":[]
+                }
+                """
+            )
+
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `PATCH invalid request returns 400 Bad Request when provided email address is already registered`() {
+            // Arrange
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate(
+                emailAddress = emailAddress,
+                password = password,
+            )
+
+            val newEmailAddress = emailAddress
+            val newPassword = "new-${password}"
+            val json = """
+            {
+              "emailAddress": "$newEmailAddress",
+              "password": "$newPassword"
+            }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.patch(
+                responseType = String::class.java,
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                body = json,
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "errors": {
+                        "emailAddress": [
+                            "This email address is already registered."
+                        ]
+                    }
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `PATCH request with invalid credentials returns 401 Unauthorize`() {
+            // Arrange
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            restTemplate.registerAccountAndAuthenticate(
+                emailAddress = emailAddress,
+                password = password,
+            )
+
+            val newEmailAddress = TestDataFactory.createUniqueEmailAddress()
+            val newPassword = "new-${password}"
+            val json = """
+            {
+              "emailAddress": "$newEmailAddress",
+              "password": "$newPassword"
+            }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.patch(
+                responseType = String::class.java,
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                body = json,
             )
 
             // Assert
