@@ -135,7 +135,7 @@ class AccountControllerApiTest {
         }
 
         @Test
-        fun `POST v1_accounts should return registered account information with invalid request`() {
+        fun `POST v1_accounts should return errors with invalid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = ""
