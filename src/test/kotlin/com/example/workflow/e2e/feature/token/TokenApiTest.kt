@@ -6,6 +6,7 @@ import com.example.workflow.e2e.test.util.CookieUtil
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.annotation.E2ETest
+import com.example.workflow.support.util.TestDataFactory
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,10 +25,17 @@ class TokenApiTest(
         @Test
         fun `POST token with valid credentials returns 200 OK`() {
             // Arrange
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            restTemplate.registerAccount(
+                emailAddress = emailAddress,
+                password = password,
+            )
+
             val json = """
             {
-              "emailAddress": "test@example.com",
-              "password": "PASSWORD"
+              "emailAddress": "$emailAddress",
+              "password": "$password"
             }
             """.trimIndent()
 
@@ -48,10 +56,16 @@ class TokenApiTest(
         @Test
         fun `POST token with invalid credentials returns 401 Unauthorize`() {
             // Arrange
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            restTemplate.registerAccount(
+                emailAddress = emailAddress,
+                password = password,
+            )
             val json = """
             {
-              "emailAddress": "test@example.com",
-              "password": "invalid-PASSWORD"
+              "emailAddress": "$emailAddress",
+              "password": "invalid-$password"
             }
             """.trimIndent()
 
