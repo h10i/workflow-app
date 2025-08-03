@@ -71,10 +71,17 @@ class AccountApiTest(
         @Test
         fun `POST invalid request returns 400 Bad Request when email address is already registered`() {
             // Arrange
+            val emailAddress = TestDataFactory.createUniqueEmailAddress()
+            val password = TestDataFactory.getValidTestPassword()
+            restTemplate.registerAccount(
+                emailAddress = emailAddress,
+                password = password,
+            )
+
             val json = """
             {
-              "emailAddress": "test@example.com",
-              "password": "P4sSw0rd!"
+              "emailAddress": "$emailAddress",
+              "password": "$password"
             }
             """.trimIndent()
 
