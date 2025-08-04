@@ -157,6 +157,22 @@ class AccountServiceTest {
     }
 
     @Nested
+    inner class DeleteAccountById {
+        @Test
+        fun `should delete account by id`() {
+            // Arrange
+            val accountId: UUID = UUID.randomUUID()
+            every { accountRepositoryMock.deleteById(accountId) } just runs
+
+            // Act
+            accountService.deleteAccountById(accountId)
+
+            // Assert
+            verify(exactly = 1) { accountRepositoryMock.deleteById(accountId) }
+        }
+    }
+
+    @Nested
     inner class VerifyEmailAddressAvailability {
         @Test
         fun `throws EmailAddressAlreadyRegisteredException when email address is registered`() {

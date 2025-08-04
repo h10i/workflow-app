@@ -34,6 +34,11 @@ class AccountService(
     }
 
     @Transactional
+    fun deleteAccountById(id: UUID) {
+        accountRepository.deleteById(id)
+    }
+
+    @Transactional
     fun verifyEmailAddressAvailability(emailAddress: String) {
         if (accountRepository.findByEmailAddress(emailAddress) != null) {
             throw EmailAddressAlreadyRegisteredException()
