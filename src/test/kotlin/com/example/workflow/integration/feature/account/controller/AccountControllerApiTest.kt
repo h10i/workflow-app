@@ -9,6 +9,7 @@ import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
 import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
@@ -16,6 +17,7 @@ import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
 import io.mockk.*
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -57,6 +59,9 @@ class AccountControllerApiTest {
     @Autowired
     private lateinit var updateAccountPresenter: UpdateAccountPresenter
 
+    @Autowired
+    private lateinit var deleteAccountUseCase: DeleteAccountUseCase
+
     @TestConfiguration
     class MockConfig {
         @Bean
@@ -76,6 +81,9 @@ class AccountControllerApiTest {
 
         @Bean
         fun updateAccountPresenter(): UpdateAccountPresenter = mockk()
+
+        @Bean
+        fun deleteAccountUseCase(): DeleteAccountUseCase = mockk()
     }
 
     @BeforeEach
@@ -370,6 +378,25 @@ class AccountControllerApiTest {
                     }
                     """.trimIndent()
                 )
+        }
+    }
+
+    @Nested
+    inner class DeleteAccount {
+        @Test
+        fun `DELETE v1_accounts_me should return no content`() {
+            // Arrange
+            every { deleteAccountUseCase.execute() } just runs
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .delete()
+                .uri("${ApiPath.Account.BASE}${ApiPath.Account.ME}")
+                .exchange()
+
+            // Assert
+            verify(exactly = 1) { deleteAccountUseCase.execute() }
+            assertThat(testResult).hasStatus(HttpStatus.NO_CONTENT)
         }
     }
 }
