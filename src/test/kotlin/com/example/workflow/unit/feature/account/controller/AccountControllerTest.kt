@@ -5,20 +5,19 @@ import com.example.workflow.feature.account.model.*
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
 import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import io.mockk.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @UnitTest
 class AccountControllerTest {
@@ -28,6 +27,7 @@ class AccountControllerTest {
     private lateinit var getAccountPresenter: GetAccountPresenter
     private lateinit var updateAccountUseCase: UpdateAccountUseCase
     private lateinit var updateAccountPresenter: UpdateAccountPresenter
+    private lateinit var deleteAccountUseCase: DeleteAccountUseCase
     private lateinit var accountController: AccountController
 
     @BeforeEach
@@ -38,6 +38,7 @@ class AccountControllerTest {
         getAccountPresenter = mockk()
         updateAccountUseCase = mockk()
         updateAccountPresenter = mockk()
+        deleteAccountUseCase = mockk()
         accountController = AccountController(
             registerAccountUseCase = registerAccountUseCase,
             registerAccountPresenter = registerAccountPresenter,
@@ -45,6 +46,7 @@ class AccountControllerTest {
             getAccountPresenter = getAccountPresenter,
             updateAccountUseCase = updateAccountUseCase,
             updateAccountPresenter = updateAccountPresenter,
+            deleteAccountUseCase = deleteAccountUseCase,
         )
     }
 
@@ -168,6 +170,22 @@ class AccountControllerTest {
             // Assert
             assertEquals(HttpStatus.OK, actual.statusCode)
             assertEquals(accountViewResponseMock, actual.body)
+        }
+    }
+
+    @Nested
+    inner class DeleteAccount {
+        @Test
+        fun `returns no content`() {
+            // Arrange
+            every { deleteAccountUseCase.execute() } just runs
+
+            // Act
+            val actual = accountController.deleteAccount()
+
+            // Assert
+            assertEquals(HttpStatus.NO_CONTENT, actual.statusCode)
+            assertNull(actual.body)
         }
     }
 }

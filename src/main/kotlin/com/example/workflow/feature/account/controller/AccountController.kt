@@ -8,6 +8,7 @@ import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
 import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
@@ -30,6 +31,7 @@ class AccountController(
     private val getAccountPresenter: GetAccountPresenter,
     private val updateAccountUseCase: UpdateAccountUseCase,
     private val updateAccountPresenter: UpdateAccountPresenter,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
 ) {
     @Operation(
         summary = "Create a new account",
@@ -111,6 +113,7 @@ class AccountController(
     @Operation(
         summary = "Update account",
         description = "Updates account with the system using the provided user details.",
+        security = [SecurityRequirement(name = "bearer-key")],
         requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Account Information",
             required = true,
@@ -154,5 +157,30 @@ class AccountController(
         val useCaseResult: UpdateAccountUseCase.Result = updateAccountUseCase.execute(request)
         val presenterResult: UpdateAccountPresenter.Result = updateAccountPresenter.toResponse(useCaseResult)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
+    }
+
+    @Operation(
+        summary = "Delete account",
+        description = "deletes account.",
+        security = [SecurityRequirement(name = "bearer-key")],
+        responses = [
+            ApiResponse(
+                responseCode = "204",
+                description = "Successfully deleted account",
+                content = [
+                    Content()
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [Content()]
+            ),
+        ],
+    )
+    @DeleteMapping(ApiPath.Account.ME)
+    fun deleteAccount(): ResponseEntity<Void> {
+        deleteAccountUseCase.execute()
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }
