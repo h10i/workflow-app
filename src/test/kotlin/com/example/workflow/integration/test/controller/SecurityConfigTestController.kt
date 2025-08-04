@@ -41,6 +41,8 @@ class SecurityConfigTestController {
 
     @DeleteMapping(
         path = [
+            // Account
+            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
             // Auth
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
