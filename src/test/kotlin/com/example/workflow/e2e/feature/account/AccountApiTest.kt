@@ -299,4 +299,41 @@ class AccountApiTest(
             assertNull(response.body)
         }
     }
+
+    @Nested
+    inner class DeleteAccount() {
+        @Test
+        fun `DELETE account with valid credentials returns 204 No Content`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+            assertNull(response.body)
+        }
+
+
+        @Test
+        fun `DELETE account with invalid credentials returns 401 Unauthorize`() {
+            // Arrange
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                accessToken = "invalid-access-token",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+    }
 }
