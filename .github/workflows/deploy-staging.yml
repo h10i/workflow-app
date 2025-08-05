@@ -25,6 +25,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: package-staging
+          path: build/libs
 
       # TODO: Add STAGING deployment logic here
       - name: Deploy to STAGING
