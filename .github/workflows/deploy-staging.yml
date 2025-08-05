@@ -17,14 +17,14 @@ jobs:
     secrets: inherit
 
   deploy-staging:
-    needs: build
+    needs: call-build
     runs-on: ubuntu-latest
     environment: staging
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: staging-artifact
+          name: package-staging
 
       # TODO: Add STAGING deployment logic here
       - name: Deploy to STAGING
