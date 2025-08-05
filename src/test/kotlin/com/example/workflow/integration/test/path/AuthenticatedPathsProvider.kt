@@ -13,5 +13,7 @@ class AuthenticatedPathsProvider : ArgumentsProvider {
         Arguments.of(HttpMethod.DELETE, "/v1/auth/revoke/all"),
         // Account
         Arguments.of(HttpMethod.GET, "/v1/accounts/me"),
+        Arguments.of(HttpMethod.PATCH, "/v1/accounts/me"),
+        Arguments.of(HttpMethod.DELETE, "/v1/accounts/me"),
     )
 }

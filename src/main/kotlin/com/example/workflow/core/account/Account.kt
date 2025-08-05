@@ -13,10 +13,10 @@ data class Account(
     val id: UUID = UUID.randomUUID(),
 
     @Column(name = "email_address", nullable = false, unique = true)
-    val emailAddress: String,
+    var emailAddress: String,
 
     @Column(name = "password", nullable = false)
-    val password: String,
+    var password: String,
 
     @OneToMany(mappedBy = "account", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val roles: MutableList<AccountRole> = mutableListOf(),

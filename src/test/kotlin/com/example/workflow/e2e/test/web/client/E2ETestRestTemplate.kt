@@ -1,7 +1,10 @@
 package com.example.workflow.e2e.test.web.client
 
+import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.util.CookieUtil
+import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.support.util.TestDataFactory
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.*
 
@@ -83,6 +86,15 @@ class E2ETestRestTemplate(
         headers: HttpHeaders = HttpHeaders()
     ): JsonResponse<T> = exchange(responseType, HttpMethod.PUT, path, body, accessToken, cookie, headers)
 
+    fun <T> patch(
+        responseType: Class<T>,
+        path: String,
+        body: Any,
+        accessToken: String? = null,
+        cookie: String? = null,
+        headers: HttpHeaders = HttpHeaders()
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.PATCH, path, body, accessToken, cookie, headers)
+
     fun <T> delete(
         responseType: Class<T>,
         path: String,
@@ -90,6 +102,28 @@ class E2ETestRestTemplate(
         cookie: String? = null,
         headers: HttpHeaders = HttpHeaders()
     ): JsonResponse<T> = exchange(responseType, HttpMethod.DELETE, path, null, accessToken, cookie, headers)
+
+    fun registerAccount(
+        emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
+        password: String = TestDataFactory.getValidTestPassword(),
+    ): AccountViewResponse {
+        val json = """
+            {
+              "emailAddress": "$emailAddress",
+              "password": "$password"
+            }
+            """.trimIndent()
+
+        val response = post(
+            responseType = AccountViewResponse::class.java,
+            path = ApiPath.Account.BASE,
+            body = json,
+        )
+        if (response.statusCode != HttpStatus.CREATED || response.body == null) {
+            throw IllegalStateException("Failed to register user for test: ${response.statusCode} - ${response.body}")
+        }
+        return response.body
+    }
 
     fun authenticate(
         emailAddress: String = "test@example.com",
@@ -116,5 +150,13 @@ class E2ETestRestTemplate(
             accessToken,
             refreshToken,
         )
+    }
+
+    fun registerAccountAndAuthenticate(
+        emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
+        password: String = TestDataFactory.getValidTestPassword(),
+    ): AuthResult {
+        registerAccount(emailAddress = emailAddress, password = password)
+        return authenticate(emailAddress = emailAddress, password = password)
     }
 }

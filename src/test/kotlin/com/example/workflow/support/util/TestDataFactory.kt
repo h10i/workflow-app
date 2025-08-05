@@ -15,6 +15,10 @@ import java.time.Instant
 import java.util.*
 
 object TestDataFactory {
+    fun createUniqueEmailAddress() = "user-${UUID.randomUUID()}@example.com"
+
+    fun getValidTestPassword() = "P4sSw0rd!"
+
     fun createRole(
         id: UUID = UUID.randomUUID(),
         name: String = "USER"

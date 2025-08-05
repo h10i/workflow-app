@@ -23,7 +23,7 @@ class RefreshTokenApiTest(
         @Test
         fun `POST refresh token with valid refresh token returns 200 OK`() {
             // Arrange
-            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate()
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
             val cookie = "refreshToken=${authResult.refreshToken}"
 
             // Act
@@ -64,7 +64,7 @@ class RefreshTokenApiTest(
         @Test
         fun `DELETE refresh token with valid credentials and valid refresh token returns 204 No Content`() {
             // Arrange
-            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate()
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
             val cookie = "refreshToken=${authResult.refreshToken}"
 
             // Act
@@ -84,7 +84,7 @@ class RefreshTokenApiTest(
         @Test
         fun `DELETE refresh token with invalid credentials returns 401 Unauthorize`() {
             // Arrange
-            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate()
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
             val cookie = "refreshToken=${authResult.refreshToken}"
 
             // Act
@@ -106,7 +106,7 @@ class RefreshTokenApiTest(
         @Test
         fun `DELETE refresh token with valid credentials returns 204 No Content`() {
             // Arrange
-            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticate()
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
 
             // Act
             val response = restTemplate.delete(

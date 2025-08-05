@@ -3,13 +3,11 @@ package com.example.workflow.unit.feature.account.service
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.toViewDto
+import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegisteredException
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import io.mockk.*
 import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.*
 import org.springframework.security.core.Authentication
@@ -17,6 +15,7 @@ import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @UnitTest
 class AccountServiceTest {
@@ -31,6 +30,36 @@ class AccountServiceTest {
 
     @AfterEach
     fun tearDown() {
+    }
+
+    @Nested
+    inner class SaveAccount {
+        @BeforeEach
+        fun setUp() {
+            mockkStatic(Account::toViewDto)
+        }
+
+        @AfterEach
+        fun tearDown() {
+            unmockkStatic(Account::toViewDto)
+        }
+
+        @Test
+        fun `returns account when creating a new account`() {
+            // Arrange
+            val accountMock: Account = mockk()
+            val savedAccountMock: Account = mockk()
+            val expectedAccountViewDtoMock: AccountViewDto = mockk()
+
+            every { accountRepositoryMock.save(accountMock) } returns savedAccountMock
+            every { savedAccountMock.toViewDto() } returns expectedAccountViewDtoMock
+
+            // Act
+            val actual = accountService.saveAccount(accountMock)
+
+            // Assert
+            assertEquals(savedAccountMock, actual)
+        }
     }
 
     @Nested
@@ -65,32 +94,20 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetAccount {
-        @BeforeEach
-        fun setUp() {
-            mockkStatic(Account::toViewDto)
-        }
-
-        @AfterEach
-        fun tearDown() {
-            unmockkStatic(Account::toViewDto)
-        }
-
+    inner class GetAccountById {
         @Test
-        fun `returns account view dto when account exists`() {
+        fun `returns account when account exists`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val accountMock: Account = mockk()
-            val expectedAccountViewDtoMock: AccountViewDto = mockk()
 
             every { accountRepositoryMock.findById(accountId) } returns Optional.of(accountMock)
-            every { accountMock.toViewDto() } returns expectedAccountViewDtoMock
 
             // Act
-            val actualAccountViewDto = accountService.getAccount(accountId)
+            val actualAccount: Account = accountService.getAccount(accountId)
 
             // Assert
-            assertEquals(expectedAccountViewDtoMock, actualAccountViewDto)
+            assertEquals(accountMock, actualAccount)
         }
 
         @Test
@@ -105,6 +122,86 @@ class AccountServiceTest {
                 accountService.getAccount(accountId)
             }
             assertEquals("Account not found: $accountId", actualException.message)
+        }
+    }
+
+    @Nested
+    inner class GetAccountByEmailAddress {
+        @Test
+        fun `returns account when account exists`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            val accountMock: Account = mockk()
+
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns accountMock
+
+            // Act
+            val actual: Account? = accountService.getAccountByEmailAddress(emailAddress)
+
+            // Assert
+            assertEquals(accountMock, actual)
+        }
+
+        @Test
+        fun `returns null when account doesn't exists`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null
+
+            // Act
+            val actual: Account? = accountService.getAccountByEmailAddress(emailAddress)
+
+            // Assert
+            assertNull(actual)
+        }
+    }
+
+    @Nested
+    inner class DeleteAccountById {
+        @Test
+        fun `should delete account by id`() {
+            // Arrange
+            val accountId: UUID = UUID.randomUUID()
+            every { accountRepositoryMock.deleteById(accountId) } just runs
+
+            // Act
+            accountService.deleteAccountById(accountId)
+
+            // Assert
+            verify(exactly = 1) { accountRepositoryMock.deleteById(accountId) }
+        }
+    }
+
+    @Nested
+    inner class VerifyEmailAddressAvailability {
+        @Test
+        fun `throws EmailAddressAlreadyRegisteredException when email address is registered`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            val accountMock: Account = mockk()
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns accountMock
+
+            // Act
+            // Assert
+            val actualException = assertThrows<EmailAddressAlreadyRegisteredException> {
+                accountService.verifyEmailAddressAvailability(emailAddress)
+            }
+            assertEquals(Account::emailAddress.name, actualException.field)
+            assertEquals("This email address is already registered.", actualException.message)
+        }
+
+        @Test
+        fun `does not throws EmailAddressAlreadyRegisteredException when email address is not registered`() {
+            // Arrange
+            val emailAddress = "user@example.com"
+            every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null
+
+            // Act
+            // Assert
+            assertDoesNotThrow {
+                accountService.verifyEmailAddressAvailability(emailAddress)
+            }
+            verify(exactly = 1) { accountRepositoryMock.findByEmailAddress(emailAddress) }
         }
     }
 }
