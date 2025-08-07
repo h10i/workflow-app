@@ -2,14 +2,13 @@ package com.example.workflow.unit.feature.role.service
 
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.RoleRepository
+import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import io.mockk.verify
+import org.junit.jupiter.api.*
 import kotlin.test.assertEquals
 
 @UnitTest
@@ -42,6 +41,39 @@ class RoleServiceTest {
 
             // Assert
             assertEquals(savedRole, actual)
+        }
+    }
+
+    @Nested
+    inner class VerifyRoleAvailability {
+        @Test
+        fun `throws RoleNameAlreadyCreatedException when email address is created`() {
+            // Arrange
+            val roleName = "EXAMPLE"
+            val role: Role = mockk()
+            every { roleRepository.findByName(roleName) } returns role
+
+            // Act
+            // Assert
+            val actualException = assertThrows<RoleNameAlreadyCreatedException> {
+                roleService.verifyRoleAvailability(roleName)
+            }
+            assertEquals(Role::name.name, actualException.field)
+            assertEquals("This role name is already created.", actualException.message)
+        }
+
+        @Test
+        fun `does not throws RoleNameAlreadyCreatedException when email address is not created`() {
+            // Arrange
+            val roleName = "EXAMPLE"
+            every { roleRepository.findByName(roleName) } returns null
+
+            // Act
+            // Assert
+            assertDoesNotThrow {
+                roleService.verifyRoleAvailability(roleName)
+            }
+            verify(exactly = 1) { roleRepository.findByName(roleName) }
         }
     }
 }
