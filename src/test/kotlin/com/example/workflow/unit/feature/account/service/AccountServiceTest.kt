@@ -34,16 +34,6 @@ class AccountServiceTest {
 
     @Nested
     inner class SaveAccount {
-        @BeforeEach
-        fun setUp() {
-            mockkStatic(Account::toViewDto)
-        }
-
-        @AfterEach
-        fun tearDown() {
-            unmockkStatic(Account::toViewDto)
-        }
-
         @Test
         fun `returns account when creating a new account`() {
             // Arrange

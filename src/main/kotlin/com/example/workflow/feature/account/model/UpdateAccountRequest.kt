@@ -5,14 +5,14 @@ import jakarta.validation.constraints.Email
 
 data class UpdateAccountRequest(
     @field:Email(message = "Invalid email address format")
-    @Schema(
+    @get:Schema(
         description = "your email address",
         example = "user@example.com",
         required = false,
     )
     val emailAddress: String? = null,
 
-    @Schema(
+    @get:Schema(
         description = "Your account password",
         example = "P4sSw0rd!",
         required = false,
