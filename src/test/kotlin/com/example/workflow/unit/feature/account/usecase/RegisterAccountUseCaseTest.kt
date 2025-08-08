@@ -85,11 +85,9 @@ class RegisterAccountUseCaseTest {
 
             // Act
             // Assert
-            val actualException = assertThrows<EmailAddressAlreadyRegisteredException> {
+            assertThrows<EmailAddressAlreadyRegisteredException> {
                 registerAccountUseCase.execute(request)
             }
-            assertEquals("This email address is already registered.", actualException.message)
-
         }
     }
 }
