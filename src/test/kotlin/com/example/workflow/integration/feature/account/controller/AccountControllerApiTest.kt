@@ -163,24 +163,6 @@ class AccountControllerApiTest {
             val emailAddress = "user@example.com"
             val password = ""
 
-            val accountViewDtoMock: AccountViewDto = mockk()
-            val useCaseResult = RegisterAccountUseCase.Result(
-                accountViewDto = accountViewDtoMock
-            )
-
-            val accountId: UUID = UUID.randomUUID()
-            val accountViewResponse = AccountViewResponse(
-                id = accountId,
-                emailAddress = emailAddress,
-                roleNames = listOf("USER"),
-            )
-            val presenterResult = RegisterAccountPresenter.Result(
-                response = accountViewResponse
-            )
-
-            every { registerAccountUseCase.execute(any()) } returns useCaseResult
-            every { registerAccountPresenter.toResponse(useCaseResult) } returns presenterResult
-
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
@@ -329,24 +311,6 @@ class AccountControllerApiTest {
             // Arrange
             val emailAddress = "user!example.com"
             val password = ""
-
-            val accountViewDtoMock: AccountViewDto = mockk()
-            val useCaseResult = UpdateAccountUseCase.Result(
-                accountViewDto = accountViewDtoMock
-            )
-
-            val accountId: UUID = UUID.randomUUID()
-            val accountViewResponse = AccountViewResponse(
-                id = accountId,
-                emailAddress = emailAddress,
-                roleNames = listOf("USER"),
-            )
-            val presenterResult = UpdateAccountPresenter.Result(
-                response = accountViewResponse
-            )
-
-            every { updateAccountUseCase.execute(any()) } returns useCaseResult
-            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
