@@ -2,16 +2,14 @@ package com.example.workflow.unit.feature.role.usecase
 
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.toViewDto
+import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
 import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.feature.role.model.RoleViewDto
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.*
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import kotlin.test.assertEquals
 
 @UnitTest
@@ -52,6 +50,7 @@ class CreateRoleUseCaseTest {
             )
             val savedRole: Role = mockk()
             val claimsSet = slot<Role>()
+            every { roleService.verifyRoleAvailability(roleName) } just runs
             every { roleService.saveRole(capture(claimsSet)) } returns savedRole
 
             val roleViewDto: RoleViewDto = mockk()
@@ -65,6 +64,23 @@ class CreateRoleUseCaseTest {
             assertEquals(roleName, capturedRole.name)
 
             assertEquals(roleViewDto, actual.roleViewDto)
+        }
+
+        @Test
+        fun `return role with invalid request`() {
+            // Arrange
+            val roleName = "EXAMPLE"
+            val request = CreateRoleRequest(
+                name = roleName,
+            )
+
+            every { roleService.verifyRoleAvailability(roleName) } throws RoleNameAlreadyCreatedException()
+
+            // Act
+            // Assert
+            assertThrows<RoleNameAlreadyCreatedException> {
+                createRoleUseCase.execute(request)
+            }
         }
     }
 }
