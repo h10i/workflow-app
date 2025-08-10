@@ -1,5 +1,6 @@
 package com.example.workflow.infra.security.config
 
+import com.example.workflow.common.constants.Role
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.infra.security.model.RsaKeyProperties
 import com.nimbusds.jose.jwk.JWK
@@ -56,6 +57,12 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
                     HttpMethod.DELETE,
                     "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
                     authenticated
+                )
+                // Role
+                authorize(
+                    HttpMethod.POST,
+                    ApiPath.Role.BASE,
+                    hasRole(Role.ADMIN.name)
                 )
                 // Token
                 authorize(

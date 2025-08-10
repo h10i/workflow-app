@@ -3,6 +3,7 @@ package com.example.workflow.integration.infra.security.config
 import com.example.workflow.infra.security.config.SecurityConfig
 import com.example.workflow.integration.test.controller.SecurityConfigTestController
 import com.example.workflow.integration.test.path.AuthenticatedPathsProvider
+import com.example.workflow.integration.test.path.HasAdminPathsProvider
 import com.example.workflow.integration.test.path.PermitAllPathsProvider
 import com.example.workflow.support.annotation.IntegrationTest
 import io.mockk.clearAllMocks
@@ -105,6 +106,43 @@ class SecurityConfigIntegrationTest {
         @ArgumentsSource(AuthenticatedPathsProvider::class)
         @WithMockUser
         fun `authenticated paths returns 200 OK with Authentication`(method: HttpMethod, path: String) {
+            // Arrange
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .method(method)
+                .uri(path)
+                .exchange()
+
+            // Assert
+            Assertions.assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+        }
+    }
+
+    @Nested
+    inner class HsaAdminPaths {
+        @ParameterizedTest
+        @ArgumentsSource(HasAdminPathsProvider::class)
+        @WithMockUser(roles = ["USER"])
+        fun `has admin paths returns 403 Forbidden without ADMIN`(method: HttpMethod, path: String) {
+            // Arrange
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .method(method)
+                .uri(path)
+                .exchange()
+
+            // Assert
+            Assertions.assertThat(testResult)
+                .hasStatus(HttpStatus.FORBIDDEN)
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(HasAdminPathsProvider::class)
+        @WithMockUser(roles = ["ADMIN"])
+        fun `authenticated paths returns 200 OK with ADMIN`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
