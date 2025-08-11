@@ -120,6 +120,7 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
 
         val jwtAuthenticationConverter = JwtAuthenticationConverter()
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter)
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_")
         return jwtAuthenticationConverter
     }
 
