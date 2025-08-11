@@ -123,7 +123,6 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
         return jwtAuthenticationConverter
     }
 
-    @Suppress("UsePropertyAccessSyntax")
     @Bean
     fun authenticationManager(
         userDetailsService: UserDetailsService,
