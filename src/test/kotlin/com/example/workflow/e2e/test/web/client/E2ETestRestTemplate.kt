@@ -152,6 +152,8 @@ class E2ETestRestTemplate(
         )
     }
 
+    fun authenticateWithAdmin(): AuthResult = authenticate("admin@example.com", "PASSWORD")
+
     fun registerAccountAndAuthenticate(
         emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
         password: String = TestDataFactory.getValidTestPassword(),

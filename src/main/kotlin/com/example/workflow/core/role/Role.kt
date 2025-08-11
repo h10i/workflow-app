@@ -1,6 +1,7 @@
 package com.example.workflow.core.role
 
 import com.example.workflow.core.account.AccountRole
+import com.example.workflow.feature.role.model.RoleViewDto
 import jakarta.persistence.*
 import java.util.*
 
@@ -34,3 +35,8 @@ data class Role(
         return "Role(id=$id, name='$name')"
     }
 }
+
+fun Role.toViewDto(): RoleViewDto = RoleViewDto(
+    id = id,
+    name = name,
+)
