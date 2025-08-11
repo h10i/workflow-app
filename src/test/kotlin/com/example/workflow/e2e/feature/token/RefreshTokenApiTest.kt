@@ -14,10 +14,10 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @E2ETest
-class RefreshTokenApiTest(
+class RefreshTokenApiTest : AbstractE2ETest() {
     @Autowired
-    private val restTemplate: E2ETestRestTemplate
-) : AbstractE2ETest() {
+    private lateinit var restTemplate: E2ETestRestTemplate
+
     @Nested
     inner class RefreshToken() {
         @Test
