@@ -23,4 +23,8 @@ object ApiPath {
         const val BASE = "${ApiVersion.V1}/auth"
         const val TOKEN = "/token"
     }
+
+    object Role {
+        const val BASE = "${ApiVersion.V1}/roles"
+    }
 }
