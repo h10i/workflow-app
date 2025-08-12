@@ -16,10 +16,10 @@ import java.util.*
 import kotlin.test.*
 
 @E2ETest
-class AccountApiTest(
+class AccountApiTest : AbstractE2ETest() {
     @Autowired
-    private val restTemplate: E2ETestRestTemplate
-) : AbstractE2ETest() {
+    private lateinit var restTemplate: E2ETestRestTemplate
+
     @Nested
     inner class RegisterAccount {
         @Test

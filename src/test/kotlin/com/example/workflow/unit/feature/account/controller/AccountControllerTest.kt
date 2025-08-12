@@ -1,7 +1,10 @@
 package com.example.workflow.unit.feature.account.controller
 
 import com.example.workflow.feature.account.controller.AccountController
-import com.example.workflow.feature.account.model.*
+import com.example.workflow.feature.account.model.AccountViewDto
+import com.example.workflow.feature.account.model.AccountViewResponse
+import com.example.workflow.feature.account.model.RegisterAccountRequest
+import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.feature.account.presenter.GetAccountPresenter
 import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
 import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
@@ -10,7 +13,10 @@ import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -56,16 +62,6 @@ class AccountControllerTest {
 
     @Nested
     inner class RegisterAccount() {
-        @BeforeEach
-        fun setUp() {
-            mockkStatic(AccountViewDto::toViewResponse)
-        }
-
-        @AfterEach
-        fun tearDown() {
-            unmockkStatic(AccountViewDto::toViewResponse)
-        }
-
         @Test
         fun `registerAccount should return account view response`() {
             // Arrange
@@ -97,16 +93,6 @@ class AccountControllerTest {
 
     @Nested
     inner class Get() {
-        @BeforeEach
-        fun setUp() {
-            mockkStatic(AccountViewDto::toViewResponse)
-        }
-
-        @AfterEach
-        fun tearDown() {
-            unmockkStatic(AccountViewDto::toViewResponse)
-        }
-
         @Test
         fun `get should return account view response`() {
             // Arrange
@@ -134,16 +120,6 @@ class AccountControllerTest {
 
     @Nested
     inner class UpdateAccount() {
-        @BeforeEach
-        fun setUp() {
-            mockkStatic(AccountViewDto::toViewResponse)
-        }
-
-        @AfterEach
-        fun tearDown() {
-            unmockkStatic(AccountViewDto::toViewResponse)
-        }
-
         @Test
         fun `returns account view response`() {
             // Arrange
