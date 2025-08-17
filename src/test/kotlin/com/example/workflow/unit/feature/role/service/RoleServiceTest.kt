@@ -45,6 +45,23 @@ class RoleServiceTest {
     }
 
     @Nested
+    inner class GetAllRoles {
+        @Test
+        fun `should return a list of all roles`() {
+            // Arrange
+            val roles: List<Role> = mockk()
+
+            every { roleRepository.findAll() } returns roles
+
+            // Act
+            val actual = roleService.getAllRoles()
+
+            // Assert
+            assertEquals(roles, actual)
+        }
+    }
+
+    @Nested
     inner class VerifyRoleAvailability {
         @Test
         fun `throws RoleNameAlreadyCreatedException when email address is created`() {
