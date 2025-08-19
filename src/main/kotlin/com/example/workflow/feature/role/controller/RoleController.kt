@@ -2,11 +2,17 @@ package com.example.workflow.feature.role.controller
 
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.role.model.CreateRoleRequest
+import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,7 +34,7 @@ class RoleController(
     }
 
     @GetMapping
-    fun getAllRoles(): ResponseEntity<List<RoleViewResponse>> {
+    fun getAllRoles(): ResponseEntity<RoleViewListResponse> {
         val useCaseResult: GetAllRolesUseCase.Result = getAllRolesUseCase.execute()
         val presenterResult: GetAllRolesPresenter.Result = getAllRolesPresenter.toResponse(useCaseResult)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)

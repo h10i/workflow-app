@@ -59,8 +59,8 @@ class GetAllRolesPresenterTest {
             val actual: GetAllRolesPresenter.Result = getAllRolePresenter.toResponse(useCaseResult)
 
             // Assert
-            assertEquals(roleViewResponse0, actual.response[0])
-            assertEquals(roleViewResponse1, actual.response[1])
+            assertEquals(roleViewResponse0, actual.response.roles[0])
+            assertEquals(roleViewResponse1, actual.response.roles[1])
         }
 
         @Test
@@ -75,7 +75,7 @@ class GetAllRolesPresenterTest {
             val actual: GetAllRolesPresenter.Result = getAllRolePresenter.toResponse(useCaseResult)
 
             // Assert
-            assertTrue(actual.response.isEmpty())
+            assertTrue(actual.response.roles.isEmpty())
         }
     }
 }

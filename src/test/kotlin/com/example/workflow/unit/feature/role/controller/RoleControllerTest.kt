@@ -2,6 +2,7 @@ package com.example.workflow.unit.feature.role.controller
 
 import com.example.workflow.feature.role.controller.RoleController
 import com.example.workflow.feature.role.model.CreateRoleRequest
+import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
@@ -76,7 +77,7 @@ class RoleControllerTest {
             // Arrange
             val useCaseResult: GetAllRolesUseCase.Result = mockk()
             val presenterResult: GetAllRolesPresenter.Result = mockk()
-            val response: List<RoleViewResponse> = mockk()
+            val response: RoleViewListResponse = mockk()
 
             every { presenterResult.response } returns response
             every { getAllRolesUseCase.execute() } returns useCaseResult
