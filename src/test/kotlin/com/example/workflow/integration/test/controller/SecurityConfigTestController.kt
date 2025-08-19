@@ -16,6 +16,8 @@ class SecurityConfigTestController {
             ApiPath.SpringDoc.SWAGGER_UI_ALL,
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            // Role
+            ApiPath.Role.BASE,
         ]
     )
     fun get() = ResponseEntity.ok("get")
