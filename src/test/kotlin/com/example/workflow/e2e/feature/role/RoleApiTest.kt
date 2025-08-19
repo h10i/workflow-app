@@ -11,10 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
-import kotlin.test.fail
+import kotlin.test.*
 
 @E2ETest
 class RoleApiTest : AbstractE2ETest() {
@@ -106,6 +103,55 @@ class RoleApiTest : AbstractE2ETest() {
                 """
             )
             assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `POST request with invalid credentials returns 401 Unauthorized`() {
+            // Arrange
+
+            // Act
+            val json = """
+                {
+                    "name": "NEW_ADMIN"
+                }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.post(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                body = json,
+                accessToken = "invalid-access-token",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `POST request with invalid credentials returns 403 Forbidden`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
+
+            // Act
+            val json = """
+                {
+                    "name": "ADMIN"
+                }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.post(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                body = json,
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+            assertNull(response.body)
         }
     }
 }
