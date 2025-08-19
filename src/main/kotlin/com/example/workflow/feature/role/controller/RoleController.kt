@@ -1,5 +1,6 @@
 package com.example.workflow.feature.role.controller
 
+import com.example.workflow.common.model.UnifiedErrorResponse
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.feature.role.model.RoleViewListResponse
@@ -26,6 +27,52 @@ class RoleController(
     private val getAllRolesUseCase: GetAllRolesUseCase,
     private val getAllRolesPresenter: GetAllRolesPresenter,
 ) {
+    @Operation(
+        summary = "Create a new role",
+        description = "Creates a new role for the admin user.",
+        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Role Information",
+            required = true,
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = CreateRoleRequest::class)
+                )
+            ]
+        ),
+        responses = [
+            ApiResponse(
+                responseCode = "201",
+                description = "Successfully created a role",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = RoleViewResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = UnifiedErrorResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [Content()]
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Required role missing.",
+                content = [Content()]
+            ),
+        ],
+    )
     @PostMapping
     fun createRole(@Valid @RequestBody request: CreateRoleRequest): ResponseEntity<RoleViewResponse> {
         val useCaseResult: CreateRoleUseCase.Result = createRoleUseCase.execute(request)
@@ -33,6 +80,28 @@ class RoleController(
         return ResponseEntity.status(HttpStatus.CREATED).body(presenterResult.response)
     }
 
+    @Operation(
+        summary = "Get all roles",
+        description = "Retrieves all roles for the admin user.",
+        security = [SecurityRequirement(name = "bearer-key")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Successfully retrieved all roles information",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = RoleViewListResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [Content()]
+            ),
+        ],
+    )
     @GetMapping
     fun getAllRoles(): ResponseEntity<RoleViewListResponse> {
         val useCaseResult: GetAllRolesUseCase.Result = getAllRolesUseCase.execute()
