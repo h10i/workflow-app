@@ -10,5 +10,6 @@ class HasAdminPathsProvider : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments?>? = Stream.of(
         // Role
         Arguments.of(HttpMethod.POST, "/v1/roles"),
+        Arguments.of(HttpMethod.GET, "/v1/roles")
     )
 }

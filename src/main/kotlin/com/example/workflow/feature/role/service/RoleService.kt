@@ -16,6 +16,11 @@ class RoleService(
     }
 
     @Transactional
+    fun getAllRoles(): List<Role> {
+        return roleRepository.findAll()
+    }
+
+    @Transactional
     fun verifyRoleAvailability(name: String) {
         if (roleRepository.findByName(name) != null) {
             throw RoleNameAlreadyCreatedException()

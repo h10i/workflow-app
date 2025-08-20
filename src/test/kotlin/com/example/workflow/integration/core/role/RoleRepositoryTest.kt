@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @IntegrationTest
 @DataJpaTest
@@ -86,6 +87,38 @@ class RoleRepositoryTest {
 
             // Assert
             assertNull(actual)
+        }
+    }
+
+    @Nested
+    inner class FindAll {
+        @Test
+        fun `returns empty list when role does not exist`() {
+            // Arrange
+
+            // Act
+            val actual: List<Role> = roleRepository.findAll()
+
+            // Assert
+            assertTrue(actual.isEmpty())
+        }
+
+        @Test
+        fun `returns roles when two roles exists`() {
+            // Arrange
+            val roles: List<Role> = listOf(
+                TestDataFactory.createRole(name = "EXAMPLE1"),
+                TestDataFactory.createRole(name = "EXAMPLE2"),
+            )
+            roles.forEach { entityManager.persist(it) }
+            entityManager.flush()
+            entityManager.clear()
+
+            // Act
+            val actual: List<Role> = roleRepository.findAll()
+
+            // Assert
+            assertEquals(roles.sortedBy { it.id }, actual.sortedBy { it.id })
         }
     }
 }

@@ -10,11 +10,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
-import kotlin.test.fail
+import kotlin.test.*
 
 @E2ETest
 class RoleApiTest : AbstractE2ETest() {
@@ -24,6 +22,7 @@ class RoleApiTest : AbstractE2ETest() {
     @Nested
     inner class CreateRole {
         @Test
+        @Transactional
         fun `POST valid request returns 201 Created`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
@@ -106,6 +105,127 @@ class RoleApiTest : AbstractE2ETest() {
                 """
             )
             assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `POST request with invalid credentials returns 401 Unauthorized`() {
+            // Arrange
+
+            // Act
+            val json = """
+                {
+                    "name": "NEW_ADMIN"
+                }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.post(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                body = json,
+                accessToken = "invalid-access-token",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `POST request with invalid credentials returns 403 Forbidden`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
+
+            // Act
+            val json = """
+                {
+                    "name": "ADMIN"
+                }
+            """.trimIndent()
+
+            // Act
+            val response = restTemplate.post(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                body = json,
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+            assertNull(response.body)
+        }
+    }
+
+    @Nested
+    inner class GetAllRoles {
+        @Test
+        fun `GET request with a admin role should return 200 OK`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.OK, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "roles":[
+                            {
+                                "id":"7189ff37-21e6-4ee5-a8c5-83282e3e1de1",
+                                "name":"USER"
+                            },
+                            {
+                                "id":"3c21a2e0-7594-45bf-8eb3-6bf9edbed13d",
+                                "name":"ADMIN"
+                            }
+                        ]
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `GET request with invalid credentials should return 401 Unauthorized`() {
+            // Arrange
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                accessToken = "invalid-access-token",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `GET request for a non-admin role should return 403 Forbidden`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = ApiPath.Role.BASE,
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+            assertNull(response.body)
         }
     }
 }
