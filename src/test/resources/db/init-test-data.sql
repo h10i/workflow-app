@@ -1,3 +1,8 @@
+delete from account_role;
+delete from refresh_token;
+delete from role;
+delete from account;
+
 insert into account(id, email_address, password) values
   ('15101d3d-0b10-4e5a-aae1-b21ccdf06b34', 'admin@example.com', '$2a$10$Ui1YMe5Zi3zTKElzouyAseR1gaDhrMaEyzNlcMqmpI9nAU.B8IhUe')
 ;
