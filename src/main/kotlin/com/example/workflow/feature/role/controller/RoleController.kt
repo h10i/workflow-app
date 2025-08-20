@@ -100,6 +100,11 @@ class RoleController(
                 description = "Authentication credentials are missing or invalid.",
                 content = [Content()]
             ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Required role missing.",
+                content = [Content()]
+            ),
         ],
     )
     @GetMapping
