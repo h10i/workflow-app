@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.test.*
 
@@ -21,6 +22,7 @@ class RoleApiTest : AbstractE2ETest() {
     @Nested
     inner class CreateRole {
         @Test
+        @Transactional
         fun `POST valid request returns 201 Created`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
