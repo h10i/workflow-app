@@ -3,7 +3,7 @@ package com.example.workflow.common.model
 import io.swagger.v3.oas.annotations.media.Schema
 
 data class UnifiedErrorResponse(
-    @Schema(
+    @get:Schema(
         description = "A map containing error details. " +
                 "Keys are either specific field names (for validation errors) " +
                 "or general error categories (e.g., 'general', 'global'). " +
