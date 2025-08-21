@@ -28,6 +28,7 @@ import kotlin.test.assertEquals
 @IntegrationTest
 @WebMvcTest(TokenController::class)
 @Import(TokenControllerApiTest.MockConfig::class, NoSecurityConfig::class)
+@Suppress("unused")
 class TokenControllerApiTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester

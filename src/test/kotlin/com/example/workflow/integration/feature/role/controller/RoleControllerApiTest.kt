@@ -32,6 +32,7 @@ import kotlin.test.assertEquals
 @IntegrationTest
 @WebMvcTest(RoleController::class)
 @Import(RoleControllerApiTest.MockConfig::class, NoSecurityConfig::class)
+@Suppress("unused")
 class RoleControllerApiTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester

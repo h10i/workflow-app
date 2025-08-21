@@ -47,6 +47,7 @@ class RefreshTokenControllerApiTest {
     private lateinit var revokeAllRefreshTokensUseCase: RevokeAllRefreshTokensUseCase
 
     @TestConfiguration
+    @Suppress("unused")
     class MockConfig {
         @Bean
         fun refreshTokenUseCase(): RefreshTokenUseCase = mockk(relaxed = true)

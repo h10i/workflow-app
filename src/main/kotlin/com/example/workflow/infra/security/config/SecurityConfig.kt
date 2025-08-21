@@ -32,6 +32,7 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(RsaKeyProperties::class)
+@Suppress("unused")
 class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {

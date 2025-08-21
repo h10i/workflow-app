@@ -35,6 +35,7 @@ class SecurityConfigIntegrationTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     @TestConfiguration
+    @Suppress("unused")
     class MockConfig {
         @Bean
         fun userDetailsService(): UserDetailsService = mockk(relaxed = true)
