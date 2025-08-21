@@ -1,7 +1,6 @@
 package com.example.workflow.unit.feature.account.controller
 
 import com.example.workflow.feature.account.controller.AccountController
-import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.model.UpdateAccountRequest
@@ -69,11 +68,7 @@ class AccountControllerTest {
                 emailAddress = "user@example.com",
                 password = "test-password",
             )
-            val accountViewDtoMock = mockk<AccountViewDto>()
-            val useCaseResult = RegisterAccountUseCase.Result(
-                accountViewDto = accountViewDtoMock,
-            )
-
+            val useCaseResult: RegisterAccountUseCase.Result = mockk()
             val accountViewResponseMock: AccountViewResponse = mockk()
             val presenterResult = RegisterAccountPresenter.Result(
                 response = accountViewResponseMock
@@ -96,11 +91,7 @@ class AccountControllerTest {
         @Test
         fun `get should return account view response`() {
             // Arrange
-            val accountViewDtoMock = mockk<AccountViewDto>()
-            val useCaseResult = GetAccountUseCase.Result(
-                accountViewDto = accountViewDtoMock,
-            )
-
+            val useCaseResult: GetAccountUseCase.Result = mockk()
             val accountViewResponseMock = mockk<AccountViewResponse>()
             val presenterResult = GetAccountPresenter.Result(
                 response = accountViewResponseMock
@@ -127,10 +118,7 @@ class AccountControllerTest {
                 emailAddress = "new@example.com",
                 password = "new-test-password",
             )
-            val accountViewDtoMock = mockk<AccountViewDto>()
-            val useCaseResult = UpdateAccountUseCase.Result(
-                accountViewDto = accountViewDtoMock,
-            )
+            val useCaseResult: UpdateAccountUseCase.Result = mockk()
 
             val accountViewResponseMock: AccountViewResponse = mockk()
             val presenterResult = UpdateAccountPresenter.Result(
