@@ -37,7 +37,7 @@ data class AccountRole(
         return "AccountRole(id=$id, account=${account.id}, role=${role.id})"
     }
 
-    override fun getAuthority(): String? {
+    override fun getAuthority(): String {
         return role.name
     }
 }

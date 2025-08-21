@@ -44,7 +44,7 @@ class RevokeAllRefreshTokensUseCaseTest {
             every { refreshTokenServiceMock.revokeAllRefreshTokens(accountId) } returns 1
 
             // Act
-            val actual = revokeRefreshTokenUseCase.execute()
+            revokeRefreshTokenUseCase.execute()
 
             // Assert
             verify { refreshTokenServiceMock.revokeAllRefreshTokens(accountId) }

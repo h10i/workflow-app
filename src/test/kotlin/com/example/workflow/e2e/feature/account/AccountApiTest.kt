@@ -232,11 +232,10 @@ class AccountApiTest : AbstractE2ETest() {
                 password = password,
             )
 
-            val newEmailAddress = emailAddress
             val newPassword = "new-${password}"
             val json = """
             {
-              "emailAddress": "$newEmailAddress",
+              "emailAddress": "$emailAddress",
               "password": "$newPassword"
             }
             """.trimIndent()
