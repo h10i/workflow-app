@@ -7,6 +7,7 @@ import javax.sql.DataSource
 
 @Configuration
 @Profile("test")
+@Suppress("unused")
 class TestDataInitializer(
     private val dataSource: DataSource
 ) {

@@ -15,5 +15,4 @@ import org.springframework.test.context.TestExecutionListeners
 )
 @Import(TestcontainersConfiguration::class, E2ETestConfig::class)
 @ActiveProfiles("test")
-abstract class AbstractE2ETest {
-}
+abstract class AbstractE2ETest

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile
 
 @TestConfiguration
 @Profile("test")
+@Suppress("unused")
 class E2ETestConfig {
     @Bean
     fun e2ETestRestTemplate(testRestTemplate: TestRestTemplate): E2ETestRestTemplate {

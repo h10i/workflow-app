@@ -63,6 +63,7 @@ class AccountControllerApiTest {
     private lateinit var deleteAccountUseCase: DeleteAccountUseCase
 
     @TestConfiguration
+    @Suppress("unused")
     class MockConfig {
         @Bean
         fun registerAccountUseCase(): RegisterAccountUseCase = mockk()
