@@ -1,10 +1,14 @@
 package com.example.workflow.integration.core.role
 
+import com.example.workflow.core.account.Account
+import com.example.workflow.core.account.AccountRole
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.RoleRepository
+import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.util.TestDataFactory
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -119,6 +123,54 @@ class RoleRepositoryTest {
 
             // Assert
             assertEquals(roles.sortedBy { it.id }, actual.sortedBy { it.id })
+        }
+    }
+
+    @Nested
+    inner class DeleteById {
+        private lateinit var role: Role
+        private lateinit var account: Account
+        private lateinit var accountRole: AccountRole
+        private lateinit var refreshToken: RefreshToken
+
+        @BeforeEach
+        fun setUp() {
+            // Arrange
+            role = TestDataFactory.createRole(name = "EXAMPLE_ROLE")
+            entityManager.persist(role)
+
+            account = TestDataFactory.createAccount()
+            entityManager.persist(account)
+
+            accountRole = TestDataFactory.registerAccountRole(account = account, role = role)
+            entityManager.persist(accountRole)
+
+            refreshToken = TestDataFactory.registerRefreshToken(account = account)
+            entityManager.persist(refreshToken)
+
+            entityManager.flush()
+            entityManager.clear()
+        }
+
+        @AfterEach
+        fun tearDown() {
+        }
+
+        @Test
+        fun `should delete data associated with role when role is deleted`() {
+            // Act
+
+            // Act
+            roleRepository.deleteById(role.id)
+            entityManager.flush()
+
+            // Assert
+            val actualRole = entityManager.find(Role::class.java, role.id)
+            assertNull(actualRole)
+            val actualAccount = entityManager.find(Account::class.java, account.id)
+            assertNotNull(actualAccount)
+            val actualAccountRole = entityManager.find(AccountRole::class.java, accountRole.id)
+            assertNull(actualAccountRole)
         }
     }
 }
