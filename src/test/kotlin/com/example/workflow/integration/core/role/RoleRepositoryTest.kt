@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -48,6 +49,49 @@ class RoleRepositoryTest {
 
             // Assert
             assertEquals(role, actual)
+        }
+    }
+
+    @Nested
+    inner class FindById {
+        private lateinit var role: Role
+
+        @BeforeEach
+        fun setUp() {
+            // Arrange
+            role = TestDataFactory.createRole()
+            entityManager.persist(role)
+
+            entityManager.flush()
+            entityManager.clear()
+        }
+
+        @AfterEach
+        fun tearDown() {
+        }
+
+        @Test
+        fun `returns role when role id exists`() {
+            // Arrange
+            val roleId = role.id
+
+            // Act
+            val actual: Role? = roleRepository.findById(roleId).orElse(null)
+
+            // Assert
+            assertEquals(role, actual)
+        }
+
+        @Test
+        fun `returns role when role id doesn't exists`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+
+            // Act
+            val actual: Role? = roleRepository.findById(roleId).orElse(null)
+
+            // Assert
+            assertNull(actual)
         }
     }
 
