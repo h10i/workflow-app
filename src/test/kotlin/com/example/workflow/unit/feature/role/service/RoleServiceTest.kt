@@ -5,10 +5,9 @@ import com.example.workflow.core.role.RoleRepository
 import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.jupiter.api.*
+import java.util.*
 import kotlin.test.assertEquals
 
 @UnitTest
@@ -58,6 +57,22 @@ class RoleServiceTest {
 
             // Assert
             assertEquals(roles, actual)
+        }
+    }
+
+    @Nested
+    inner class DeleteRoleById {
+        @Test
+        fun `should delete role by id`() {
+            // Arrange
+            val roleId: UUID = UUID.randomUUID()
+            every { roleRepository.deleteById(roleId) } just runs
+
+            // Act
+            roleService.deleteById(roleId)
+
+            // Assert
+            verify(exactly = 1) { roleRepository.deleteById(roleId) }
         }
     }
 

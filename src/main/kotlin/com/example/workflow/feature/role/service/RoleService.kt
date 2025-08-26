@@ -5,6 +5,7 @@ import com.example.workflow.core.role.RoleRepository
 import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class RoleService(
@@ -18,6 +19,11 @@ class RoleService(
     @Transactional
     fun getAllRoles(): List<Role> {
         return roleRepository.findAll()
+    }
+
+    @Transactional
+    fun deleteById(id: UUID) {
+        roleRepository.deleteById(id)
     }
 
     @Transactional
