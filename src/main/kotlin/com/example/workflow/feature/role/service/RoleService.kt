@@ -33,6 +33,13 @@ class RoleService(
     }
 
     @Transactional
+    fun verifyRoleIdAvailability(id: UUID) {
+        if (getRoleById(id) == null) {
+            throw EntityNotFoundException("Role not found: $id")
+        }
+    }
+
+    @Transactional
     fun verifyRoleAvailability(name: String) {
         if (roleRepository.findByName(name) != null) {
             throw RoleNameAlreadyCreatedException()

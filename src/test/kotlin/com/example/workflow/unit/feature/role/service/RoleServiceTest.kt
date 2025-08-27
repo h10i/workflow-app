@@ -7,6 +7,7 @@ import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
 import io.mockk.*
+import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.*
 import java.util.*
 import kotlin.test.assertEquals
@@ -107,6 +108,39 @@ class RoleServiceTest {
 
             // Assert
             verify(exactly = 1) { roleRepository.deleteById(roleId) }
+        }
+    }
+
+    @Nested
+    inner class VerifyRoleIdAvailability {
+        @Test
+        fun `should throw EntityNotFoundException when role does not exist`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+
+            every { roleRepository.findById(roleId) } returns Optional.empty()
+
+            // Act
+            // Assert
+            val actual = assertThrows<EntityNotFoundException> {
+                roleService.verifyRoleIdAvailability(roleId)
+            }
+            assertEquals("Role not found: $roleId", actual.message)
+        }
+
+        @Test
+        fun `should not throw any Exception when role exists`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            val role = TestDataFactory.createRole(id = roleId)
+
+            every { roleRepository.findById(roleId) } returns Optional.of(role)
+
+            // Act
+            // Assert
+            assertDoesNotThrow {
+                roleService.verifyRoleIdAvailability(roleId)
+            }
         }
     }
 
