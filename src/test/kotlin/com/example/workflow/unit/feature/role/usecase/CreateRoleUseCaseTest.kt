@@ -50,7 +50,7 @@ class CreateRoleUseCaseTest {
             )
             val savedRole: Role = mockk()
             val claimsSet = slot<Role>()
-            every { roleService.verifyRoleAvailability(roleName) } just runs
+            every { roleService.verifyRoleNameAvailability(roleName) } just runs
             every { roleService.saveRole(capture(claimsSet)) } returns savedRole
 
             val roleViewDto: RoleViewDto = mockk()
@@ -74,7 +74,7 @@ class CreateRoleUseCaseTest {
                 name = roleName,
             )
 
-            every { roleService.verifyRoleAvailability(roleName) } throws RoleNameAlreadyCreatedException()
+            every { roleService.verifyRoleNameAvailability(roleName) } throws RoleNameAlreadyCreatedException()
 
             // Act
             // Assert

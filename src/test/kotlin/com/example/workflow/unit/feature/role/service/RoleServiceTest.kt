@@ -145,7 +145,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class VerifyRoleAvailability {
+    inner class VerifyRoleNameAvailability {
         @Test
         fun `throws RoleNameAlreadyCreatedException when email address is created`() {
             // Arrange
@@ -156,7 +156,7 @@ class RoleServiceTest {
             // Act
             // Assert
             val actualException = assertThrows<RoleNameAlreadyCreatedException> {
-                roleService.verifyRoleAvailability(roleName)
+                roleService.verifyRoleNameAvailability(roleName)
             }
             assertEquals(Role::name.name, actualException.field)
             assertEquals("This role name is already created.", actualException.message)
@@ -171,7 +171,7 @@ class RoleServiceTest {
             // Act
             // Assert
             assertDoesNotThrow {
-                roleService.verifyRoleAvailability(roleName)
+                roleService.verifyRoleNameAvailability(roleName)
             }
             verify(exactly = 1) { roleRepository.findByName(roleName) }
         }
