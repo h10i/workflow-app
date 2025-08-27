@@ -9,6 +9,7 @@ class DeleteRoleUseCase(
     private val roleService: RoleService,
 ) {
     fun execute(id: UUID) {
+        roleService.verifyRoleIdAvailability(id)
         roleService.deleteById(id)
     }
 }
