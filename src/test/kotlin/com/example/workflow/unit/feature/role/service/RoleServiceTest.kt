@@ -5,10 +5,12 @@ import com.example.workflow.core.role.RoleRepository
 import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.support.annotation.UnitTest
+import com.example.workflow.support.util.TestDataFactory
 import io.mockk.*
 import org.junit.jupiter.api.*
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @UnitTest
 class RoleServiceTest {
@@ -40,6 +42,38 @@ class RoleServiceTest {
 
             // Assert
             assertEquals(savedRole, actual)
+        }
+    }
+
+    @Nested
+    inner class GetRoleById {
+        @Test
+        fun `should return role when role exists`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            val role = TestDataFactory.createRole(id = roleId)
+
+            every { roleRepository.findById(roleId) } returns Optional.of(role)
+
+            // Act
+            val actual: Role? = roleService.getRoleById(roleId)
+
+            // Assert
+            assertEquals(role, actual)
+        }
+
+        @Test
+        fun `should return null when role doesn't exists`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+
+            every { roleRepository.findById(roleId) } returns Optional.empty()
+
+            // Act
+            val actual: Role? = roleService.getRoleById(roleId)
+
+            // Assert
+            assertNull(actual)
         }
     }
 
