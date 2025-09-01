@@ -47,6 +47,8 @@ class SecurityConfigTestController {
         path = [
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            // Role
+            "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
             // Auth
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",

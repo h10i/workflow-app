@@ -27,5 +27,6 @@ object ApiPath {
     object Role {
         const val BASE = "${ApiVersion.V1}/roles"
         const val ID = "/{id}"
+        const val PATH_PATTERN_WITH_ID = "/*"
     }
 }
