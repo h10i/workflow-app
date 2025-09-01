@@ -8,6 +8,7 @@ import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
+import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -18,6 +19,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping(ApiPath.Role.BASE)
@@ -26,6 +28,7 @@ class RoleController(
     private val createRolePresenter: CreateRolePresenter,
     private val getAllRolesUseCase: GetAllRolesUseCase,
     private val getAllRolesPresenter: GetAllRolesPresenter,
+    private val deleteRoleUseCase: DeleteRoleUseCase,
 ) {
     @Operation(
         summary = "Create a new role",
@@ -112,5 +115,38 @@ class RoleController(
         val useCaseResult: GetAllRolesUseCase.Result = getAllRolesUseCase.execute()
         val presenterResult: GetAllRolesPresenter.Result = getAllRolesPresenter.toResponse(useCaseResult)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
+    }
+
+    @Operation(
+        summary = "Delete a role",
+        description = "Deletes a role. This operation requires an ADMIN role.",
+        security = [SecurityRequirement(name = "bearer-key")],
+        responses = [
+            ApiResponse(
+                responseCode = "204",
+                description = "Successfully deleted a role",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = RoleViewListResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [Content()]
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Required role missing.",
+                content = [Content()]
+            ),
+        ],
+    )
+    @DeleteMapping(ApiPath.Role.ID)
+    fun deleteRole(@PathVariable id: UUID): ResponseEntity<Void> {
+        deleteRoleUseCase.execute(id)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }
