@@ -25,6 +25,14 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun handleBusinessErrors(ex: ResourceNotFoundException): ResponseEntity<UnifiedErrorResponse> {
+        val errorsMap = mapOf("general" to listOf(ex.message ?: "Resource not found."))
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(UnifiedErrorResponse(errorsMap))
+    }
+
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessErrors(ex: BusinessException): ResponseEntity<UnifiedErrorResponse> {
         val errorKey = ex.field ?: "general"

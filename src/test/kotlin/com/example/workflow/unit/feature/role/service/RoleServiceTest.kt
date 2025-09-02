@@ -3,11 +3,11 @@ package com.example.workflow.unit.feature.role.service
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.RoleRepository
 import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
+import com.example.workflow.feature.role.exception.RoleNotFoundException
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
 import io.mockk.*
-import jakarta.persistence.EntityNotFoundException
 import org.junit.jupiter.api.*
 import java.util.*
 import kotlin.test.assertEquals
@@ -114,7 +114,7 @@ class RoleServiceTest {
     @Nested
     inner class VerifyRoleIdAvailability {
         @Test
-        fun `should throw EntityNotFoundException when role does not exist`() {
+        fun `should throw RoleNotFoundException when role does not exist`() {
             // Arrange
             val roleId = UUID.randomUUID()
 
@@ -122,10 +122,10 @@ class RoleServiceTest {
 
             // Act
             // Assert
-            val actual = assertThrows<EntityNotFoundException> {
+            val actual = assertThrows<RoleNotFoundException> {
                 roleService.verifyRoleIdAvailability(roleId)
             }
-            assertEquals("Role not found: $roleId", actual.message)
+            assertEquals("Role not found with criteria: id: $roleId", actual.message)
         }
 
         @Test

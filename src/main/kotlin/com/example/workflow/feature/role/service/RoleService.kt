@@ -3,7 +3,7 @@ package com.example.workflow.feature.role.service
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.RoleRepository
 import com.example.workflow.feature.role.exception.RoleNameAlreadyCreatedException
-import jakarta.persistence.EntityNotFoundException
+import com.example.workflow.feature.role.exception.RoleNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -35,7 +35,7 @@ class RoleService(
     @Transactional
     fun verifyRoleIdAvailability(id: UUID) {
         if (getRoleById(id) == null) {
-            throw EntityNotFoundException("Role not found: $id")
+            throw RoleNotFoundException(mapOf(Role::id.name to id.toString()))
         }
     }
 
