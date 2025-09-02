@@ -228,4 +228,98 @@ class RoleApiTest : AbstractE2ETest() {
             assertNull(response.body)
         }
     }
+
+    @Nested
+    inner class DeleteRole {
+        @Test
+        fun `DELETE request with an admin role should return 204 No Content`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_DELETE_204", accessToken = authResult.accessToken)
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+            assertNull(response.body)
+        }
+
+
+        @Test
+        fun `DELETE request with invalid credentials should return 401 Unauthorized`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_DELETE_401", accessToken = authResult.accessToken)
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
+                accessToken = "invalid-access-token",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `DELETE request with a non-admin role should return 403 Forbidden`() {
+            // Arrange
+            val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_DELETE_403", accessToken = authResultWithAdmin.accessToken)
+            val authResultWithUser: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
+                accessToken = authResultWithUser.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `DELETE request with non-existent role id should return 404 Not Found`() {
+            // Arrange
+            val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleId = UUID.randomUUID()
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleId}",
+                accessToken = authResult.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "errors":{
+                            "general": [
+                                "Role not found with criteria: id: $roleId"
+                            ]
+                        }
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+    }
 }
