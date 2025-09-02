@@ -7,15 +7,20 @@ import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
+import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import java.util.*
 import kotlin.test.assertEquals
 
 @UnitTest
@@ -24,6 +29,7 @@ class RoleControllerTest {
     private lateinit var createRolePresenter: CreateRolePresenter
     private lateinit var getAllRolesUseCase: GetAllRolesUseCase
     private lateinit var getAllRolesPresenter: GetAllRolesPresenter
+    private lateinit var deleteRoleUseCase: DeleteRoleUseCase
     private lateinit var roleController: RoleController
 
     @BeforeEach
@@ -32,11 +38,13 @@ class RoleControllerTest {
         createRolePresenter = mockk()
         getAllRolesUseCase = mockk()
         getAllRolesPresenter = mockk()
+        deleteRoleUseCase = mockk()
         roleController = RoleController(
             createRoleUseCase = createRoleUseCase,
             createRolePresenter = createRolePresenter,
             getAllRolesUseCase = getAllRolesUseCase,
             getAllRolesPresenter = getAllRolesPresenter,
+            deleteRoleUseCase = deleteRoleUseCase,
         )
     }
 
@@ -89,6 +97,23 @@ class RoleControllerTest {
             // Assert
             assertEquals(HttpStatus.OK, actual.statusCode)
             assertEquals(response, actual.body)
+        }
+    }
+
+    @Nested
+    inner class DeleteRole() {
+        @Test
+        fun `should return no content`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            every { deleteRoleUseCase.execute(roleId) } just runs
+
+            // Act
+            val actual = roleController.deleteRole(roleId)
+
+            // Assert
+            assertEquals(HttpStatus.NO_CONTENT, actual.statusCode)
+            assertNull(actual.body)
         }
     }
 }

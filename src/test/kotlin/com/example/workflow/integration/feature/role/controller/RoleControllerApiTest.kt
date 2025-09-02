@@ -8,6 +8,7 @@ import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
+import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
@@ -49,6 +50,9 @@ class RoleControllerApiTest {
     @Autowired
     private lateinit var getAllRolesPresenter: GetAllRolesPresenter
 
+    @Autowired
+    private lateinit var deleteRoleUseCase: DeleteRoleUseCase
+
     @TestConfiguration
     class MockConfig {
         @Bean
@@ -62,6 +66,9 @@ class RoleControllerApiTest {
 
         @Bean
         fun getAllRolesPresenter(): GetAllRolesPresenter = mockk()
+
+        @Bean
+        fun deleteRoleUseCase(): DeleteRoleUseCase = mockk()
     }
 
     @BeforeEach
@@ -216,6 +223,25 @@ class RoleControllerApiTest {
                         }
                     """.trimIndent()
                 )
+        }
+    }
+
+    @Nested
+    inner class DeleteRole {
+        @Test
+        fun `DELETE v1_role_{id} should delete a role and return no content`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            every { deleteRoleUseCase.execute(roleId) } just runs
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .delete()
+                .uri("${ApiPath.Role.BASE}/${roleId}")
+                .exchange()
+
+            // Assert
+            assertThat(testResult).hasStatus(HttpStatus.NO_CONTENT)
         }
     }
 }

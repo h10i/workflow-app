@@ -3,6 +3,7 @@ package com.example.workflow.e2e.test.web.client
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.util.CookieUtil
 import com.example.workflow.feature.account.model.AccountViewResponse
+import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.util.TestDataFactory
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -160,5 +161,25 @@ class E2ETestRestTemplate(
     ): AuthResult {
         registerAccount(emailAddress = emailAddress, password = password)
         return authenticate(emailAddress = emailAddress, password = password)
+    }
+
+    fun createRole(
+        name: String,
+        accessToken: String,
+    ): RoleViewResponse {
+        val json = """
+                {
+                    "name": "$name"
+                }
+            """.trimIndent()
+
+        val response = post(
+            responseType = RoleViewResponse::class.java,
+            path = ApiPath.Role.BASE,
+            body = json,
+            accessToken = accessToken,
+        )
+
+        return response.body ?: throw IllegalStateException("role not found")
     }
 }

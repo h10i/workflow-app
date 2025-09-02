@@ -16,7 +16,7 @@ class CreateRoleUseCase(
     )
 
     fun execute(request: CreateRoleRequest): Result {
-        roleService.verifyRoleAvailability(request.name)
+        roleService.verifyRoleNameAvailability(request.name)
 
         val role = Role(
             name = request.name,

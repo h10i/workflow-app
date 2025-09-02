@@ -66,6 +66,11 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
                     hasRole(Role.ADMIN.name)
                 )
                 authorize(HttpMethod.GET, ApiPath.Role.BASE, hasRole(Role.ADMIN.name))
+                authorize(
+                    HttpMethod.DELETE,
+                    "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
+                    hasRole(Role.ADMIN.name)
+                )
                 // Token
                 authorize(
                     HttpMethod.POST,
