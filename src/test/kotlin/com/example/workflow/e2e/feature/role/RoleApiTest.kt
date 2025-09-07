@@ -158,6 +158,112 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
+    inner class GetRole {
+        @Test
+        fun `GET request with a admin role should return 200 OK`() {
+            // Arrange
+            val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_GET_200", accessToken = authResultWithAdmin.accessToken)
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
+                accessToken = authResultWithAdmin.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.OK, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "id":"${roleViewResponse.id}",
+                        "name":"${roleViewResponse.name}"
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `GET request with invalid credentials should return 401 Unauthorized`() {
+            // Arrange
+            val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_GET_401", accessToken = authResultWithAdmin.accessToken)
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
+                accessToken = "invalid-access-token",
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `GET request for a non-admin role should return 403 Forbidden`() {
+            // Arrange
+            val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_GET_403", accessToken = authResultWithAdmin.accessToken)
+            val authResultWithUser: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
+                accessToken = authResultWithUser.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+            assertNull(response.body)
+        }
+
+        @Test
+        fun `GET request with non-existent role id should return 404 Not Found`() {
+            // Arrange
+            val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
+            val roleViewResponse =
+                restTemplate.createRole(name = "ROLE_TO_GET_403", accessToken = authResultWithAdmin.accessToken)
+            val roleId = UUID.randomUUID()
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.Role.BASE}/${roleId}",
+                accessToken = authResultWithAdmin.accessToken,
+            )
+
+            // Assert
+            assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "errors":{
+                            "general": [
+                                "Role not found with criteria: id: $roleId"
+                            ]
+                        }
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+    }
+
+    @Nested
     inner class GetAllRoles {
         @Test
         fun `GET request with a admin role should return 200 OK`() {
