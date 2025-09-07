@@ -7,9 +7,11 @@ import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
+import com.example.workflow.feature.role.presenter.GetRolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
+import com.example.workflow.feature.role.usecase.GetRoleUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -26,6 +28,8 @@ import java.util.*
 class RoleController(
     private val createRoleUseCase: CreateRoleUseCase,
     private val createRolePresenter: CreateRolePresenter,
+    private val getRoleUseCase: GetRoleUseCase,
+    private val getRolePresenter: GetRolePresenter,
     private val getAllRolesUseCase: GetAllRolesUseCase,
     private val getAllRolesPresenter: GetAllRolesPresenter,
     private val deleteRoleUseCase: DeleteRoleUseCase,
@@ -81,6 +85,45 @@ class RoleController(
         val useCaseResult: CreateRoleUseCase.Result = createRoleUseCase.execute(request)
         val presenterResult: CreateRolePresenter.Result = createRolePresenter.toResponse(useCaseResult)
         return ResponseEntity.status(HttpStatus.CREATED).body(presenterResult.response)
+    }
+
+    @Operation(
+        summary = "Get a role",
+        description = "Retrieves a role. This operation requires an ADMIN role.",
+        security = [SecurityRequirement(name = "bearer-key")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Successfully retrieved a role information",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = RoleViewResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [Content()]
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Required role missing.",
+                content = [Content()]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "A role not found.",
+                content = [Content()]
+            ),
+        ],
+    )
+    @GetMapping(ApiPath.Role.ID)
+    fun getRole(@PathVariable id: UUID): ResponseEntity<RoleViewResponse> {
+        val useCaseResult: GetRoleUseCase.Result = getRoleUseCase.execute(id)
+        val presenterResult: GetRolePresenter.Result = getRolePresenter.toResponse(useCaseResult)
+        return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 
     @Operation(
