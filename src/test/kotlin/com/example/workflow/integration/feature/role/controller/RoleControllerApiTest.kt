@@ -7,9 +7,11 @@ import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
+import com.example.workflow.feature.role.presenter.GetRolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
+import com.example.workflow.feature.role.usecase.GetRoleUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
 import io.mockk.*
@@ -45,6 +47,12 @@ class RoleControllerApiTest {
     private lateinit var createRolePresenter: CreateRolePresenter
 
     @Autowired
+    private lateinit var getRoleUseCase: GetRoleUseCase
+
+    @Autowired
+    private lateinit var getRolePresenter: GetRolePresenter
+
+    @Autowired
     private lateinit var getAllRolesUseCase: GetAllRolesUseCase
 
     @Autowired
@@ -60,6 +68,12 @@ class RoleControllerApiTest {
 
         @Bean
         fun createRolePresenter(): CreateRolePresenter = mockk()
+
+        @Bean
+        fun getRoleUseCase(): GetRoleUseCase = mockk()
+
+        @Bean
+        fun getRolePresenter(): GetRolePresenter = mockk()
 
         @Bean
         fun getAllRolesUseCase(): GetAllRolesUseCase = mockk()
@@ -165,6 +179,45 @@ class RoleControllerApiTest {
                                     "Name must not be blank"
                                 ]
                             }
+                        }
+                    """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class GetRole {
+        @Test
+        fun `GET v1_roles_{id} should return a role information`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            val useCaseResult: GetRoleUseCase.Result = mockk()
+            val presenterResult = GetRolePresenter.Result(
+                response = RoleViewResponse(
+                    id = roleId,
+                    name = "EXAMPLE_ROLE",
+                )
+            )
+
+            every { getRoleUseCase.execute(roleId) } returns useCaseResult
+            every { getRolePresenter.toResponse(useCaseResult) } returns presenterResult
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .get()
+                .uri("${ApiPath.Role.BASE}/${roleId}")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+
+            // Assert
+            assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                        {
+                            "id": "${presenterResult.response.id}",
+                            "name": "${presenterResult.response.name}"
                         }
                     """.trimIndent()
                 )
