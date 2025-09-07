@@ -6,9 +6,11 @@ import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.role.presenter.CreateRolePresenter
 import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
+import com.example.workflow.feature.role.presenter.GetRolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
+import com.example.workflow.feature.role.usecase.GetRoleUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.just
@@ -27,6 +29,8 @@ import kotlin.test.assertEquals
 class RoleControllerTest {
     private lateinit var createRoleUseCase: CreateRoleUseCase
     private lateinit var createRolePresenter: CreateRolePresenter
+    private lateinit var getRoleUseCase: GetRoleUseCase
+    private lateinit var getRolePresenter: GetRolePresenter
     private lateinit var getAllRolesUseCase: GetAllRolesUseCase
     private lateinit var getAllRolesPresenter: GetAllRolesPresenter
     private lateinit var deleteRoleUseCase: DeleteRoleUseCase
@@ -36,12 +40,16 @@ class RoleControllerTest {
     fun setUp() {
         createRoleUseCase = mockk()
         createRolePresenter = mockk()
+        getRoleUseCase = mockk()
+        getRolePresenter = mockk()
         getAllRolesUseCase = mockk()
         getAllRolesPresenter = mockk()
         deleteRoleUseCase = mockk()
         roleController = RoleController(
             createRoleUseCase = createRoleUseCase,
             createRolePresenter = createRolePresenter,
+            getRoleUseCase = getRoleUseCase,
+            getRolePresenter = getRolePresenter,
             getAllRolesUseCase = getAllRolesUseCase,
             getAllRolesPresenter = getAllRolesPresenter,
             deleteRoleUseCase = deleteRoleUseCase,
@@ -75,6 +83,29 @@ class RoleControllerTest {
             // Assert
             assertEquals(HttpStatus.CREATED, actual.statusCode)
             assertEquals(roleViewResponse, actual.body)
+        }
+    }
+
+    @Nested
+    inner class GetRole() {
+        @Test
+        fun `should return role view response`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            val useCaseResult: GetRoleUseCase.Result = mockk()
+            val presenterResult: GetRolePresenter.Result = mockk()
+            val response: RoleViewResponse = mockk()
+
+            every { getRoleUseCase.execute(roleId) } returns useCaseResult
+            every { getRolePresenter.toResponse(useCaseResult) } returns presenterResult
+            every { presenterResult.response } returns response
+
+            // Act
+            val actual = roleController.getRole(roleId)
+
+            // Assert
+            assertEquals(HttpStatus.OK, actual.statusCode)
+            assertEquals(response, actual.body)
         }
     }
 
