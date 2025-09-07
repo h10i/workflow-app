@@ -17,6 +17,7 @@ class SecurityConfigTestController {
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
             // Role
+            "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
             ApiPath.Role.BASE,
         ]
     )
