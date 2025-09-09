@@ -56,10 +56,7 @@ class AccountControllerTest {
         @Test
         fun `registerAccount should return account view response`() {
             // Arrange
-            val request = RegisterAccountRequest(
-                emailAddress = "user@example.com",
-                password = "test-password",
-            )
+            val request: RegisterAccountRequest = mockk()
             val useCaseResult: RegisterAccountUseCase.Result = mockk(relaxed = true)
             val accountViewResponseMock: AccountViewResponse = mockk()
             val presenterResult = AccountPresenter.Result(
@@ -106,10 +103,7 @@ class AccountControllerTest {
         @Test
         fun `returns account view response`() {
             // Arrange
-            val request = UpdateAccountRequest(
-                emailAddress = "new@example.com",
-                password = "new-test-password",
-            )
+            val request: UpdateAccountRequest = mockk()
             val useCaseResult: UpdateAccountUseCase.Result = mockk(relaxed = true)
 
             val accountViewResponseMock: AccountViewResponse = mockk()

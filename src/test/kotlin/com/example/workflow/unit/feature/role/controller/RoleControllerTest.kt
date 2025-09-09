@@ -57,9 +57,7 @@ class RoleControllerTest {
         @Test
         fun `returns role view response`() {
             // Arrange
-            val request = CreateRoleRequest(
-                name = "EXAMPLE",
-            )
+            val request: CreateRoleRequest = mockk()
             val useCaseResult: CreateRoleUseCase.Result = mockk(relaxed = true)
             val roleViewResponse: RoleViewResponse = mockk()
             val presenterResult = RolePresenter.Result(
