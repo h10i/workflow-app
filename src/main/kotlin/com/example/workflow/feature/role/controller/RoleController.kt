@@ -5,9 +5,7 @@ import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
-import com.example.workflow.feature.role.presenter.CreateRolePresenter
-import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
-import com.example.workflow.feature.role.presenter.GetRolePresenter
+import com.example.workflow.feature.role.presenter.RolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
@@ -26,12 +24,10 @@ import java.util.*
 @RestController
 @RequestMapping(ApiPath.Role.BASE)
 class RoleController(
+    private val rolePresenter: RolePresenter,
     private val createRoleUseCase: CreateRoleUseCase,
-    private val createRolePresenter: CreateRolePresenter,
     private val getRoleUseCase: GetRoleUseCase,
-    private val getRolePresenter: GetRolePresenter,
     private val getAllRolesUseCase: GetAllRolesUseCase,
-    private val getAllRolesPresenter: GetAllRolesPresenter,
     private val deleteRoleUseCase: DeleteRoleUseCase,
 ) {
     @Operation(
@@ -83,7 +79,8 @@ class RoleController(
     @PostMapping
     fun createRole(@Valid @RequestBody request: CreateRoleRequest): ResponseEntity<RoleViewResponse> {
         val useCaseResult: CreateRoleUseCase.Result = createRoleUseCase.execute(request)
-        val presenterResult: CreateRolePresenter.Result = createRolePresenter.toResponse(useCaseResult)
+        val presenterResult: RolePresenter.Result<RoleViewResponse> =
+            rolePresenter.toResponse(useCaseResult.roleViewDto)
         return ResponseEntity.status(HttpStatus.CREATED).body(presenterResult.response)
     }
 
@@ -122,7 +119,8 @@ class RoleController(
     @GetMapping(ApiPath.Role.ID)
     fun getRole(@PathVariable id: UUID): ResponseEntity<RoleViewResponse> {
         val useCaseResult: GetRoleUseCase.Result = getRoleUseCase.execute(id)
-        val presenterResult: GetRolePresenter.Result = getRolePresenter.toResponse(useCaseResult)
+        val presenterResult: RolePresenter.Result<RoleViewResponse> =
+            rolePresenter.toResponse(useCaseResult.roleViewDto)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 
@@ -156,7 +154,8 @@ class RoleController(
     @GetMapping
     fun getAllRoles(): ResponseEntity<RoleViewListResponse> {
         val useCaseResult: GetAllRolesUseCase.Result = getAllRolesUseCase.execute()
-        val presenterResult: GetAllRolesPresenter.Result = getAllRolesPresenter.toResponse(useCaseResult)
+        val presenterResult: RolePresenter.Result<RoleViewListResponse> =
+            rolePresenter.toResponse(useCaseResult.roleViewDtoList)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 

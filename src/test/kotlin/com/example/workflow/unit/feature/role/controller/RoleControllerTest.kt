@@ -4,9 +4,7 @@ import com.example.workflow.feature.role.controller.RoleController
 import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
-import com.example.workflow.feature.role.presenter.CreateRolePresenter
-import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
-import com.example.workflow.feature.role.presenter.GetRolePresenter
+import com.example.workflow.feature.role.presenter.RolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
@@ -27,31 +25,25 @@ import kotlin.test.assertEquals
 
 @UnitTest
 class RoleControllerTest {
+    private lateinit var rolePresenter: RolePresenter
     private lateinit var createRoleUseCase: CreateRoleUseCase
-    private lateinit var createRolePresenter: CreateRolePresenter
     private lateinit var getRoleUseCase: GetRoleUseCase
-    private lateinit var getRolePresenter: GetRolePresenter
     private lateinit var getAllRolesUseCase: GetAllRolesUseCase
-    private lateinit var getAllRolesPresenter: GetAllRolesPresenter
     private lateinit var deleteRoleUseCase: DeleteRoleUseCase
     private lateinit var roleController: RoleController
 
     @BeforeEach
     fun setUp() {
+        rolePresenter = mockk()
         createRoleUseCase = mockk()
-        createRolePresenter = mockk()
         getRoleUseCase = mockk()
-        getRolePresenter = mockk()
         getAllRolesUseCase = mockk()
-        getAllRolesPresenter = mockk()
         deleteRoleUseCase = mockk()
         roleController = RoleController(
+            rolePresenter = rolePresenter,
             createRoleUseCase = createRoleUseCase,
-            createRolePresenter = createRolePresenter,
             getRoleUseCase = getRoleUseCase,
-            getRolePresenter = getRolePresenter,
             getAllRolesUseCase = getAllRolesUseCase,
-            getAllRolesPresenter = getAllRolesPresenter,
             deleteRoleUseCase = deleteRoleUseCase,
         )
     }
@@ -68,14 +60,14 @@ class RoleControllerTest {
             val request = CreateRoleRequest(
                 name = "EXAMPLE",
             )
-            val useCaseResult: CreateRoleUseCase.Result = mockk()
+            val useCaseResult: CreateRoleUseCase.Result = mockk(relaxed = true)
             val roleViewResponse: RoleViewResponse = mockk()
-            val presenterResult: CreateRolePresenter.Result = CreateRolePresenter.Result(
+            val presenterResult = RolePresenter.Result(
                 response = roleViewResponse,
             )
 
             every { createRoleUseCase.execute(request) } returns useCaseResult
-            every { createRolePresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDto) } returns presenterResult
 
             // Act
             val actual = roleController.createRole(request)
@@ -92,12 +84,12 @@ class RoleControllerTest {
         fun `should return role view response`() {
             // Arrange
             val roleId = UUID.randomUUID()
-            val useCaseResult: GetRoleUseCase.Result = mockk()
-            val presenterResult: GetRolePresenter.Result = mockk()
+            val useCaseResult: GetRoleUseCase.Result = mockk(relaxed = true)
+            val presenterResult: RolePresenter.Result<RoleViewResponse> = mockk()
             val response: RoleViewResponse = mockk()
 
             every { getRoleUseCase.execute(roleId) } returns useCaseResult
-            every { getRolePresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDto) } returns presenterResult
             every { presenterResult.response } returns response
 
             // Act
@@ -115,12 +107,12 @@ class RoleControllerTest {
         fun `should return role view response list`() {
             // Arrange
             val useCaseResult: GetAllRolesUseCase.Result = mockk()
-            val presenterResult: GetAllRolesPresenter.Result = mockk()
+            val presenterResult: RolePresenter.Result<RoleViewListResponse> = mockk()
             val response: RoleViewListResponse = mockk()
 
             every { presenterResult.response } returns response
             every { getAllRolesUseCase.execute() } returns useCaseResult
-            every { getAllRolesPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDtoList) } returns presenterResult
 
             // Act
             val actual = roleController.getAllRoles()
