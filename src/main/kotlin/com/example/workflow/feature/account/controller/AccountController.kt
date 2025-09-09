@@ -107,7 +107,7 @@ class AccountController(
     fun get(): ResponseEntity<AccountViewResponse> {
         val useCaseResult: GetAccountUseCase.Result = getAccountUseCase.execute()
         val presenterResult: GetAccountPresenter.Result = getAccountPresenter.toResponse(useCaseResult)
-        return ResponseEntity.ok().body(presenterResult.response)
+        return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 
     @Operation(

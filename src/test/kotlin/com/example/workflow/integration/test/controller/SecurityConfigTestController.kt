@@ -2,6 +2,7 @@ package com.example.workflow.integration.test.controller
 
 import com.example.workflow.common.path.ApiPath
 import org.springframework.context.annotation.Profile
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -21,7 +22,7 @@ class SecurityConfigTestController {
             ApiPath.Role.BASE,
         ]
     )
-    fun get() = ResponseEntity.ok("get")
+    fun get() = ResponseEntity.status(HttpStatus.OK).body("get")
 
     @PostMapping(
         path = [
@@ -34,7 +35,7 @@ class SecurityConfigTestController {
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
         ]
     )
-    fun post() = ResponseEntity.ok("post")
+    fun post() = ResponseEntity.status(HttpStatus.OK).body("post")
 
     @PatchMapping(
         path = [
@@ -42,7 +43,7 @@ class SecurityConfigTestController {
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
         ]
     )
-    fun patch() = ResponseEntity.ok("patch")
+    fun patch() = ResponseEntity.status(HttpStatus.OK).body("patch")
 
     @DeleteMapping(
         path = [
@@ -55,5 +56,5 @@ class SecurityConfigTestController {
             "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
         ]
     )
-    fun delete() = ResponseEntity.ok("delete")
+    fun delete() = ResponseEntity.status(HttpStatus.OK).body("delete")
 }

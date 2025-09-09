@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -59,7 +60,7 @@ class TokenController(
         val useCaseResult: IssueTokenUseCase.Result = issueTokenUseCase.execute(request)
         val presenterResult: TokenPresenter.Result = tokenPresenter.toResponse(useCaseResult)
 
-        return ResponseEntity.ok()
+        return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.SET_COOKIE, presenterResult.refreshTokenCookie.toString())
             .body(presenterResult.response)
     }

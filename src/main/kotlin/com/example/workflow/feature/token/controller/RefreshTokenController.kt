@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -47,7 +48,7 @@ class RefreshTokenController(
     fun refreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<TokenResponse> {
         val useCaseResult = refreshTokenUseCase.execute(refreshTokenValue)
         val presenterResult = refreshTokenPresenter.toResponse(useCaseResult)
-        return ResponseEntity<TokenResponse>.ok().body(presenterResult.response)
+        return ResponseEntity<TokenResponse>.status(HttpStatus.OK).body(presenterResult.response)
     }
 
     @Operation(
@@ -70,7 +71,7 @@ class RefreshTokenController(
     @DeleteMapping(ApiPath.RefreshToken.REVOKE)
     fun revokeRefreshToken(@CookieValue("refreshToken") refreshTokenValue: String): ResponseEntity<Void> {
         revokeRefreshTokenUseCase.execute(refreshTokenValue)
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
     @Operation(
@@ -93,6 +94,6 @@ class RefreshTokenController(
     @DeleteMapping(ApiPath.RefreshToken.REVOKE_ALL)
     fun revokeAllRefreshTokens(): ResponseEntity<Void> {
         revokeAllRefreshTokensUseCase.execute()
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }
