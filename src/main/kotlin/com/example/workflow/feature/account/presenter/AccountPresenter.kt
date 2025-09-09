@@ -1,19 +1,19 @@
 package com.example.workflow.feature.account.presenter
 
+import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.toViewResponse
-import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import org.springframework.stereotype.Component
 
 @Component
-class GetAccountPresenter {
-    data class Result(
-        val response: AccountViewResponse
+class AccountPresenter {
+    data class Result<T>(
+        val response: T
     )
 
-    fun toResponse(useCaseResult: GetAccountUseCase.Result): Result {
+    fun toResponse(accountViewDto: AccountViewDto): Result<AccountViewResponse> {
         return Result(
-            useCaseResult.accountViewDto.toViewResponse()
+            accountViewDto.toViewResponse()
         )
     }
 }

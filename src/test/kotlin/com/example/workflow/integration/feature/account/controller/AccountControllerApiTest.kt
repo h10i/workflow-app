@@ -6,9 +6,7 @@ import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.model.UpdateAccountRequest
-import com.example.workflow.feature.account.presenter.GetAccountPresenter
-import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
-import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.presenter.AccountPresenter
 import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
@@ -42,22 +40,16 @@ class AccountControllerApiTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     @Autowired
-    private lateinit var registerAccountUseCase: RegisterAccountUseCase
+    private lateinit var accountPresenter: AccountPresenter
 
     @Autowired
-    private lateinit var registerAccountPresenter: RegisterAccountPresenter
+    private lateinit var registerAccountUseCase: RegisterAccountUseCase
 
     @Autowired
     private lateinit var getAccountUseCase: GetAccountUseCase
 
     @Autowired
-    private lateinit var getAccountPresenter: GetAccountPresenter
-
-    @Autowired
     private lateinit var updateAccountUseCase: UpdateAccountUseCase
-
-    @Autowired
-    private lateinit var updateAccountPresenter: UpdateAccountPresenter
 
     @Autowired
     private lateinit var deleteAccountUseCase: DeleteAccountUseCase
@@ -66,22 +58,16 @@ class AccountControllerApiTest {
     @Suppress("unused")
     class MockConfig {
         @Bean
-        fun registerAccountUseCase(): RegisterAccountUseCase = mockk()
+        fun accountPresenter(): AccountPresenter = mockk()
 
         @Bean
-        fun registerAccountPresenter(): RegisterAccountPresenter = mockk()
+        fun registerAccountUseCase(): RegisterAccountUseCase = mockk()
 
         @Bean
         fun getAccountUseCase(): GetAccountUseCase = mockk()
 
         @Bean
-        fun getAccountPresenter(): GetAccountPresenter = mockk()
-
-        @Bean
         fun updateAccountUseCase(): UpdateAccountUseCase = mockk()
-
-        @Bean
-        fun updateAccountPresenter(): UpdateAccountPresenter = mockk()
 
         @Bean
         fun deleteAccountUseCase(): DeleteAccountUseCase = mockk()
@@ -115,12 +101,12 @@ class AccountControllerApiTest {
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
-            val presenterResult = RegisterAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponse
             )
 
             every { registerAccountUseCase.execute(any()) } returns useCaseResult
-            every { registerAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -215,12 +201,12 @@ class AccountControllerApiTest {
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
-            val presenterResult = GetAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponse
             )
 
             every { getAccountUseCase.execute() } returns useCaseResult
-            every { getAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -264,12 +250,12 @@ class AccountControllerApiTest {
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
-            val presenterResult = UpdateAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponse
             )
 
             every { updateAccountUseCase.execute(any()) } returns useCaseResult
-            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester

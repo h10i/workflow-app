@@ -4,9 +4,7 @@ import com.example.workflow.feature.account.controller.AccountController
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.model.UpdateAccountRequest
-import com.example.workflow.feature.account.presenter.GetAccountPresenter
-import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
-import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.presenter.AccountPresenter
 import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
@@ -27,31 +25,25 @@ import kotlin.test.assertNull
 @UnitTest
 class AccountControllerTest {
     private lateinit var registerAccountUseCase: RegisterAccountUseCase
-    private lateinit var registerAccountPresenter: RegisterAccountPresenter
     private lateinit var getAccountUseCase: GetAccountUseCase
-    private lateinit var getAccountPresenter: GetAccountPresenter
     private lateinit var updateAccountUseCase: UpdateAccountUseCase
-    private lateinit var updateAccountPresenter: UpdateAccountPresenter
     private lateinit var deleteAccountUseCase: DeleteAccountUseCase
+    private lateinit var accountPresenter: AccountPresenter
     private lateinit var accountController: AccountController
 
     @BeforeEach
     fun setUp() {
         registerAccountUseCase = mockk()
-        registerAccountPresenter = mockk()
         getAccountUseCase = mockk()
-        getAccountPresenter = mockk()
         updateAccountUseCase = mockk()
-        updateAccountPresenter = mockk()
         deleteAccountUseCase = mockk()
+        accountPresenter = mockk()
         accountController = AccountController(
             registerAccountUseCase = registerAccountUseCase,
-            registerAccountPresenter = registerAccountPresenter,
             getAccountUseCase = getAccountUseCase,
-            getAccountPresenter = getAccountPresenter,
             updateAccountUseCase = updateAccountUseCase,
-            updateAccountPresenter = updateAccountPresenter,
             deleteAccountUseCase = deleteAccountUseCase,
+            accountPresenter = accountPresenter,
         )
     }
 
@@ -68,14 +60,14 @@ class AccountControllerTest {
                 emailAddress = "user@example.com",
                 password = "test-password",
             )
-            val useCaseResult: RegisterAccountUseCase.Result = mockk()
+            val useCaseResult: RegisterAccountUseCase.Result = mockk(relaxed = true)
             val accountViewResponseMock: AccountViewResponse = mockk()
-            val presenterResult = RegisterAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponseMock
             )
 
             every { registerAccountUseCase.execute(request) } returns useCaseResult
-            every { registerAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val actual = accountController.registerAccount(request)
@@ -91,14 +83,14 @@ class AccountControllerTest {
         @Test
         fun `get should return account view response`() {
             // Arrange
-            val useCaseResult: GetAccountUseCase.Result = mockk()
+            val useCaseResult: GetAccountUseCase.Result = mockk(relaxed = true)
             val accountViewResponseMock = mockk<AccountViewResponse>()
-            val presenterResult = GetAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponseMock
             )
 
             every { getAccountUseCase.execute() } returns useCaseResult
-            every { getAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val actual = accountController.get()
@@ -118,15 +110,15 @@ class AccountControllerTest {
                 emailAddress = "new@example.com",
                 password = "new-test-password",
             )
-            val useCaseResult: UpdateAccountUseCase.Result = mockk()
+            val useCaseResult: UpdateAccountUseCase.Result = mockk(relaxed = true)
 
             val accountViewResponseMock: AccountViewResponse = mockk()
-            val presenterResult = UpdateAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponseMock
             )
 
             every { updateAccountUseCase.execute(request) } returns useCaseResult
-            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val actual = accountController.updateAccount(request)
