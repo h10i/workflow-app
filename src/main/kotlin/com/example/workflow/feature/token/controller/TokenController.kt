@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
@@ -56,12 +55,12 @@ class TokenController(
         ],
     )
     @PostMapping(ApiPath.Token.TOKEN)
-    fun token(@Valid @RequestBody request: TokenRequest, response: HttpServletResponse): ResponseEntity<TokenResponse> {
+    fun token(@Valid @RequestBody request: TokenRequest): ResponseEntity<TokenResponse> {
         val useCaseResult: IssueTokenUseCase.Result = issueTokenUseCase.execute(request)
         val presenterResult: TokenPresenter.Result = tokenPresenter.toResponse(useCaseResult)
 
-        response.addHeader(HttpHeaders.SET_COOKIE, presenterResult.refreshTokenCookie.toString())
-
-        return ResponseEntity.ok().body(presenterResult.response)
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, presenterResult.refreshTokenCookie.toString())
+            .body(presenterResult.response)
     }
 }
