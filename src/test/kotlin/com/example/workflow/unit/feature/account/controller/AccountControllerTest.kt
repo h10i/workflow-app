@@ -76,7 +76,7 @@ class AccountControllerTest {
     }
 
     @Nested
-    inner class GetFun {
+    inner class GetAccountFun {
         @Test
         fun `should execute GetAccountUseCase and return account view response`() {
             // Arrange
@@ -90,7 +90,7 @@ class AccountControllerTest {
             every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
-            val actual = accountController.get()
+            val actual = accountController.getAccount()
 
             // Assert
             assertEquals(HttpStatus.OK, actual.statusCode)

@@ -184,7 +184,7 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class GetApi {
+    inner class GetAccountApi {
         @Test
         fun `should return the account information when valid request`() {
             // Arrange

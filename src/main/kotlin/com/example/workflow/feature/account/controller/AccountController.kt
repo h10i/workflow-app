@@ -101,7 +101,7 @@ class AccountController(
         ],
     )
     @GetMapping(ApiPath.Account.ME)
-    fun get(): ResponseEntity<AccountViewResponse> {
+    fun getAccount(): ResponseEntity<AccountViewResponse> {
         val useCaseResult: GetAccountUseCase.Result = getAccountUseCase.execute()
         val presenterResult: AccountPresenter.Result<AccountViewResponse> =
             accountPresenter.toResponse(useCaseResult.accountViewDto)
