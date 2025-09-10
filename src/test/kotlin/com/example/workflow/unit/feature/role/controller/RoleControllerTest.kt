@@ -55,7 +55,7 @@ class RoleControllerTest {
     @Nested
     inner class CreateRole() {
         @Test
-        fun `returns role view response`() {
+        fun `should execute CreateRoleUseCase and return role view response`() {
             // Arrange
             val request: CreateRoleRequest = mockk()
             val useCaseResult: CreateRoleUseCase.Result = mockk(relaxed = true)
@@ -79,7 +79,7 @@ class RoleControllerTest {
     @Nested
     inner class GetRole() {
         @Test
-        fun `should return role view response`() {
+        fun `should execute GetRoleUseCase and return role view response`() {
             // Arrange
             val roleId = UUID.randomUUID()
             val useCaseResult: GetRoleUseCase.Result = mockk(relaxed = true)
@@ -102,7 +102,7 @@ class RoleControllerTest {
     @Nested
     inner class GetAllRoles() {
         @Test
-        fun `should return role view response list`() {
+        fun `should execute GetAllRolesUseCase and return role view response list`() {
             // Arrange
             val useCaseResult: GetAllRolesUseCase.Result = mockk()
             val presenterResult: RolePresenter.Result<RoleViewListResponse> = mockk()
@@ -124,7 +124,7 @@ class RoleControllerTest {
     @Nested
     inner class DeleteRole() {
         @Test
-        fun `should return no content`() {
+        fun `should execute DeleteRoleUseCase and return no content`() {
             // Arrange
             val roleId = UUID.randomUUID()
             every { deleteRoleUseCase.execute(roleId) } just runs

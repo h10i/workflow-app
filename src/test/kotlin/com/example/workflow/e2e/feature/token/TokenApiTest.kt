@@ -23,7 +23,7 @@ class TokenApiTest : AbstractE2ETest() {
     @Nested
     inner class CreateToken() {
         @Test
-        fun `POST token with valid credentials returns 200 OK`() {
+        fun `should return 200 OK when valid request`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -54,7 +54,7 @@ class TokenApiTest : AbstractE2ETest() {
 
 
         @Test
-        fun `POST token with invalid credentials returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when invalid request`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()

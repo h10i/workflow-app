@@ -50,7 +50,7 @@ class IssueTokenUseCaseTest {
     @Nested
     inner class ExecuteMethod {
         @Test
-        fun `execute method should return access token and refresh token`() {
+        fun `should return access token and refresh token`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "test-password"

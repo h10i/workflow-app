@@ -83,7 +83,7 @@ class RoleControllerApiTest {
     @Nested
     inner class CreateRole {
         @Test
-        fun `POST v1_roles should return created role information with valid request`() {
+        fun `should return the role information when valid request`() {
             // Arrange
             val roleName = "EXAMPLE"
 
@@ -135,7 +135,7 @@ class RoleControllerApiTest {
         }
 
         @Test
-        fun `POST v1_roles should return created role information with invalid request`() {
+        fun `should return the role information when invalid request`() {
             // Arrange
             val roleName = ""
 
@@ -174,7 +174,7 @@ class RoleControllerApiTest {
     @Nested
     inner class GetRole {
         @Test
-        fun `GET v1_roles_{id} should return a role information`() {
+        fun `should return the role information when valid request`() {
             // Arrange
             val roleId = UUID.randomUUID()
             val useCaseResult: GetRoleUseCase.Result = mockk()
@@ -213,7 +213,7 @@ class RoleControllerApiTest {
     @Nested
     inner class GetAllRoles {
         @Test
-        fun `GET v1_roles should return all roles information`() {
+        fun `should return the all roles information when valid request`() {
             // Arrange
             val useCaseResult: GetAllRolesUseCase.Result = mockk()
             val roleViewResponseList: List<RoleViewResponse> = listOf(
@@ -268,7 +268,7 @@ class RoleControllerApiTest {
     @Nested
     inner class DeleteRole {
         @Test
-        fun `DELETE v1_role_{id} should delete a role and return no content`() {
+        fun `should delete a role and return no content when valid request`() {
             // Arrange
             val roleId = UUID.randomUUID()
             every { deleteRoleUseCase.execute(roleId) } just runs

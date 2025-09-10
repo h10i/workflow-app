@@ -28,7 +28,7 @@ class DeleteRoleUseCaseTest {
     @Nested
     inner class ExecuteFun {
         @Test
-        fun `should delete role by id when role exists`() {
+        fun `should delete the role by id when a role exists`() {
             // Arrange
             val roleId = UUID.randomUUID()
 
@@ -43,7 +43,7 @@ class DeleteRoleUseCaseTest {
         }
 
         @Test
-        fun `should throw exception when role does not exist`() {
+        fun `should throw exception when a role does not exist`() {
             // Arrange
             val roleId = UUID.randomUUID()
 

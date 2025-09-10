@@ -39,7 +39,7 @@ class AccountRepositoryTest {
     @Nested
     inner class Save {
         @Test
-        fun `returns account when saving new account`() {
+        fun `should return the saved account when saving a new account`() {
             // Arrange
             val account = TestDataFactory.createAccount()
 
@@ -79,7 +79,7 @@ class AccountRepositoryTest {
         }
 
         @Test
-        fun `return Account when email address exists`() {
+        fun `should return the account when a email address exists`() {
             // Arrange
             val emailAddress = account.emailAddress
 
@@ -94,7 +94,7 @@ class AccountRepositoryTest {
         }
 
         @Test
-        fun `return null when email address doesn't exists`() {
+        fun `should return null when a email address does not exist`() {
             // Arrange
             val emailAddress = "not.found.${account.emailAddress}"
 
@@ -137,7 +137,7 @@ class AccountRepositoryTest {
         }
 
         @Test
-        fun `should delete data associated with account when account is deleted`() {
+        fun `should delete account-related data when an account is deleted`() {
             // Arrange
 
             // Act

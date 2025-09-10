@@ -42,7 +42,7 @@ class CreateRoleUseCaseTest {
         }
 
         @Test
-        fun `return role with valid request`() {
+        fun `should return the role when valid request`() {
             // Arrange
             val roleName = "EXAMPLE"
             val request = CreateRoleRequest(
@@ -67,7 +67,7 @@ class CreateRoleUseCaseTest {
         }
 
         @Test
-        fun `return role with invalid request`() {
+        fun `should return the role when invalid request`() {
             // Arrange
             val roleName = "EXAMPLE"
             val request = CreateRoleRequest(

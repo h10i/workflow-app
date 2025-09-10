@@ -58,7 +58,7 @@ class RefreshTokenRepositoryTest {
         }
 
         @Test
-        fun `return RefreshToken when token value exists`() {
+        fun `should return the refresh token when a token value exists`() {
             // Arrange
             val refreshToken = account.refreshTokens[0]
             val refreshTokenValue = refreshToken.value
@@ -74,7 +74,7 @@ class RefreshTokenRepositoryTest {
         }
 
         @Test
-        fun `return null when token value exists`() {
+        fun `should return null when a token value does not exist`() {
             // Arrange
             val refreshTokenValue = UUID.randomUUID().toString()
 
@@ -113,7 +113,7 @@ class RefreshTokenRepositoryTest {
         }
 
         @Test
-        fun `return 1 when account ID and value are correct`() {
+        fun `should return 1 when both account ID and value are correct`() {
             // Arrange
             val accountId = accounts[0].id
             val refreshTokenValue = accounts[0].refreshTokens[0].value
@@ -129,7 +129,7 @@ class RefreshTokenRepositoryTest {
         }
 
         @Test
-        fun `return 0 when token value is from another account`() {
+        fun `should return 0 when token value is from another account`() {
             // Arrange
             val accountId = accounts[1].id
             val refreshTokenValue = accounts[0].refreshTokens[0].value
@@ -169,7 +169,7 @@ class RefreshTokenRepositoryTest {
         }
 
         @Test
-        fun `return number of refresh tokens when account ID exists`() {
+        fun `should return number of refresh tokens when an account id exists`() {
             // Arrange
             val accountId = account.id
 
@@ -183,7 +183,7 @@ class RefreshTokenRepositoryTest {
         }
 
         @Test
-        fun `return 0 when account ID doesn't exists`() {
+        fun `should return 0 when an account id does not exist`() {
             // Arrange
             val accountId = UUID.randomUUID()
 

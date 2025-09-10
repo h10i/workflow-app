@@ -36,7 +36,7 @@ class RevokeRefreshTokenUseCaseTest {
     @Nested
     inner class ExecuteMethod {
         @Test
-        fun `revoke refresh token succeeds`() {
+        fun `should revoke a refresh token`() {
             // Arrange
             val tokenValue = "revoked-token"
             val accountId = UUID.randomUUID()

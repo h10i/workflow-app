@@ -40,7 +40,7 @@ class TokenControllerTest {
     @Nested
     inner class TokenMethod {
         @Test
-        fun `token endpoint should return token and set refreshToken cookie`() {
+        fun `should execute IssueTokenUseCase and return token response and cookie including refresh token`() {
             // Arrange
             val request = TokenRequest("user@example.com", "test-password")
             val responseCookie = ResponseCookie.from("refreshToken", "dummy").build()

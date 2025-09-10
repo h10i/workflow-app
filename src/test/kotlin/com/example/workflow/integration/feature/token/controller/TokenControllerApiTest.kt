@@ -60,7 +60,7 @@ class TokenControllerApiTest {
     @Nested
     inner class TokenMethod {
         @Test
-        fun `GET v1_auth_token should return access token and set cookie to refresh token`() {
+        fun `should return a new access token and set cookie to refresh token when valid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "P4sSw0rd!"

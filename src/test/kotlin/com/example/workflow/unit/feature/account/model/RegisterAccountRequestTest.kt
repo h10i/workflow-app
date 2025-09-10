@@ -28,7 +28,7 @@ class RegisterAccountRequestTest {
     @Nested
     inner class EmailAddress {
         @Test
-        fun `success when emailAddress are valid`() {
+        fun `should succeed when emailAddress are valid`() {
             // Arrange
             val request = RegisterAccountRequest(emailAddress = "test@example.com", password = "")
 
@@ -42,7 +42,7 @@ class RegisterAccountRequestTest {
         }
 
         @Test
-        fun `failure when emailAddress is blank`() {
+        fun `should fail when emailAddress is blank`() {
             // Arrange
             val request = RegisterAccountRequest(emailAddress = "", password = "P4sSw0rd!")
 
@@ -57,7 +57,7 @@ class RegisterAccountRequestTest {
         }
 
         @Test
-        fun `failure when emailAddress has an invalid format`() {
+        fun `should fail when emailAddress has an invalid format`() {
             // Arrange
             val request = RegisterAccountRequest(emailAddress = "invalid-email", password = "P4sSw0rd!")
 
@@ -75,7 +75,7 @@ class RegisterAccountRequestTest {
     @Nested
     inner class Password {
         @Test
-        fun `success when password are valid`() {
+        fun `should succeed when password are valid`() {
             // Arrange
             val request = RegisterAccountRequest(emailAddress = "", password = "P4sSw0rd!")
 
@@ -89,7 +89,7 @@ class RegisterAccountRequestTest {
         }
 
         @Test
-        fun `failure when password is blank`() {
+        fun `should fail when password is blank`() {
             // Arrange
             val request = RegisterAccountRequest(emailAddress = "test@example.com", password = "")
 

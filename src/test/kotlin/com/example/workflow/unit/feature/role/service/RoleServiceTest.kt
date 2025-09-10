@@ -31,7 +31,7 @@ class RoleServiceTest {
     @Nested
     inner class SaveRole {
         @Test
-        fun `return role when saving new role`() {
+        fun `should return the role when saving a new role`() {
             // Arrange
             val role: Role = mockk()
             val savedRole: Role = mockk()
@@ -49,7 +49,7 @@ class RoleServiceTest {
     @Nested
     inner class GetRoleById {
         @Test
-        fun `should return role when role exists`() {
+        fun `should return the role when a role exists`() {
             // Arrange
             val roleId = UUID.randomUUID()
             val role = TestDataFactory.createRole(id = roleId)
@@ -64,7 +64,7 @@ class RoleServiceTest {
         }
 
         @Test
-        fun `should return null when role doesn't exists`() {
+        fun `should return null when a role does not exist`() {
             // Arrange
             val roleId = UUID.randomUUID()
 
@@ -114,7 +114,7 @@ class RoleServiceTest {
     @Nested
     inner class VerifyRoleIdAvailability {
         @Test
-        fun `should throw RoleNotFoundException when role does not exist`() {
+        fun `should throw RoleNotFoundException when a role does not exist`() {
             // Arrange
             val roleId = UUID.randomUUID()
 
@@ -129,7 +129,7 @@ class RoleServiceTest {
         }
 
         @Test
-        fun `should not throw any Exception when role exists`() {
+        fun `should not throw any Exception when a role exists`() {
             // Arrange
             val roleId = UUID.randomUUID()
             val role = TestDataFactory.createRole(id = roleId)
@@ -147,7 +147,7 @@ class RoleServiceTest {
     @Nested
     inner class VerifyRoleNameAvailability {
         @Test
-        fun `throws RoleNameAlreadyCreatedException when email address is created`() {
+        fun `should throw RoleNameAlreadyCreatedException when email address is created`() {
             // Arrange
             val roleName = "EXAMPLE"
             val role: Role = mockk()
@@ -163,7 +163,7 @@ class RoleServiceTest {
         }
 
         @Test
-        fun `does not throws RoleNameAlreadyCreatedException when email address is not created`() {
+        fun `should not throw RoleNameAlreadyCreatedException when email address is not created`() {
             // Arrange
             val roleName = "EXAMPLE"
             every { roleRepository.findByName(roleName) } returns null

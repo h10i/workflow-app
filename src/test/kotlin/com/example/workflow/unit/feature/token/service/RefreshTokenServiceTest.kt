@@ -40,7 +40,7 @@ class RefreshTokenServiceTest {
     @Nested
     inner class CreateRefreshToken {
         @Test
-        fun `returns RefreshToken when account exists`() {
+        fun `should return RefreshToken when an account exists`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val accountMock: Account = mockk()
@@ -58,7 +58,7 @@ class RefreshTokenServiceTest {
         }
 
         @Test
-        fun `throws EntityNotFoundException when account doesn't exists`() {
+        fun `should throw EntityNotFoundException when an account does not exist`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
 
@@ -76,7 +76,7 @@ class RefreshTokenServiceTest {
     @Nested
     inner class GetRefreshTokenByValue {
         @Test
-        fun `returns refresh token when value exists`() {
+        fun `should return refresh token when a value exists`() {
             // Arrange
             val refreshTokenValue: String = UUID.randomUUID().toString()
             val expectedRefreshToken: RefreshToken = mockk()
@@ -91,7 +91,7 @@ class RefreshTokenServiceTest {
         }
 
         @Test
-        fun `returns refresh token when value doesn't exists`() {
+        fun `should return refresh token when a value does not exist`() {
             // Arrange
             val refreshTokenValue: String = UUID.randomUUID().toString()
 
@@ -108,7 +108,7 @@ class RefreshTokenServiceTest {
     @Nested
     inner class VerifyExpiration {
         @Test
-        fun `returns refresh token if not expired`() {
+        fun `should return refresh token when not expired token`() {
             // Arrange
             val refreshToken: RefreshToken = mockk()
             val futureDate = Instant.now().plus(1, ChronoUnit.DAYS)
@@ -123,7 +123,7 @@ class RefreshTokenServiceTest {
         }
 
         @Test
-        fun `returns null if expired`() {
+        fun `should return null when expired token`() {
             // Arrange
             val refreshToken: RefreshToken = mockk()
             val pastDate = Instant.now().minus(1, ChronoUnit.DAYS)
@@ -143,7 +143,7 @@ class RefreshTokenServiceTest {
     @Nested
     inner class RevokeRefreshToken {
         @Test
-        fun `returns deleted count`() {
+        fun `should return deleted count`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val refreshTokenValue: String = UUID.randomUUID().toString()
@@ -167,7 +167,7 @@ class RefreshTokenServiceTest {
     @Nested
     inner class RevokeAllRefreshTokens {
         @Test
-        fun `returns deleted count`() {
+        fun `should return deleted count`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val expectedCount = 2

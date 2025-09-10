@@ -85,7 +85,7 @@ class AccountControllerApiTest {
     @Nested
     inner class RegisterAccount {
         @Test
-        fun `POST v1_accounts should return registered account information with valid request`() {
+        fun `should return the account information when valid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "test-password"
@@ -145,7 +145,7 @@ class AccountControllerApiTest {
         }
 
         @Test
-        fun `POST v1_accounts should return errors with invalid request`() {
+        fun `should return errors when invalid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = ""
@@ -186,7 +186,7 @@ class AccountControllerApiTest {
     @Nested
     inner class Get {
         @Test
-        fun `GET v1_accounts_me should return account information`() {
+        fun `should return the account information when valid request`() {
             // Arrange
             val accountId = UUID.randomUUID()
             val emailAddress = "user@example.com"
@@ -234,7 +234,7 @@ class AccountControllerApiTest {
     @Nested
     inner class UpdateAccount {
         @Test
-        fun `PATCH v1_accounts_me should return updated account information with valid request`() {
+        fun `should return the account information when valid request`() {
             // Arrange
             val emailAddress = "new@example.com"
             val password = "new-test-password"
@@ -294,7 +294,7 @@ class AccountControllerApiTest {
         }
 
         @Test
-        fun `PATCH v1_accounts_me should return errors with invalid request`() {
+        fun `should return errors when invalid request`() {
             // Arrange
             val emailAddress = "user!example.com"
             val password = ""
@@ -335,7 +335,7 @@ class AccountControllerApiTest {
     @Nested
     inner class DeleteAccount {
         @Test
-        fun `DELETE v1_accounts_me should return no content`() {
+        fun `should delete an account and return no content when valid request`() {
             // Arrange
             every { deleteAccountUseCase.execute() } just runs
 

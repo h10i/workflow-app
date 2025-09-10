@@ -23,7 +23,7 @@ class AccountApiTest : AbstractE2ETest() {
     @Nested
     inner class RegisterAccount {
         @Test
-        fun `POST valid request returns 201 Created`() {
+        fun `should return 201 Created when valid request without credentials`() {
             // Arrange
             val json = """
             {
@@ -69,7 +69,7 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `POST invalid request returns 400 Bad Request when email address is already registered`() {
+        fun `should return 400 Bad Request when invalid request (email address is already registered) without credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -115,7 +115,7 @@ class AccountApiTest : AbstractE2ETest() {
     @Nested
     inner class GetAccount {
         @Test
-        fun `GET account with valid credentials returns 200 OK`() {
+        fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -153,7 +153,7 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `GET account with invalid credentials returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when valid request without credentials`() {
             // Arrange
 
             // Act
@@ -172,7 +172,7 @@ class AccountApiTest : AbstractE2ETest() {
     inner class UpdateAccount {
         @Test
         @Transactional
-        fun `PATCH valid request returns 200 OK`() {
+        fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -223,7 +223,7 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `PATCH invalid request returns 400 Bad Request when provided email address is already registered`() {
+        fun `should return 400 Bad Request when invalid request (email address is already registered) with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -268,7 +268,7 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `PATCH request with invalid credentials returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -302,7 +302,7 @@ class AccountApiTest : AbstractE2ETest() {
     @Nested
     inner class DeleteAccount() {
         @Test
-        fun `DELETE account with valid credentials returns 204 No Content`() {
+        fun `should return 204 No Content when valid request with valid credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
 
@@ -320,7 +320,7 @@ class AccountApiTest : AbstractE2ETest() {
 
 
         @Test
-        fun `DELETE account with invalid credentials returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
 
             // Act

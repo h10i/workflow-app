@@ -31,7 +31,7 @@ class DeleteAccountUseCaseTest {
     @Nested
     inner class ExecuteMethod {
         @Test
-        fun `should delete account by authenticated id`() {
+        fun `should delete the account by the authenticated id`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             every { accountService.getCurrentAccountId() } returns accountId

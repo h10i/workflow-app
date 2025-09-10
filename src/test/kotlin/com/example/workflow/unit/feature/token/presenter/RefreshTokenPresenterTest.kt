@@ -29,7 +29,7 @@ class RefreshTokenPresenterTest {
     @Nested
     inner class ToResponse {
         @Test
-        fun `toResponse returns presenter result`() {
+        fun `should return a presenter result`() {
             // Arrange
             val accessToken = "test-access-token"
             val account: Account = TestDataFactory.createAccount()
