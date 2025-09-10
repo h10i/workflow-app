@@ -29,7 +29,7 @@ class DeleteAccountUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
         fun `should delete the account by the authenticated id`() {
             // Arrange

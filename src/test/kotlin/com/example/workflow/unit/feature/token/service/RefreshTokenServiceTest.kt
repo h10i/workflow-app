@@ -38,7 +38,7 @@ class RefreshTokenServiceTest {
     }
 
     @Nested
-    inner class CreateRefreshToken {
+    inner class CreateRefreshTokenFun {
         @Test
         fun `should return RefreshToken when an account exists`() {
             // Arrange
@@ -74,7 +74,7 @@ class RefreshTokenServiceTest {
     }
 
     @Nested
-    inner class GetRefreshTokenByValue {
+    inner class GetRefreshTokenByValueFun {
         @Test
         fun `should return refresh token when a value exists`() {
             // Arrange
@@ -106,7 +106,7 @@ class RefreshTokenServiceTest {
     }
 
     @Nested
-    inner class VerifyExpiration {
+    inner class VerifyExpirationFun {
         @Test
         fun `should return refresh token when not expired token`() {
             // Arrange
@@ -141,7 +141,7 @@ class RefreshTokenServiceTest {
     }
 
     @Nested
-    inner class RevokeRefreshToken {
+    inner class RevokeRefreshTokenFun {
         @Test
         fun `should return deleted count`() {
             // Arrange
@@ -165,7 +165,7 @@ class RefreshTokenServiceTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshTokens {
+    inner class RevokeAllRefreshTokensFun {
         @Test
         fun `should return deleted count`() {
             // Arrange

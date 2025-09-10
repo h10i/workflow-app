@@ -72,7 +72,7 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RefreshToken {
+    inner class RefreshTokenApi {
         @Test
         fun `should return a new token when valid refresh token`() {
             // Arrange
@@ -134,7 +134,7 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RevokeRefreshToken() {
+    inner class RevokeRefreshTokenApi {
         @Test
         fun `should revoke refresh token and return no content when valid request`() {
             // Arrange
@@ -161,7 +161,7 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshTokens {
+    inner class RevokeAllRefreshTokensApi {
         @Test
         fun `should revoke the all refresh tokens and return no content when valid request`() {
             // Arrange

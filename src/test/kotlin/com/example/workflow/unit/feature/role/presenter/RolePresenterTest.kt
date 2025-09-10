@@ -29,7 +29,7 @@ class RolePresenterTest {
     }
 
     @Nested
-    inner class ToResponseFunction {
+    inner class ToResponseFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(RoleViewDto::toViewResponse)

@@ -35,7 +35,7 @@ class UpdateAccountUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         private val originalAccountId = UUID.randomUUID()
         private val originalEmailAddress = "original@example.com"
         private val originalEncryptedPassword = "original-encrypted-password"

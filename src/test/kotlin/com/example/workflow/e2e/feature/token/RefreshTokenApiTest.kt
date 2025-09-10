@@ -19,7 +19,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
     private lateinit var restTemplate: E2ETestRestTemplate
 
     @Nested
-    inner class RefreshToken() {
+    inner class RefreshTokenApi {
         @Test
         fun `should return 200 OK when valid request with valid refresh token`() {
             // Arrange
@@ -60,7 +60,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class RevokeRefreshToken() {
+    inner class RevokeRefreshTokenApi {
         @Test
         fun `should return 204 No Content when valid request with valid credentials`() {
             // Arrange
@@ -102,7 +102,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class RevokeAllRefreshToken() {
+    inner class RevokeAllRefreshTokenApi {
         @Test
         fun `should return 204 No Content when valid request with valid credentials`() {
             // Arrange

@@ -22,7 +22,7 @@ class AccountTest {
     }
 
     @Nested
-    inner class ToViewDto {
+    inner class ToViewDtoFun {
         @Test
         fun `should map account view dto`() {
             // Arrange

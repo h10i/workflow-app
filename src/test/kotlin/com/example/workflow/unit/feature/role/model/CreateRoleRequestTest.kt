@@ -26,7 +26,7 @@ class CreateRoleRequestTest {
     }
 
     @Nested
-    inner class Name {
+    inner class NameValidation {
         @Test
         fun `should succeed when name are valid`() {
             // Arrange

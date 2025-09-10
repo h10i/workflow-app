@@ -37,7 +37,7 @@ class RefreshTokenUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
         fun `should refresh token when valid token`() {
             // Arrange

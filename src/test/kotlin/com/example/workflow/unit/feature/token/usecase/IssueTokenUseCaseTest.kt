@@ -48,7 +48,7 @@ class IssueTokenUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
         fun `should return access token and refresh token`() {
             // Arrange

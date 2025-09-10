@@ -33,7 +33,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class SaveAccount {
+    inner class SaveAccountFun {
         @Test
         fun `should return the account when creating a new account`() {
             // Arrange
@@ -53,7 +53,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetCurrentAccountId {
+    inner class GetCurrentAccountIdFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(SecurityContextHolder::class)
@@ -84,7 +84,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetAccountById {
+    inner class GetAccountByIdFun {
         @Test
         fun `should return the account when an account exists`() {
             // Arrange
@@ -116,7 +116,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetAccountByEmailAddress {
+    inner class GetAccountByEmailAddressFun {
         @Test
         fun `should return the account when an account exists`() {
             // Arrange
@@ -147,7 +147,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class DeleteAccountById {
+    inner class DeleteAccountByIdFun {
         @Test
         fun `should delete the account by id`() {
             // Arrange
@@ -163,7 +163,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class VerifyEmailAddressAvailability {
+    inner class VerifyEmailAddressAvailabilityFun {
         @Test
         fun `should throw EmailAddressAlreadyRegisteredException when email address is registered`() {
             // Arrange

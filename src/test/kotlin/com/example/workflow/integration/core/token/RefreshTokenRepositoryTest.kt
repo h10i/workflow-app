@@ -37,7 +37,7 @@ class RefreshTokenRepositoryTest {
     }
 
     @Nested
-    inner class FindByValue {
+    inner class FindByValueFun {
         private lateinit var account: Account
 
         @BeforeEach
@@ -87,7 +87,7 @@ class RefreshTokenRepositoryTest {
     }
 
     @Nested
-    inner class DeleteByAccountIdAndValue {
+    inner class DeleteByAccountIdAndValueFun {
         private val accounts: MutableList<Account> = mutableListOf()
 
         @BeforeEach
@@ -146,7 +146,7 @@ class RefreshTokenRepositoryTest {
     }
 
     @Nested
-    inner class DeleteByAccountId {
+    inner class DeleteByAccountIdFun {
         private lateinit var account: Account
 
         @BeforeEach

@@ -30,7 +30,7 @@ class CreateRoleUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Role::toViewDto)

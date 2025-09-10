@@ -40,7 +40,7 @@ class RefreshTokenControllerTest {
     }
 
     @Nested
-    inner class RefreshTokenMethod {
+    inner class RefreshTokenFun {
         @Test
         fun `should execute RefreshTokenUseCase and return token response`() {
             // Arrange
@@ -85,7 +85,7 @@ class RefreshTokenControllerTest {
     }
 
     @Nested
-    inner class RevokeRefreshToken {
+    inner class RevokeRefreshTokenFun {
         @Test
         fun `should revoke a refresh token and return no content`() {
             // Arrange
@@ -103,7 +103,7 @@ class RefreshTokenControllerTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshTokens {
+    inner class RevokeAllRefreshTokensFun {
         @Test
         fun `should revoke all refresh tokens and return no content`() {
             // Arrange

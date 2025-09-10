@@ -29,7 +29,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class SaveRole {
+    inner class SaveRoleFun {
         @Test
         fun `should return the role when saving a new role`() {
             // Arrange
@@ -47,7 +47,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class GetRoleById {
+    inner class GetRoleByIdFun {
         @Test
         fun `should return the role when a role exists`() {
             // Arrange
@@ -79,7 +79,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class GetAllRoles {
+    inner class GetAllRolesFun {
         @Test
         fun `should return a list of all roles`() {
             // Arrange
@@ -96,7 +96,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class DeleteRoleById {
+    inner class DeleteRoleByIdFun {
         @Test
         fun `should delete role by id`() {
             // Arrange
@@ -112,7 +112,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class VerifyRoleIdAvailability {
+    inner class VerifyRoleIdAvailabilityFun {
         @Test
         fun `should throw RoleNotFoundException when a role does not exist`() {
             // Arrange
@@ -145,7 +145,7 @@ class RoleServiceTest {
     }
 
     @Nested
-    inner class VerifyRoleNameAvailability {
+    inner class VerifyRoleNameAvailabilityFun {
         @Test
         fun `should throw RoleNameAlreadyCreatedException when email address is created`() {
             // Arrange

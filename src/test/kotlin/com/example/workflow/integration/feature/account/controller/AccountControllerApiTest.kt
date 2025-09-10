@@ -83,7 +83,7 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class RegisterAccount {
+    inner class RegisterAccountApi {
         @Test
         fun `should return the account information when valid request`() {
             // Arrange
@@ -184,7 +184,7 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class Get {
+    inner class GetApi {
         @Test
         fun `should return the account information when valid request`() {
             // Arrange
@@ -232,7 +232,7 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class UpdateAccount {
+    inner class UpdateAccountApi {
         @Test
         fun `should return the account information when valid request`() {
             // Arrange
@@ -333,7 +333,7 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class DeleteAccount {
+    inner class DeleteAccountApi {
         @Test
         fun `should delete an account and return no content when valid request`() {
             // Arrange

@@ -27,7 +27,7 @@ class AuthenticationServiceTest {
     }
 
     @Nested
-    inner class Authenticate {
+    inner class AuthenticateFun {
         @Test
         fun `should return Authentication when valid credentials`() {
             // Arrange

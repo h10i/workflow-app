@@ -34,7 +34,7 @@ class RevokeRefreshTokenUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
         fun `should revoke a refresh token`() {
             // Arrange

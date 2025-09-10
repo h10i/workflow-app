@@ -38,7 +38,7 @@ class TokenControllerTest {
     }
 
     @Nested
-    inner class TokenMethod {
+    inner class TokenFun {
         @Test
         fun `should execute IssueTokenUseCase and return token response and cookie including refresh token`() {
             // Arrange

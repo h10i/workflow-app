@@ -20,7 +20,7 @@ class RoleApiTest : AbstractE2ETest() {
     private lateinit var restTemplate: E2ETestRestTemplate
 
     @Nested
-    inner class CreateRole {
+    inner class CreateRoleApi {
         @Test
         @Transactional
         fun `should return 201 Created when valid request with ADMIN credentials`() {
@@ -158,7 +158,7 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class GetRole {
+    inner class GetRoleApi {
         @Test
         fun `should return 200 OK when valid request with ADMIN credentials`() {
             // Arrange
@@ -264,7 +264,7 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class GetAllRoles {
+    inner class GetAllRolesApi {
         @Test
         fun `should return 200 OK when valid request with ADMIN credentials`() {
             // Arrange
@@ -336,7 +336,7 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class DeleteRole {
+    inner class DeleteRoleApi {
         @Test
         fun `should return 204 No Content when valid request with ADMIN credentials`() {
             // Arrange

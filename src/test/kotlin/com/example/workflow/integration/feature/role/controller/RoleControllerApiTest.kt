@@ -81,7 +81,7 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class CreateRole {
+    inner class CreateRoleApi {
         @Test
         fun `should return the role information when valid request`() {
             // Arrange
@@ -172,7 +172,7 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class GetRole {
+    inner class GetRoleApi {
         @Test
         fun `should return the role information when valid request`() {
             // Arrange
@@ -211,7 +211,7 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class GetAllRoles {
+    inner class GetAllRolesApi {
         @Test
         fun `should return the all roles information when valid request`() {
             // Arrange
@@ -266,7 +266,7 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class DeleteRole {
+    inner class DeleteRoleApi {
         @Test
         fun `should delete a role and return no content when valid request`() {
             // Arrange

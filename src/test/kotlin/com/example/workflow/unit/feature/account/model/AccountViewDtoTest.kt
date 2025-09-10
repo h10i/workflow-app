@@ -21,7 +21,7 @@ class AccountViewDtoTest {
     }
 
     @Nested
-    inner class ToViewResponse {
+    inner class ToViewResponseFun {
         @Test
         fun `should map account view dto`() {
             // Arrange

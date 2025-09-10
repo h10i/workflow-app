@@ -26,7 +26,7 @@ class RegisterAccountRequestTest {
     }
 
     @Nested
-    inner class EmailAddress {
+    inner class EmailAddressValidation {
         @Test
         fun `should succeed when emailAddress are valid`() {
             // Arrange
@@ -73,7 +73,7 @@ class RegisterAccountRequestTest {
     }
 
     @Nested
-    inner class Password {
+    inner class PasswordValidation {
         @Test
         fun `should succeed when password are valid`() {
             // Arrange

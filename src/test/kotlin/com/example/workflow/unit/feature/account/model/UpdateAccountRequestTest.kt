@@ -26,7 +26,7 @@ class UpdateAccountRequestTest {
     }
 
     @Nested
-    inner class EmailAddress {
+    inner class EmailAddressValidation {
         @Test
         fun `should succeed (skip validation) when emailAddress is blank`() {
             // Arrange
@@ -72,7 +72,7 @@ class UpdateAccountRequestTest {
     }
 
     @Nested
-    inner class Password {
+    inner class PasswordValidation {
         @Test
         fun `should succeed (skip validation) when password is blank`() {
             // Arrange

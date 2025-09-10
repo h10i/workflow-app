@@ -38,7 +38,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class Save {
+    inner class SaveFun {
         @Test
         fun `should return the saved role when saving a new role`() {
             // Arrange
@@ -53,7 +53,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class FindById {
+    inner class FindByIdFun {
         private lateinit var role: Role
 
         @BeforeEach
@@ -96,7 +96,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class FindByName {
+    inner class FindByNameFun {
         private lateinit var role: Role
 
         @BeforeEach
@@ -139,7 +139,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class FindAll {
+    inner class FindAllFun {
         @Test
         fun `should return empty list when a role does not exist`() {
             // Arrange
@@ -171,7 +171,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class DeleteById {
+    inner class DeleteByIdFun {
         private lateinit var role: Role
         private lateinit var account: Account
         private lateinit var accountRole: AccountRole

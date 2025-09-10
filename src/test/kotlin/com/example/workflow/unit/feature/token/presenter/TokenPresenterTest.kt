@@ -25,7 +25,7 @@ class TokenPresenterTest {
     }
 
     @Nested
-    inner class ToResponse {
+    inner class ToResponseFun {
         @Test
         fun `should return a presenter result`() {
             // Arrange

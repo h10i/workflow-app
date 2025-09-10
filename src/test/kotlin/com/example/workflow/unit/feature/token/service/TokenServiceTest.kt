@@ -28,7 +28,7 @@ class TokenServiceTest {
     }
 
     @Nested
-    inner class GenerateToken {
+    inner class GenerateTokenFun {
         @Test
         fun `should encode JWT claims and return token value`() {
             // Arrange

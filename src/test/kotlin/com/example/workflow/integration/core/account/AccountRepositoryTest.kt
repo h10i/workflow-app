@@ -37,7 +37,7 @@ class AccountRepositoryTest {
     }
 
     @Nested
-    inner class Save {
+    inner class SaveFun {
         @Test
         fun `should return the saved account when saving a new account`() {
             // Arrange
@@ -52,7 +52,7 @@ class AccountRepositoryTest {
     }
 
     @Nested
-    inner class FindByEmailAddress {
+    inner class FindByEmailAddressFunc {
         private lateinit var account: Account
 
         @BeforeEach
@@ -108,7 +108,7 @@ class AccountRepositoryTest {
 
 
     @Nested
-    inner class DeleteById {
+    inner class DeleteByIdFun {
         private lateinit var account: Account
         private lateinit var accountRole: AccountRole
         private lateinit var refreshToken: RefreshToken

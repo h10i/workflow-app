@@ -52,7 +52,7 @@ class AccountControllerTest {
     }
 
     @Nested
-    inner class RegisterAccount() {
+    inner class RegisterAccountFun {
         @Test
         fun `should execute RegisterAccountUseCase and return account view response`() {
             // Arrange
@@ -76,7 +76,7 @@ class AccountControllerTest {
     }
 
     @Nested
-    inner class Get() {
+    inner class GetFun {
         @Test
         fun `should execute GetAccountUseCase and return account view response`() {
             // Arrange

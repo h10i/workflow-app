@@ -58,7 +58,7 @@ class TokenControllerApiTest {
     }
 
     @Nested
-    inner class TokenMethod {
+    inner class TokenApi {
         @Test
         fun `should return a new access token and set cookie to refresh token when valid request`() {
             // Arrange

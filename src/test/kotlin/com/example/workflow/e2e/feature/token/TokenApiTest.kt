@@ -21,7 +21,7 @@ class TokenApiTest : AbstractE2ETest() {
     private lateinit var restTemplate: E2ETestRestTemplate
 
     @Nested
-    inner class CreateToken() {
+    inner class CreateTokenApi {
         @Test
         fun `should return 200 OK when valid request`() {
             // Arrange

@@ -21,7 +21,7 @@ class AccountApiTest : AbstractE2ETest() {
     private lateinit var restTemplate: E2ETestRestTemplate
 
     @Nested
-    inner class RegisterAccount {
+    inner class RegisterAccountApi {
         @Test
         fun `should return 201 Created when valid request without credentials`() {
             // Arrange
@@ -113,7 +113,7 @@ class AccountApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class GetAccount {
+    inner class GetAccountApi {
         @Test
         fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
@@ -169,7 +169,7 @@ class AccountApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class UpdateAccount {
+    inner class UpdateAccountApi {
         @Test
         @Transactional
         fun `should return 200 OK when valid request with valid credentials`() {
@@ -300,7 +300,7 @@ class AccountApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class DeleteAccount() {
+    inner class DeleteAccountApi {
         @Test
         fun `should return 204 No Content when valid request with valid credentials`() {
             // Arrange

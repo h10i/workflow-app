@@ -34,7 +34,7 @@ class RegisterAccountUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Account::toViewDto)
