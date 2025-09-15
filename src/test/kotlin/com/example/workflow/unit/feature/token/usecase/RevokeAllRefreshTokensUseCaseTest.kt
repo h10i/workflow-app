@@ -34,9 +34,9 @@ class RevokeAllRefreshTokensUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
-        fun `revoke refresh token succeeds`() {
+        fun `should revoke all refresh token`() {
             // Arrange
             val accountId = UUID.randomUUID()
 

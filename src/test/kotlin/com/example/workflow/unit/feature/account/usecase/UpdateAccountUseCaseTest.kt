@@ -35,7 +35,7 @@ class UpdateAccountUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         private val originalAccountId = UUID.randomUUID()
         private val originalEmailAddress = "original@example.com"
         private val originalEncryptedPassword = "original-encrypted-password"
@@ -103,7 +103,7 @@ class UpdateAccountUseCaseTest {
         }
 
         @Test
-        fun `throws EmailAddressAlreadyRegisteredException when new email address is already registered`() {
+        fun `should throw EmailAddressAlreadyRegisteredException when a new email address is already registered`() {
             // Arrange
             val newEmailAddress = "new@example.com"
             val newPassword = "new-password"

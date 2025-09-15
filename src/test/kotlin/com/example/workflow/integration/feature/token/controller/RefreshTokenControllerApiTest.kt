@@ -72,9 +72,9 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RefreshToken {
+    inner class RefreshTokenApi {
         @Test
-        fun `refreshToken endpoint should return new token on valid refresh token`() {
+        fun `should return a new token when valid refresh token`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
             val useCaseResult: RefreshTokenUseCase.Result = mockk()
@@ -114,7 +114,7 @@ class RefreshTokenControllerApiTest {
         }
 
         @Test
-        fun `refreshToken endpoint should return UNAUTHORIZED when refresh token is invalid`() {
+        fun `should return errors when invalid refresh token`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
 
@@ -134,9 +134,9 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RevokeRefreshToken() {
+    inner class RevokeRefreshTokenApi {
         @Test
-        fun `revoke endpoint should revoke refresh token and return no content`() {
+        fun `should revoke refresh token and return no content when valid request`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
 
@@ -161,9 +161,9 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshTokens {
+    inner class RevokeAllRefreshTokensApi {
         @Test
-        fun `revokeAll endpoint should revoke all refresh tokens and return no content`() {
+        fun `should revoke the all refresh tokens and return no content when valid request`() {
             // Arrange
             every { revokeAllRefreshTokensUseCase.execute() } just Runs
 

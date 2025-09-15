@@ -37,9 +37,9 @@ class RefreshTokenUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
-        fun `refresh succeeds when valid token is provided`() {
+        fun `should refresh token when valid token`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
             val account: Account = TestDataFactory.createAccount()
@@ -65,7 +65,7 @@ class RefreshTokenUseCaseTest {
         }
 
         @Test
-        fun `throws Unauthorized Exception when refresh token not found`() {
+        fun `should throw Unauthorized Exception when a refresh token does not exist`() {
             // Arrange
             val tokenValue = "missing-token"
 
@@ -79,7 +79,7 @@ class RefreshTokenUseCaseTest {
         }
 
         @Test
-        fun `throws Unauthorized Exception when refresh token is expired`() {
+        fun `should throw Unauthorized Exception when expired refresh token`() {
             // Arrange
             val tokenValue = "expired-token"
             val expiredToken: RefreshToken = mockk()

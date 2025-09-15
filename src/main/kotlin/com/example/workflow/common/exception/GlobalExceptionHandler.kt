@@ -16,7 +16,7 @@ class GlobalExceptionHandler {
         val errors = ex.bindingResult.fieldErrors
             .groupBy({ it.field }, { it.defaultMessage ?: "Validation error" })
 
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(UnifiedErrorResponse(errors))
     }
 

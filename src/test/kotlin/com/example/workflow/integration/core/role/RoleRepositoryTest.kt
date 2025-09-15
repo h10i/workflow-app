@@ -38,9 +38,9 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class Save {
+    inner class SaveFun {
         @Test
-        fun `returns role when saving new role`() {
+        fun `should return the saved role when saving a new role`() {
             // Arrange
             val role = TestDataFactory.createRole()
 
@@ -53,7 +53,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class FindById {
+    inner class FindByIdFun {
         private lateinit var role: Role
 
         @BeforeEach
@@ -71,7 +71,7 @@ class RoleRepositoryTest {
         }
 
         @Test
-        fun `returns role when role id exists`() {
+        fun `should return the role when a role id exists`() {
             // Arrange
             val roleId = role.id
 
@@ -83,7 +83,7 @@ class RoleRepositoryTest {
         }
 
         @Test
-        fun `returns role when role id doesn't exists`() {
+        fun `should return null when a role id does not exist`() {
             // Arrange
             val roleId = UUID.randomUUID()
 
@@ -96,7 +96,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class FindByName {
+    inner class FindByNameFun {
         private lateinit var role: Role
 
         @BeforeEach
@@ -114,7 +114,7 @@ class RoleRepositoryTest {
         }
 
         @Test
-        fun `returns role when role name exists`() {
+        fun `should return the role when a role name exists`() {
             // Arrange
             val roleName = role.name
 
@@ -126,7 +126,7 @@ class RoleRepositoryTest {
         }
 
         @Test
-        fun `returns role when role name doesn't exists`() {
+        fun `should return null when a role name does not exist`() {
             // Arrange
             val roleName = "NOT_FOUND_${role.name}"
 
@@ -139,9 +139,9 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class FindAll {
+    inner class FindAllFun {
         @Test
-        fun `returns empty list when role does not exist`() {
+        fun `should return empty list when a role does not exist`() {
             // Arrange
 
             // Act
@@ -152,7 +152,7 @@ class RoleRepositoryTest {
         }
 
         @Test
-        fun `returns roles when two roles exists`() {
+        fun `should return the roles when two roles exists`() {
             // Arrange
             val roles: List<Role> = listOf(
                 TestDataFactory.createRole(name = "EXAMPLE1"),
@@ -171,7 +171,7 @@ class RoleRepositoryTest {
     }
 
     @Nested
-    inner class DeleteById {
+    inner class DeleteByIdFun {
         private lateinit var role: Role
         private lateinit var account: Account
         private lateinit var accountRole: AccountRole
@@ -201,7 +201,7 @@ class RoleRepositoryTest {
         }
 
         @Test
-        fun `should delete data associated with role when role is deleted`() {
+        fun `should delete role-related data when an role is deleted`() {
             // Act
 
             // Act

@@ -20,10 +20,10 @@ class RoleApiTest : AbstractE2ETest() {
     private lateinit var restTemplate: E2ETestRestTemplate
 
     @Nested
-    inner class CreateRole {
+    inner class CreateRoleApi {
         @Test
         @Transactional
-        fun `POST valid request returns 201 Created`() {
+        fun `should return 201 Created when valid request with ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
 
@@ -69,7 +69,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `POST invalid request returns 400 Bad Request when role name is already created`() {
+        fun `should return 400 Bad Request when invalid request (role name is already created) with ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
 
@@ -108,7 +108,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `POST request with invalid credentials returns 401 Unauthorized`() {
+        fun `should return 401 Unauthorized when valid request with invalid credentials`() {
             // Arrange
 
             // Act
@@ -132,7 +132,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `POST request with invalid credentials returns 403 Forbidden`() {
+        fun `should return 403 Forbidden when valid request with non-ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
 
@@ -158,9 +158,9 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class GetRole {
+    inner class GetRoleApi {
         @Test
-        fun `GET request with a admin role should return 200 OK`() {
+        fun `should return 200 OK when valid request with ADMIN credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -190,7 +190,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `GET request with invalid credentials should return 401 Unauthorized`() {
+        fun `should return 401 Unauthorized when valid request with invalid credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -209,7 +209,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `GET request for a non-admin role should return 403 Forbidden`() {
+        fun `should return 403 Forbidden when valid request with non-ADMIN credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -229,7 +229,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `GET request with non-existent role id should return 404 Not Found`() {
+        fun `should return 404 Not Found when invalid request (non-existent role id) with ADMIN credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -264,9 +264,9 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class GetAllRoles {
+    inner class GetAllRolesApi {
         @Test
-        fun `GET request with a admin role should return 200 OK`() {
+        fun `should return 200 OK when valid request with ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
 
@@ -302,7 +302,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `GET request with invalid credentials should return 401 Unauthorized`() {
+        fun `should return 401 Unauthorized when valid request with invalid credentials`() {
             // Arrange
 
             // Act
@@ -318,7 +318,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `GET request for a non-admin role should return 403 Forbidden`() {
+        fun `should return 403 Forbidden when valid request with non-ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
 
@@ -336,9 +336,9 @@ class RoleApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class DeleteRole {
+    inner class DeleteRoleApi {
         @Test
-        fun `DELETE request with an admin role should return 204 No Content`() {
+        fun `should return 204 No Content when valid request with ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -358,7 +358,7 @@ class RoleApiTest : AbstractE2ETest() {
 
 
         @Test
-        fun `DELETE request with invalid credentials should return 401 Unauthorized`() {
+        fun `should return 401 Unauthorized when valid request with invalid credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -377,7 +377,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `DELETE request with a non-admin role should return 403 Forbidden`() {
+        fun `should return 403 Forbidden when valid request with non-ADMIN credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleViewResponse =
@@ -397,7 +397,7 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `DELETE request with non-existent role id should return 404 Not Found`() {
+        fun `should return 404 Not Found when invalid request (non-existent role id) with ADMIN credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
             val roleId = UUID.randomUUID()

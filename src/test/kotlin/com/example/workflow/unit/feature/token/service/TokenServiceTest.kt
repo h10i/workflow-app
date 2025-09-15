@@ -28,9 +28,9 @@ class TokenServiceTest {
     }
 
     @Nested
-    inner class GenerateToken {
+    inner class GenerateTokenFun {
         @Test
-        fun `generateToken should encode JWT claims and return token value`() {
+        fun `should encode JWT claims and return token value`() {
             // Arrange
             val tokenValue = "mocked.jwt.token"
             val mockJwt = mockk<Jwt>()

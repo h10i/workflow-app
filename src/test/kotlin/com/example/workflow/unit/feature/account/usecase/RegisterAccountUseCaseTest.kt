@@ -34,7 +34,7 @@ class RegisterAccountUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Account::toViewDto)
@@ -46,7 +46,7 @@ class RegisterAccountUseCaseTest {
         }
 
         @Test
-        fun `return account with valid request`() {
+        fun `should return the account when valid request`() {
             // Arrange
             val request = RegisterAccountRequest(
                 emailAddress = "user@example.com",
@@ -74,7 +74,7 @@ class RegisterAccountUseCaseTest {
         }
 
         @Test
-        fun `throw EmailAlreadyRegisteredException with registered email address`() {
+        fun `should throw EmailAlreadyRegisteredException when email address is registered`() {
             // Arrange
             val request = RegisterAccountRequest(
                 emailAddress = "user@example.com",

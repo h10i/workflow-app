@@ -25,9 +25,9 @@ class TokenPresenterTest {
     }
 
     @Nested
-    inner class ToResponse {
+    inner class ToResponseFun {
         @Test
-        fun `toResponse returns presenter result`() {
+        fun `should return a presenter result`() {
             // Arrange
             val accessToken = "test-access-token"
             val refreshTokenCookie = ResponseCookie.from("refreshToken", "dummy").build()

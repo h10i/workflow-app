@@ -24,9 +24,9 @@ class RefreshTokenCookieFactoryTest {
     }
 
     @Nested
-    inner class Create() {
+    inner class CreateFun() {
         @Test
-        fun `create method should generate a ResponseCookie with correct properties for the given value`() {
+        fun `should generate a ResponseCookie with correct properties for the given value`() {
             // Arrange
             val refreshTokenValue = "test-refresh-token-value"
             val expectedMaxAge = Duration.ofSeconds(30L * 24 * 60 * 60)

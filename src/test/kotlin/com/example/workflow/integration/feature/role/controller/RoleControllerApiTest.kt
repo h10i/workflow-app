@@ -5,9 +5,7 @@ import com.example.workflow.feature.role.controller.RoleController
 import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
-import com.example.workflow.feature.role.presenter.CreateRolePresenter
-import com.example.workflow.feature.role.presenter.GetAllRolesPresenter
-import com.example.workflow.feature.role.presenter.GetRolePresenter
+import com.example.workflow.feature.role.presenter.RolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
@@ -41,22 +39,16 @@ class RoleControllerApiTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     @Autowired
-    private lateinit var createRoleUseCase: CreateRoleUseCase
+    private lateinit var rolePresenter: RolePresenter
 
     @Autowired
-    private lateinit var createRolePresenter: CreateRolePresenter
+    private lateinit var createRoleUseCase: CreateRoleUseCase
 
     @Autowired
     private lateinit var getRoleUseCase: GetRoleUseCase
 
     @Autowired
-    private lateinit var getRolePresenter: GetRolePresenter
-
-    @Autowired
     private lateinit var getAllRolesUseCase: GetAllRolesUseCase
-
-    @Autowired
-    private lateinit var getAllRolesPresenter: GetAllRolesPresenter
 
     @Autowired
     private lateinit var deleteRoleUseCase: DeleteRoleUseCase
@@ -64,22 +56,16 @@ class RoleControllerApiTest {
     @TestConfiguration
     class MockConfig {
         @Bean
-        fun createRoleUseCase(): CreateRoleUseCase = mockk()
+        fun rolePresenter(): RolePresenter = mockk()
 
         @Bean
-        fun createRolePresenter(): CreateRolePresenter = mockk()
+        fun createRoleUseCase(): CreateRoleUseCase = mockk()
 
         @Bean
         fun getRoleUseCase(): GetRoleUseCase = mockk()
 
         @Bean
-        fun getRolePresenter(): GetRolePresenter = mockk()
-
-        @Bean
         fun getAllRolesUseCase(): GetAllRolesUseCase = mockk()
-
-        @Bean
-        fun getAllRolesPresenter(): GetAllRolesPresenter = mockk()
 
         @Bean
         fun deleteRoleUseCase(): DeleteRoleUseCase = mockk()
@@ -95,9 +81,9 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class CreateRole {
+    inner class CreateRoleApi {
         @Test
-        fun `POST v1_roles should return created role information with valid request`() {
+        fun `should return the role information when valid request`() {
             // Arrange
             val roleName = "EXAMPLE"
 
@@ -108,12 +94,12 @@ class RoleControllerApiTest {
             )
 
             val useCaseResult: CreateRoleUseCase.Result = mockk()
-            val presenterResult: CreateRolePresenter.Result = CreateRolePresenter.Result(
+            val presenterResult = RolePresenter.Result(
                 response = roleViewResponse,
             )
 
             every { createRoleUseCase.execute(any()) } returns useCaseResult
-            every { createRolePresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -149,7 +135,7 @@ class RoleControllerApiTest {
         }
 
         @Test
-        fun `POST v1_roles should return created role information with invalid request`() {
+        fun `should return the role information when invalid request`() {
             // Arrange
             val roleName = ""
 
@@ -186,13 +172,13 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class GetRole {
+    inner class GetRoleApi {
         @Test
-        fun `GET v1_roles_{id} should return a role information`() {
+        fun `should return the role information when valid request`() {
             // Arrange
             val roleId = UUID.randomUUID()
             val useCaseResult: GetRoleUseCase.Result = mockk()
-            val presenterResult = GetRolePresenter.Result(
+            val presenterResult = RolePresenter.Result(
                 response = RoleViewResponse(
                     id = roleId,
                     name = "EXAMPLE_ROLE",
@@ -200,7 +186,7 @@ class RoleControllerApiTest {
             )
 
             every { getRoleUseCase.execute(roleId) } returns useCaseResult
-            every { getRolePresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -225,9 +211,9 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class GetAllRoles {
+    inner class GetAllRolesApi {
         @Test
-        fun `GET v1_roles should return all roles information`() {
+        fun `should return the all roles information when valid request`() {
             // Arrange
             val useCaseResult: GetAllRolesUseCase.Result = mockk()
             val roleViewResponseList: List<RoleViewResponse> = listOf(
@@ -240,14 +226,14 @@ class RoleControllerApiTest {
                     name = "EXAMPLE_02",
                 ),
             )
-            val presenterResult = GetAllRolesPresenter.Result(
+            val presenterResult = RolePresenter.Result(
                 response = RoleViewListResponse(
                     roles = roleViewResponseList,
                 )
             )
 
             every { getAllRolesUseCase.execute() } returns useCaseResult
-            every { getAllRolesPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDtoList) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -280,9 +266,9 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class DeleteRole {
+    inner class DeleteRoleApi {
         @Test
-        fun `DELETE v1_role_{id} should delete a role and return no content`() {
+        fun `should delete a role and return no content when valid request`() {
             // Arrange
             val roleId = UUID.randomUUID()
             every { deleteRoleUseCase.execute(roleId) } just runs

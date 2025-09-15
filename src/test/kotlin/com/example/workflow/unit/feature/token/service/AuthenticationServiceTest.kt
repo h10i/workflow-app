@@ -27,9 +27,9 @@ class AuthenticationServiceTest {
     }
 
     @Nested
-    inner class Authenticate {
+    inner class AuthenticateFun {
         @Test
-        fun `returns Authentication when credentials are valid`() {
+        fun `should return Authentication when valid credentials`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "securepassword"
@@ -49,7 +49,7 @@ class AuthenticationServiceTest {
         }
 
         @Test
-        fun `throws AuthenticationException when credentials are invalid`() {
+        fun `should throw AuthenticationException when invalid credentials`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "wrongpassword"

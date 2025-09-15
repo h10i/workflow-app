@@ -8,13 +8,10 @@ import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
-import jakarta.servlet.http.HttpServletResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
@@ -41,12 +38,11 @@ class TokenControllerTest {
     }
 
     @Nested
-    inner class TokenMethod {
+    inner class TokenFun {
         @Test
-        fun `token endpoint should return token and set refreshToken cookie`() {
+        fun `should execute IssueTokenUseCase and return token response and cookie including refresh token`() {
             // Arrange
             val request = TokenRequest("user@example.com", "test-password")
-            val response: HttpServletResponse = mockk(relaxed = true)
             val responseCookie = ResponseCookie.from("refreshToken", "dummy").build()
             val accessToken = "test-access-token"
             val tokenResponse = TokenResponse(accessToken)
@@ -60,12 +56,12 @@ class TokenControllerTest {
             every { tokenPresenter.toResponse(useCaseResult) } returns presenterResult
 
             // Act
-            val actual: ResponseEntity<TokenResponse> = tokenController.token(request, response)
+            val actual: ResponseEntity<TokenResponse> = tokenController.token(request)
 
             // Assert
-            verify { response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString()) }
             assertEquals(HttpStatus.OK, actual.statusCode)
             assertEquals(tokenResponse, actual.body)
+            assertEquals("[refreshToken=dummy]", actual.headers.get("Set-Cookie").toString())
         }
     }
 

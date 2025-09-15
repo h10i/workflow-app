@@ -32,7 +32,7 @@ class SecurityConfigTest {
     }
 
     @Nested
-    inner class PasswordEncoderMethod {
+    inner class PasswordEncoderFun {
         @Test
         fun `passwordEncoder returns BCryptPasswordEncoder`() {
             // Arrange
@@ -46,7 +46,7 @@ class SecurityConfigTest {
     }
 
     @Nested
-    inner class JwtDecoder {
+    inner class JwtDecoderFun {
         @Test
         fun `jwtDecoder returns NimbusJwtDecoder`() {
             // Arrange
@@ -60,7 +60,7 @@ class SecurityConfigTest {
     }
 
     @Nested
-    inner class JwtEncoder() {
+    inner class JwtEncoderFun {
         @Test
         fun `jwtEncoder returns NimbusJwtEncoder`() {
             // Arrange
@@ -74,7 +74,7 @@ class SecurityConfigTest {
     }
 
     @Nested
-    inner class JwtAuthenticationConverter() {
+    inner class JwtAuthenticationConverterFun {
         @Test
         fun `jwtAuthenticationConverter returns JwtAuthenticationConverter`() {
             // Arrange
@@ -88,7 +88,7 @@ class SecurityConfigTest {
     }
 
     @Nested
-    inner class AuthenticationManager() {
+    inner class AuthenticationManagerFun {
         @Test
         fun `authenticationManager returns configured ProviderManager`() {
             // Arrange

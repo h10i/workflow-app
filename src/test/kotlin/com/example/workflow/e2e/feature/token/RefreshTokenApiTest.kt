@@ -19,9 +19,9 @@ class RefreshTokenApiTest : AbstractE2ETest() {
     private lateinit var restTemplate: E2ETestRestTemplate
 
     @Nested
-    inner class RefreshToken() {
+    inner class RefreshTokenApi {
         @Test
-        fun `POST refresh token with valid refresh token returns 200 OK`() {
+        fun `should return 200 OK when valid request with valid refresh token`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
             val cookie = "refreshToken=${authResult.refreshToken}"
@@ -41,7 +41,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
 
 
         @Test
-        fun `POST refresh token with invalid refresh token returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when valid request with invalid refresh token`() {
             // Arrange
             val cookie = "refreshToken=invalid-token-value"
 
@@ -60,9 +60,9 @@ class RefreshTokenApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class RevokeRefreshToken() {
+    inner class RevokeRefreshTokenApi {
         @Test
-        fun `DELETE refresh token with valid credentials and valid refresh token returns 204 No Content`() {
+        fun `should return 204 No Content when valid request with valid credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
             val cookie = "refreshToken=${authResult.refreshToken}"
@@ -82,7 +82,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
 
 
         @Test
-        fun `DELETE refresh token with invalid credentials returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
             val cookie = "refreshToken=${authResult.refreshToken}"
@@ -102,9 +102,9 @@ class RefreshTokenApiTest : AbstractE2ETest() {
     }
 
     @Nested
-    inner class RevokeAllRefreshToken() {
+    inner class RevokeAllRefreshTokenApi {
         @Test
-        fun `DELETE refresh token with valid credentials returns 204 No Content`() {
+        fun `should return 204 No Content when valid request with valid credentials`() {
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate()
 
@@ -122,7 +122,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
 
 
         @Test
-        fun `DELETE refresh token with invalid credentials returns 401 Unauthorize`() {
+        fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
 
             // Act

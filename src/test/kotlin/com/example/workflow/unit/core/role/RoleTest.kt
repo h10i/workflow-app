@@ -21,7 +21,7 @@ class RoleTest {
     }
 
     @Nested
-    inner class ToViewDto {
+    inner class ToViewDtoFun {
         @Test
         fun `should map role view dto`() {
             // Arrange

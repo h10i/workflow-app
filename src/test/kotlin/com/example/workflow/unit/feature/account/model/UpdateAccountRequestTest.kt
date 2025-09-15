@@ -26,9 +26,9 @@ class UpdateAccountRequestTest {
     }
 
     @Nested
-    inner class EmailAddress {
+    inner class EmailAddressValidation {
         @Test
-        fun `success (skip validation) when emailAddress is blank`() {
+        fun `should succeed (skip validation) when emailAddress is blank`() {
             // Arrange
             val request = UpdateAccountRequest()
 
@@ -42,7 +42,7 @@ class UpdateAccountRequestTest {
         }
 
         @Test
-        fun `success when emailAddress are valid`() {
+        fun `should succeed when emailAddress are valid`() {
             // Arrange
             val request = UpdateAccountRequest(emailAddress = "test@example.com")
 
@@ -56,7 +56,7 @@ class UpdateAccountRequestTest {
         }
 
         @Test
-        fun `failure when emailAddress has an invalid format`() {
+        fun `should fail when emailAddress has an invalid format`() {
             // Arrange
             val request = UpdateAccountRequest(emailAddress = "invalid-email")
 
@@ -72,9 +72,9 @@ class UpdateAccountRequestTest {
     }
 
     @Nested
-    inner class Password {
+    inner class PasswordValidation {
         @Test
-        fun `success (skip validation) when password is blank`() {
+        fun `should succeed (skip validation) when password is blank`() {
             // Arrange
             val request = UpdateAccountRequest()
 
@@ -88,7 +88,7 @@ class UpdateAccountRequestTest {
         }
 
         @Test
-        fun `success when password are valid`() {
+        fun `should succeed when password are valid`() {
             // Arrange
             val request = UpdateAccountRequest(password = "P4sSw0rd!")
 

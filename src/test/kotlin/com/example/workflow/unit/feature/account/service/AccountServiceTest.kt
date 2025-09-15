@@ -33,9 +33,9 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class SaveAccount {
+    inner class SaveAccountFun {
         @Test
-        fun `returns account when creating a new account`() {
+        fun `should return the account when creating a new account`() {
             // Arrange
             val accountMock: Account = mockk()
             val savedAccountMock: Account = mockk()
@@ -53,7 +53,7 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetCurrentAccountId {
+    inner class GetCurrentAccountIdFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(SecurityContextHolder::class)
@@ -65,7 +65,7 @@ class AccountServiceTest {
         }
 
         @Test
-        fun `returns account id from security context`() {
+        fun `should return the account id from security context`() {
             // Arrange
             val expectedAccountId: UUID = UUID.randomUUID()
             val securityContextMock: SecurityContext = mockk()
@@ -84,9 +84,9 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetAccountById {
+    inner class GetAccountByIdFun {
         @Test
-        fun `returns account when account exists`() {
+        fun `should return the account when an account exists`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val accountMock: Account = mockk()
@@ -101,7 +101,7 @@ class AccountServiceTest {
         }
 
         @Test
-        fun `throws EntityNotFoundException when account doesn't exists`() {
+        fun `should throw EntityNotFoundException when an account does not exist`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             every { accountRepositoryMock.findById(accountId) } returns Optional.empty()
@@ -116,9 +116,9 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class GetAccountByEmailAddress {
+    inner class GetAccountByEmailAddressFun {
         @Test
-        fun `returns account when account exists`() {
+        fun `should return the account when an account exists`() {
             // Arrange
             val emailAddress = "user@example.com"
             val accountMock: Account = mockk()
@@ -133,7 +133,7 @@ class AccountServiceTest {
         }
 
         @Test
-        fun `returns null when account doesn't exists`() {
+        fun `should return null when an account does not exist`() {
             // Arrange
             val emailAddress = "user@example.com"
             every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null
@@ -147,9 +147,9 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class DeleteAccountById {
+    inner class DeleteAccountByIdFun {
         @Test
-        fun `should delete account by id`() {
+        fun `should delete the account by id`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             every { accountRepositoryMock.deleteById(accountId) } just runs
@@ -163,9 +163,9 @@ class AccountServiceTest {
     }
 
     @Nested
-    inner class VerifyEmailAddressAvailability {
+    inner class VerifyEmailAddressAvailabilityFun {
         @Test
-        fun `throws EmailAddressAlreadyRegisteredException when email address is registered`() {
+        fun `should throw EmailAddressAlreadyRegisteredException when email address is registered`() {
             // Arrange
             val emailAddress = "user@example.com"
             val accountMock: Account = mockk()
@@ -181,7 +181,7 @@ class AccountServiceTest {
         }
 
         @Test
-        fun `does not throws EmailAddressAlreadyRegisteredException when email address is not registered`() {
+        fun `should not throw EmailAddressAlreadyRegisteredException when email address is not registered`() {
             // Arrange
             val emailAddress = "user@example.com"
             every { accountRepositoryMock.findByEmailAddress(emailAddress) } returns null

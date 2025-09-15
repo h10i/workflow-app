@@ -35,7 +35,7 @@ class GetAllRolesUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteFunction() {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Role::toViewDto)

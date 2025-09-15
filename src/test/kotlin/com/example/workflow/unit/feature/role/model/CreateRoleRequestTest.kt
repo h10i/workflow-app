@@ -26,9 +26,9 @@ class CreateRoleRequestTest {
     }
 
     @Nested
-    inner class Name {
+    inner class NameValidation {
         @Test
-        fun `success when name are valid`() {
+        fun `should succeed when name are valid`() {
             // Arrange
             val request = CreateRoleRequest(name = "EXAMPLE")
 
@@ -42,7 +42,7 @@ class CreateRoleRequestTest {
         }
 
         @Test
-        fun `failure when name is blank`() {
+        fun `should fail when name is blank`() {
             // Arrange
             val request = CreateRoleRequest(name = "")
 

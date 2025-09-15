@@ -34,7 +34,7 @@ class GetAccountUseCaseTest {
     }
 
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Account::toViewDto)
@@ -46,7 +46,7 @@ class GetAccountUseCaseTest {
         }
 
         @Test
-        fun `execute method should return account`() {
+        fun `should return the account`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             val accountViewDtoMock: AccountViewDto = mockk()

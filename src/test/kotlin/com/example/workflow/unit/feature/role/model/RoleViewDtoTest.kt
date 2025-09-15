@@ -21,7 +21,7 @@ class RoleViewDtoTest {
     }
 
     @Nested
-    inner class ToViewResponse {
+    inner class ToViewResponseFun {
         @Test
         fun `should map role view response`() {
             // Arrange

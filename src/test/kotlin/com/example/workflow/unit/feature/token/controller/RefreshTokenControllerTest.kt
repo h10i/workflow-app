@@ -40,9 +40,9 @@ class RefreshTokenControllerTest {
     }
 
     @Nested
-    inner class RefreshTokenMethod {
+    inner class RefreshTokenFun {
         @Test
-        fun `refresh succeeds when valid token is provided`() {
+        fun `should execute RefreshTokenUseCase and return token response`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
             val expectedAccessTokenValue = "new-access-token-value"
@@ -70,7 +70,7 @@ class RefreshTokenControllerTest {
         }
 
         @Test
-        fun `throws Unauthorized Exception when invalid credentials`() {
+        fun `should throw unauthorized exception when invalid credentials`() {
             // Arrange
             val refreshTokenValue = "invalid-token"
 
@@ -85,9 +85,9 @@ class RefreshTokenControllerTest {
     }
 
     @Nested
-    inner class RevokeRefreshToken {
+    inner class RevokeRefreshTokenFun {
         @Test
-        fun `revoke refresh token succeeds`() {
+        fun `should revoke a refresh token and return no content`() {
             // Arrange
             val tokenValue = "revoked-token"
 
@@ -103,9 +103,9 @@ class RefreshTokenControllerTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshTokens {
+    inner class RevokeAllRefreshTokensFun {
         @Test
-        fun `revoke all refresh tokens succeeds`() {
+        fun `should revoke all refresh tokens and return no content`() {
             // Arrange
             every { revokeAllRefreshTokensUseCase.execute() } just Runs
 

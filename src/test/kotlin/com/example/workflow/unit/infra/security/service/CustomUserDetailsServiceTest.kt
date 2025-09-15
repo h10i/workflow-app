@@ -28,7 +28,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Nested
-    inner class LoadUserByUsername {
+    inner class LoadUserByUsernameFun {
         @Test
         fun `returns UserDetails when email address exists`() {
             // Arrange
