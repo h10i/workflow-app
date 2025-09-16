@@ -1,10 +1,11 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    kotlin("plugin.jpa") version "2.1.21"
+    kotlin("jvm") version "2.0.21"
+    kotlin("plugin.spring") version "2.0.21"
+    kotlin("plugin.jpa") version "2.0.21"
     id("org.springframework.boot") version "3.4.5"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
 group = "com.example"
@@ -21,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -56,4 +58,10 @@ tasks.withType<Test> {
             includeTags(*project.property("includeTags").toString().split(",").toTypedArray())
         }
     }
+}
+
+detekt {
+    config.setFrom(file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    autoCorrect = true
 }
