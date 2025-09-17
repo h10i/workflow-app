@@ -11,7 +11,7 @@ open class ResourceNotFoundException(
                 val criteriaString = searchCriteria.entries.joinToString(", ") { "${it.key}: ${it.value}" }
                 "$baseMessage with criteria: $criteriaString"
             } else {
-                "${baseMessage}."
+                "$baseMessage."
             }
         }
     }

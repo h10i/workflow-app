@@ -59,5 +59,4 @@ class TokenServiceTest {
             Assertions.assertEquals("read write", claimsSet.claims["scope"])
         }
     }
-
 }

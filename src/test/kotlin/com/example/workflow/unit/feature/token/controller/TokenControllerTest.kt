@@ -64,5 +64,4 @@ class TokenControllerTest {
             assertEquals("[refreshToken=dummy]", actual.headers.get("Set-Cookie").toString())
         }
     }
-
 }

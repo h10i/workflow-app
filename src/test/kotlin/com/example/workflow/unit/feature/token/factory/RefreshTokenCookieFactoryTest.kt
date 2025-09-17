@@ -45,5 +45,4 @@ class RefreshTokenCookieFactoryTest {
             assertEquals("None", actual.sameSite)
         }
     }
-
 }

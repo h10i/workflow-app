@@ -45,6 +45,4 @@ class TokenPresenterTest {
             assertEquals(refreshTokenCookie, actual.refreshTokenCookie)
         }
     }
-
-
 }

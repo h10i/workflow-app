@@ -39,7 +39,6 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             assertNotNull(response.body!!.accessToken)
         }
 
-
         @Test
         fun `should return 401 Unauthorize when valid request with invalid refresh token`() {
             // Arrange
@@ -80,7 +79,6 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             assertNull(response.body)
         }
 
-
         @Test
         fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
@@ -119,7 +117,6 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
             assertNull(response.body)
         }
-
 
         @Test
         fun `should return 401 Unauthorize when valid request with invalid credentials`() {

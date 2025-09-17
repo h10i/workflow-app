@@ -94,7 +94,7 @@ class RefreshTokenRepositoryTest {
         fun setUp() {
             // Arrange
             for (i in 0..1) {
-                val account = TestDataFactory.createAccount(emailAddress = "user${i}@example.com")
+                val account = TestDataFactory.createAccount(emailAddress = "user$i@example.com")
                 accounts.add(account)
                 entityManager.persist(account)
 

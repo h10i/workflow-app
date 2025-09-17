@@ -109,7 +109,7 @@ class RefreshTokenControllerApiTest {
                 {
                     "accessToken": "$accessToken"
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
@@ -180,5 +180,4 @@ class RefreshTokenControllerApiTest {
                 .hasStatus(HttpStatus.NO_CONTENT)
         }
     }
-
 }

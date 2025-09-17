@@ -109,7 +109,7 @@ class TokenControllerApiTest {
                 {
                     "accessToken": "$accessToken"
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
             Assertions.assertThat(testResult).cookies().hasValue("refreshToken", refreshToken)
         }

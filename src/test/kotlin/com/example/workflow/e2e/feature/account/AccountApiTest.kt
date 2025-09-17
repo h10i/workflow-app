@@ -187,7 +187,7 @@ class AccountApiTest : AbstractE2ETest() {
             )
 
             val newEmailAddress = TestDataFactory.createUniqueEmailAddress()
-            val newPassword = "new-${password}"
+            val newPassword = "new-$password"
             val json = """
             {
               "emailAddress": "$newEmailAddress",
@@ -232,7 +232,7 @@ class AccountApiTest : AbstractE2ETest() {
                 password = password,
             )
 
-            val newPassword = "new-${password}"
+            val newPassword = "new-$password"
             val json = """
             {
               "emailAddress": "$emailAddress",
@@ -278,7 +278,7 @@ class AccountApiTest : AbstractE2ETest() {
             )
 
             val newEmailAddress = TestDataFactory.createUniqueEmailAddress()
-            val newPassword = "new-${password}"
+            val newPassword = "new-$password"
             val json = """
             {
               "emailAddress": "$newEmailAddress",
@@ -317,7 +317,6 @@ class AccountApiTest : AbstractE2ETest() {
             assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
             assertNull(response.body)
         }
-
 
         @Test
         fun `should return 401 Unauthorize when valid request with invalid credentials`() {

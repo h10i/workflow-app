@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class UnifiedErrorResponse(
     @get:Schema(
         description = "A map containing error details. " +
-                "Keys are either specific field names (for validation errors) " +
-                "or general error categories (e.g., 'general', 'global'). " +
-                "Values are lists of error messages for the corresponding key.",
+            "Keys are either specific field names (for validation errors) " +
+            "or general error categories (e.g., 'general', 'global'). " +
+            "Values are lists of error messages for the corresponding key.",
         example = """
             {
               "field1": [

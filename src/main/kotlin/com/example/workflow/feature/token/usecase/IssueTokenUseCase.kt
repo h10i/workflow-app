@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import java.util.*
 
-
 @Service
 class IssueTokenUseCase(
     private val authenticationService: AuthenticationService,
@@ -26,7 +25,8 @@ class IssueTokenUseCase(
 
     fun execute(request: TokenRequest): Result {
         val authentication: Authentication = authenticationService.authenticate(
-            request.emailAddress, request.password
+            request.emailAddress,
+            request.password
         )
 
         val accessToken = tokenService.generateToken(

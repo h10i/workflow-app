@@ -191,7 +191,7 @@ class RoleControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .get()
-                .uri("${ApiPath.Role.BASE}/${roleId}")
+                .uri("${ApiPath.Role.BASE}/$roleId")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
 
@@ -276,7 +276,7 @@ class RoleControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .delete()
-                .uri("${ApiPath.Role.BASE}/${roleId}")
+                .uri("${ApiPath.Role.BASE}/$roleId")
                 .exchange()
 
             // Assert

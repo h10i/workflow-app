@@ -239,7 +239,7 @@ class RoleApiTest : AbstractE2ETest() {
             // Act
             val response = restTemplate.get(
                 responseType = String::class.java,
-                path = "${ApiPath.Role.BASE}/${roleId}",
+                path = "${ApiPath.Role.BASE}/$roleId",
                 accessToken = authResultWithAdmin.accessToken,
             )
 
@@ -356,7 +356,6 @@ class RoleApiTest : AbstractE2ETest() {
             assertNull(response.body)
         }
 
-
         @Test
         fun `should return 401 Unauthorized when valid request with invalid credentials`() {
             // Arrange
@@ -405,7 +404,7 @@ class RoleApiTest : AbstractE2ETest() {
             // Act
             val response = restTemplate.delete(
                 responseType = String::class.java,
-                path = "${ApiPath.Role.BASE}/${roleId}",
+                path = "${ApiPath.Role.BASE}/$roleId",
                 accessToken = authResult.accessToken,
             )
 

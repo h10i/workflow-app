@@ -67,5 +67,4 @@ class CustomUserDetailsServiceTest {
             assertEquals("Account not found: $emailAddress", exception.message)
         }
     }
-
 }

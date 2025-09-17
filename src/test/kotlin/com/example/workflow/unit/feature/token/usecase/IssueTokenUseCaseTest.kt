@@ -84,5 +84,4 @@ class IssueTokenUseCaseTest {
             assertEquals(responseCookie, actual.refreshTokenCookie)
         }
     }
-
 }

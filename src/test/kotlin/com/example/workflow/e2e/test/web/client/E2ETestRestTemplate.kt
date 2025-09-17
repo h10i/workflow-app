@@ -113,7 +113,7 @@ class E2ETestRestTemplate(
               "emailAddress": "$emailAddress",
               "password": "$password"
             }
-            """.trimIndent()
+        """.trimIndent()
 
         val response = post(
             responseType = AccountViewResponse::class.java,
@@ -171,7 +171,7 @@ class E2ETestRestTemplate(
                 {
                     "name": "$name"
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         val response = post(
             responseType = RoleViewResponse::class.java,

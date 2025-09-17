@@ -81,7 +81,9 @@ class RegisterAccountUseCaseTest {
                 password = "test-password",
             )
 
-            every { accountServiceMock.verifyEmailAddressAvailability(request.emailAddress) } throws EmailAddressAlreadyRegisteredException()
+            every {
+                accountServiceMock.verifyEmailAddressAvailability(request.emailAddress)
+            } throws EmailAddressAlreadyRegisteredException()
 
             // Act
             // Assert

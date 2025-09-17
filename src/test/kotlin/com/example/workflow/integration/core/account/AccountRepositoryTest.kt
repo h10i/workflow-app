@@ -106,7 +106,6 @@ class AccountRepositoryTest {
         }
     }
 
-
     @Nested
     inner class DeleteByIdFun {
         private lateinit var account: Account

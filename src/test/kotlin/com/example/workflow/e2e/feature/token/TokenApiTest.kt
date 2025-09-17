@@ -52,7 +52,6 @@ class TokenApiTest : AbstractE2ETest() {
             assertNotNull(CookieUtil.extractCookie(response.headers, "refreshToken"))
         }
 
-
         @Test
         fun `should return 401 Unauthorize when invalid request`() {
             // Arrange

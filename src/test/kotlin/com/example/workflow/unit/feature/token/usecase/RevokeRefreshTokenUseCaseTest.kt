@@ -51,5 +51,4 @@ class RevokeRefreshTokenUseCaseTest {
             verify { refreshTokenServiceMock.revokeRefreshToken(accountId, tokenValue) }
         }
     }
-
 }

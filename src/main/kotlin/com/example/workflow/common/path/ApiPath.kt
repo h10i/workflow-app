@@ -16,7 +16,7 @@ object ApiPath {
         const val BASE = "${ApiVersion.V1}/auth"
         const val REFRESH_TOKEN = "/refresh-token"
         const val REVOKE = "/revoke"
-        const val REVOKE_ALL = "${REVOKE}/all"
+        const val REVOKE_ALL = "$REVOKE/all"
     }
 
     object Token {

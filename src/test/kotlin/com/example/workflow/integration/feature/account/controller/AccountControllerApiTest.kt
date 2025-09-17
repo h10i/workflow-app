@@ -140,7 +140,7 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
@@ -226,7 +226,7 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
     }
@@ -289,7 +289,7 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
