@@ -19,7 +19,7 @@ class RefreshTokenCookieFactoryTest {
     }
 
     @Nested
-    inner class CreateFun() {
+    inner class CreateFun {
         @Test
         fun `should generate a ResponseCookie with correct properties for the given value`() {
             // Arrange

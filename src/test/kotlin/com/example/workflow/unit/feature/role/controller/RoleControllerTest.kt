@@ -48,7 +48,7 @@ class RoleControllerTest {
     }
 
     @Nested
-    inner class CreateRoleFun() {
+    inner class CreateRoleFun {
         @Test
         fun `should execute CreateRoleUseCase and return role view response`() {
             // Arrange
@@ -72,7 +72,7 @@ class RoleControllerTest {
     }
 
     @Nested
-    inner class GetRoleFun() {
+    inner class GetRoleFun {
         @Test
         fun `should execute GetRoleUseCase and return role view response`() {
             // Arrange
@@ -95,7 +95,7 @@ class RoleControllerTest {
     }
 
     @Nested
-    inner class GetAllRolesFun() {
+    inner class GetAllRolesFun {
         @Test
         fun `should execute GetAllRolesUseCase and return role view response list`() {
             // Arrange
@@ -117,7 +117,7 @@ class RoleControllerTest {
     }
 
     @Nested
-    inner class DeleteRoleFun() {
+    inner class DeleteRoleFun {
         @Test
         fun `should execute DeleteRoleUseCase and return no content`() {
             // Arrange

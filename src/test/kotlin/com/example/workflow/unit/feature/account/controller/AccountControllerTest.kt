@@ -94,7 +94,7 @@ class AccountControllerTest {
     }
 
     @Nested
-    inner class UpdateAccount() {
+    inner class UpdateAccount {
         @Test
         fun `should execute UpdateAccountUseCase and return account view response`() {
             // Arrange
