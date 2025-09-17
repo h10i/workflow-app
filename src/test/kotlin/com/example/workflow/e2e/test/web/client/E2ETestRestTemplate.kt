@@ -7,7 +7,12 @@ import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.util.TestDataFactory
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.*
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.MediaType
 
 class E2ETestRestTemplate(
     private val restTemplate: TestRestTemplate

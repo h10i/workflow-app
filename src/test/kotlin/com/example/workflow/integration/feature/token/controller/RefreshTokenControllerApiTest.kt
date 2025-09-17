@@ -10,7 +10,13 @@ import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
 import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import jakarta.servlet.http.Cookie
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach

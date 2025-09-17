@@ -1,7 +1,12 @@
 package com.example.workflow.core.account
 
 import com.example.workflow.core.role.Role
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import org.springframework.security.core.GrantedAuthority
 import java.util.*
 
