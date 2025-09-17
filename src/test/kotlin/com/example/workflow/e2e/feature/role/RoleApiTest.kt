@@ -236,8 +236,7 @@ class RoleApiTest : AbstractE2ETest() {
         fun `should return 404 Not Found when invalid request (non-existent role id) with ADMIN credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
-            val roleViewResponse =
-                restTemplate.createRole(name = "ROLE_TO_GET_403", accessToken = authResultWithAdmin.accessToken)
+            restTemplate.createRole(name = "ROLE_TO_GET_403", accessToken = authResultWithAdmin.accessToken)
             val roleId = UUID.randomUUID()
 
             // Act
