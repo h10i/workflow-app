@@ -8,7 +8,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -26,10 +25,6 @@ class DeleteAccountUseCaseTest {
         deleteAccountUseCase = DeleteAccountUseCase(
             accountService = accountService,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

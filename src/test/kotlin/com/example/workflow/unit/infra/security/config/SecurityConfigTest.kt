@@ -5,7 +5,6 @@ import com.example.workflow.infra.security.model.RsaKeyProperties
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -25,10 +24,6 @@ class SecurityConfigTest {
     fun setUp() {
         rsaKeyProperties = TestDataFactory.createRsaKeyProperties()
         securityConfig = SecurityConfig(rsaKeyProperties)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

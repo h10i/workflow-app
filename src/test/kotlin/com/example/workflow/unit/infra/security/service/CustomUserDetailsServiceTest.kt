@@ -7,7 +7,6 @@ import com.example.workflow.infra.security.service.CustomUserDetailsService
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -25,10 +24,6 @@ class CustomUserDetailsServiceTest {
     fun setUp() {
         accountRepository = mockk()
         customUserDetailsService = CustomUserDetailsService(accountRepository)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

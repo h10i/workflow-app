@@ -8,7 +8,6 @@ import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.config.AssertJComparisonConfig
 import com.example.workflow.support.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -27,14 +26,6 @@ class AccountRepositoryTest {
 
     @Autowired
     private lateinit var accountRepository: AccountRepository
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Nested
     inner class SaveFun {
@@ -72,10 +63,6 @@ class AccountRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test
@@ -129,10 +116,6 @@ class AccountRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test

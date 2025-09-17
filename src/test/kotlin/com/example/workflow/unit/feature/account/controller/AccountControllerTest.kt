@@ -14,7 +14,6 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -45,10 +44,6 @@ class AccountControllerTest {
             deleteAccountUseCase = deleteAccountUseCase,
             accountPresenter = accountPresenter,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

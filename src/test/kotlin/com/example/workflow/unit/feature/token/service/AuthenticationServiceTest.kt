@@ -4,7 +4,6 @@ import com.example.workflow.feature.token.service.AuthenticationService
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -25,10 +24,6 @@ class AuthenticationServiceTest {
     fun setUp() {
         authenticationManager = mockk()
         authenticationService = AuthenticationService(authenticationManager)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

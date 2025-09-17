@@ -4,8 +4,6 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.toViewDto
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -13,13 +11,6 @@ import kotlin.test.assertEquals
 
 @UnitTest
 class AccountTest {
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Nested
     inner class ToViewDtoFun {

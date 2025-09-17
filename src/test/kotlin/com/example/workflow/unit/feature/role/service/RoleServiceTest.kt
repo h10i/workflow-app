@@ -12,7 +12,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,10 +30,6 @@ class RoleServiceTest {
     fun setUp() {
         roleRepository = mockk()
         roleService = RoleService(roleRepository)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

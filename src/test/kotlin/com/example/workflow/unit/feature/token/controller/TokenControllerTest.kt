@@ -8,7 +8,6 @@ import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,10 +30,6 @@ class TokenControllerTest {
             issueTokenUseCase = issueTokenUseCase,
             tokenPresenter = tokenPresenter,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

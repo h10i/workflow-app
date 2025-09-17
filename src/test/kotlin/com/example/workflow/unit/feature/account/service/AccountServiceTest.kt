@@ -39,10 +39,6 @@ class AccountServiceTest {
         accountService = AccountService(accountRepositoryMock)
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class SaveAccountFun {
         @Test

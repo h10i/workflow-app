@@ -41,9 +41,6 @@ class SecurityConfigIntegrationTest {
         fun userDetailsService(): UserDetailsService = mockk(relaxed = true)
     }
 
-    fun setUp() {
-    }
-
     @AfterEach
     fun tearDown() {
         clearAllMocks()

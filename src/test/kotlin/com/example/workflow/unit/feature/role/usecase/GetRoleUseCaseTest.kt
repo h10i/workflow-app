@@ -32,10 +32,6 @@ class GetRoleUseCaseTest {
         )
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class ExecuteFun {
         @BeforeEach

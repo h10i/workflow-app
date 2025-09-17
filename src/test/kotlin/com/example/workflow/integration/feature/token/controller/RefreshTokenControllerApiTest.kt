@@ -20,7 +20,6 @@ import io.mockk.verify
 import jakarta.servlet.http.Cookie
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -66,10 +65,6 @@ class RefreshTokenControllerApiTest {
 
         @Bean
         fun revokeAllRefreshTokensUseCase(): RevokeAllRefreshTokensUseCase = mockk(relaxed = true)
-    }
-
-    @BeforeEach
-    fun setUp() {
     }
 
     @AfterEach

@@ -40,10 +40,6 @@ class UpdateAccountUseCaseTest {
         )
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class ExecuteFun {
         private val originalAccountId = UUID.randomUUID()

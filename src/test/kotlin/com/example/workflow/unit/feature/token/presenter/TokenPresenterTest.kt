@@ -4,7 +4,6 @@ import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.feature.token.presenter.TokenPresenter
 import com.example.workflow.feature.token.usecase.IssueTokenUseCase
 import com.example.workflow.support.annotation.UnitTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,10 +17,6 @@ class TokenPresenterTest {
     @BeforeEach
     fun setUp() {
         tokenPresenter = TokenPresenter()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

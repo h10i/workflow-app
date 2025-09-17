@@ -12,7 +12,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import jakarta.persistence.EntityNotFoundException
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -39,10 +38,6 @@ class RefreshTokenServiceTest {
             refreshTokenRepositoryMock,
             accountRepositoryMock,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

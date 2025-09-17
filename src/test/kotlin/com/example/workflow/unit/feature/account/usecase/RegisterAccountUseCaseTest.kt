@@ -39,10 +39,6 @@ class RegisterAccountUseCaseTest {
         )
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class ExecuteFun {
         @BeforeEach

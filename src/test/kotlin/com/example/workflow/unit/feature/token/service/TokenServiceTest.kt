@@ -7,7 +7,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -29,10 +28,6 @@ class TokenServiceTest {
     fun setUp() {
         jwtEncoderMock = mockk()
         tokenService = spyk(TokenService(jwtEncoderMock))
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

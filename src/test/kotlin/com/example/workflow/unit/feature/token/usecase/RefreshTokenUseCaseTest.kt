@@ -11,7 +11,6 @@ import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -34,10 +33,6 @@ class RefreshTokenUseCaseTest {
             tokenService = tokenServiceMock,
             refreshTokenService = refreshTokenServiceMock
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

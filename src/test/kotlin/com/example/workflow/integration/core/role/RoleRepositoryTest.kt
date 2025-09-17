@@ -7,7 +7,6 @@ import com.example.workflow.core.role.RoleRepository
 import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.util.TestDataFactory
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -28,14 +27,6 @@ class RoleRepositoryTest {
 
     @Autowired
     private lateinit var roleRepository: RoleRepository
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Nested
     inner class SaveFun {
@@ -64,10 +55,6 @@ class RoleRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test
@@ -107,10 +94,6 @@ class RoleRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test
@@ -194,10 +177,6 @@ class RoleRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test

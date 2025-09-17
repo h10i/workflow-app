@@ -7,7 +7,6 @@ import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.config.AssertJComparisonConfig
 import com.example.workflow.support.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,14 +27,6 @@ class RefreshTokenRepositoryTest {
     @Autowired
     private lateinit var refreshTokenRepository: RefreshTokenRepository
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class FindByValueFun {
         private lateinit var account: Account
@@ -51,10 +42,6 @@ class RefreshTokenRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test
@@ -108,10 +95,6 @@ class RefreshTokenRepositoryTest {
             entityManager.clear()
         }
 
-        @AfterEach
-        fun tearDown() {
-        }
-
         @Test
         fun `should return 1 when both account ID and value are correct`() {
             // Arrange
@@ -162,10 +145,6 @@ class RefreshTokenRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test

@@ -15,7 +15,6 @@ import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,10 +49,6 @@ class TokenControllerApiTest {
 
         @Bean
         fun tokenPresenter(): TokenPresenter = mockk(relaxed = true)
-    }
-
-    @BeforeEach
-    fun setUp() {
     }
 
     @AfterEach

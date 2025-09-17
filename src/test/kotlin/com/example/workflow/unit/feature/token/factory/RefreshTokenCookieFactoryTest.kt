@@ -2,7 +2,6 @@ package com.example.workflow.unit.feature.token.factory
 
 import com.example.workflow.feature.token.factory.RefreshTokenCookieFactory
 import com.example.workflow.support.annotation.UnitTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,10 +16,6 @@ class RefreshTokenCookieFactoryTest {
     @BeforeEach
     fun setUp() {
         refreshTokenCookieFactory = RefreshTokenCookieFactory()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested
