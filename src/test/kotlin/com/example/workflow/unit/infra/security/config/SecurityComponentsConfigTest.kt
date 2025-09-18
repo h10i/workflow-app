@@ -1,6 +1,6 @@
 package com.example.workflow.unit.infra.security.config
 
-import com.example.workflow.infra.security.config.SecurityConfig
+import com.example.workflow.infra.security.config.SecurityComponentsConfig
 import com.example.workflow.infra.security.model.RsaKeyProperties
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
@@ -16,14 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @UnitTest
-class SecurityConfigTest {
+class SecurityComponentsConfigTest {
     private lateinit var rsaKeyProperties: RsaKeyProperties
-    private lateinit var securityConfig: SecurityConfig
+    private lateinit var securityConfig: SecurityComponentsConfig
 
     @BeforeEach
     fun setUp() {
         rsaKeyProperties = TestDataFactory.createRsaKeyProperties()
-        securityConfig = SecurityConfig(rsaKeyProperties)
+        securityConfig = SecurityComponentsConfig(rsaKeyProperties)
     }
 
     @Nested
