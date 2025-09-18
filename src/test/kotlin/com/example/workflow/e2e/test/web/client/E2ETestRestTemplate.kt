@@ -125,8 +125,8 @@ class E2ETestRestTemplate(
             path = ApiPath.Account.BASE,
             body = json,
         )
-        if (response.statusCode != HttpStatus.CREATED || response.body == null) {
-            throw IllegalStateException("Failed to register user for test: ${response.statusCode} - ${response.body}")
+        check(response.statusCode == HttpStatus.CREATED && response.body != null) {
+            "Failed to register user for test: ${response.statusCode} - ${response.body}"
         }
         return response.body
     }
@@ -149,9 +149,9 @@ class E2ETestRestTemplate(
         )
 
         val accessToken = response.body?.accessToken
-            ?: throw IllegalStateException("access token not found")
+            ?: error("access token not found")
         val refreshToken = CookieUtil.extractCookie(response.headers, "refreshToken")
-            ?: throw IllegalArgumentException("refresh token cookie not found")
+            ?: error("refresh token cookie not found")
         return AuthResult(
             accessToken,
             refreshToken,
@@ -185,6 +185,6 @@ class E2ETestRestTemplate(
             accessToken = accessToken,
         )
 
-        return response.body ?: throw IllegalStateException("role not found")
+        return response.body ?: error("role not found")
     }
 }
