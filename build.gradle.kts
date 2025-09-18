@@ -55,6 +55,7 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform {
         if (project.hasProperty("includeTags")) {
+            @Suppress("SpreadOperator")
             includeTags(*project.property("includeTags").toString().split(",").toTypedArray())
         }
     }
