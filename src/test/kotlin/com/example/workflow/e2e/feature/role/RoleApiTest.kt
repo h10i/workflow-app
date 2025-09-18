@@ -73,7 +73,8 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `should return 400 Bad Request when invalid request (role name is already created) with ADMIN credentials`() {
+        fun `should return 400 Bad Request when invalid request with ADMIN credentials`() {
+            // invalid request: role name is already created
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
 

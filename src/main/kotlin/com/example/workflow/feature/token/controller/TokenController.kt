@@ -26,7 +26,8 @@ class TokenController(
 ) {
     @Operation(
         summary = "Authenticate user and issue tokens",
-        description = "Authenticates the user with the provided email address and password, then issues a new access token and a refresh token. The refresh token is set as an HTTP-only cookie.",
+        description = "Authenticates the user with the provided email address and password," +
+            " then issues a new access token and a refresh token. The refresh token is set as an HTTP-only cookie.",
         requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "User authentication credentials",
             required = true,

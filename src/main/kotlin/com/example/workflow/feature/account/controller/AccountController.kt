@@ -61,7 +61,8 @@ class AccountController(
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                description = "Invalid request data or a general business validation error occurred." +
+                    " Details are provided in the 'errors' map.",
                 content = [
                     Content(
                         mediaType = "application/json",
@@ -81,7 +82,8 @@ class AccountController(
 
     @Operation(
         summary = "Get your account information",
-        description = "Retrieves the registered account information for the authenticated user. A valid JWT token is required in the Authorization header.",
+        description = "Retrieves the registered account information for the authenticated user." +
+            " A valid JWT token is required in the Authorization header.",
         security = [SecurityRequirement(name = "bearer-key")],
         responses = [
             ApiResponse(
@@ -141,7 +143,8 @@ class AccountController(
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                description = "Invalid request data or a general business validation error occurred." +
+                    " Details are provided in the 'errors' map.",
                 content = [
                     Content(
                         mediaType = "application/json",

@@ -43,7 +43,13 @@ data class Account(
     }
 
     override fun toString(): String {
-        return "Account(id=$id, emailAddress='$emailAddress', password='$password', roles=$roles, refreshTokens=$refreshTokens)"
+        return "Account(" +
+            "id=$id, " +
+            "emailAddress='$emailAddress', " +
+            "password='$password', " +
+            "roles=$roles, " +
+            "refreshTokens=$refreshTokens" +
+            ")"
     }
 }
 

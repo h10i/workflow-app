@@ -29,7 +29,8 @@ class RefreshTokenController(
 ) {
     @Operation(
         summary = "Issue a new access token",
-        description = "Issues a new access token using a valid refresh token. The refresh token is provided as an HTTP cookie.",
+        description = "Issues a new access token using a valid refresh token." +
+            " The refresh token is provided as an HTTP cookie.",
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -57,7 +58,8 @@ class RefreshTokenController(
 
     @Operation(
         summary = "Revoke a specific refresh token",
-        description = "Revokes the specified refresh token for the current user. A valid JWT token is required in the Authorization header.",
+        description = "Revokes the specified refresh token for the current user." +
+            " A valid JWT token is required in the Authorization header.",
         security = [SecurityRequirement(name = "bearer-key")],
         responses = [
             ApiResponse(
@@ -80,7 +82,8 @@ class RefreshTokenController(
 
     @Operation(
         summary = "Revoke all refresh tokens",
-        description = "Revokes all refresh tokens for the current user. A valid JWT token is required in the Authorization header.",
+        description = "Revokes all refresh tokens for the current user." +
+            " A valid JWT token is required in the Authorization header.",
         security = [SecurityRequirement(name = "bearer-key")],
         responses = [
             ApiResponse(

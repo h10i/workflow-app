@@ -126,7 +126,9 @@ class UpdateAccountUseCaseTest {
 
             every { accountService.getCurrentAccountId() } returns originalAccountId
             every { accountService.getAccount(originalAccountId) } returns originalAccount
-            every { accountService.verifyEmailAddressAvailability(newEmailAddress) } throws EmailAddressAlreadyRegisteredException()
+            every {
+                accountService.verifyEmailAddressAvailability(newEmailAddress)
+            } throws EmailAddressAlreadyRegisteredException()
 
             // Act
             // Assert

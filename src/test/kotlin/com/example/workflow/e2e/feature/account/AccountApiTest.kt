@@ -73,7 +73,8 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `should return 400 Bad Request when invalid request (email address is already registered) without credentials`() {
+        fun `should return 400 Bad Request when invalid request without credentials`() {
+            // invalid request: email address is already registered
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()
@@ -227,7 +228,8 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `should return 400 Bad Request when invalid request (email address is already registered) with valid credentials`() {
+        fun `should return 400 Bad Request when invalid request with valid credentials`() {
+            // invalid request: email address is already registered
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
             val password = TestDataFactory.getValidTestPassword()

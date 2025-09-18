@@ -62,7 +62,8 @@ class RoleController(
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                description = "Invalid request data or a general business validation error occurred." +
+                    " Details are provided in the 'errors' map.",
                 content = [
                     Content(
                         mediaType = "application/json",
