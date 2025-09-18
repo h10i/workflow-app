@@ -3,6 +3,7 @@ package com.example.workflow.e2e.feature.account
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
+import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.support.annotation.E2ETest
 import com.example.workflow.support.util.TestDataFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -13,7 +14,11 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import java.util.*
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 @E2ETest
 class AccountApiTest : AbstractE2ETest() {
@@ -36,7 +41,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Account.BASE,
-                body = json,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                )
             )
 
             // Assert
@@ -69,10 +76,11 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `should return 400 Bad Request when invalid request (email address is already registered) without credentials`() {
+        fun `should return 400 Bad Request when invalid request without credentials`() {
+            // invalid request: email address is already registered
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -89,7 +97,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Account.BASE,
-                body = json,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                )
             )
 
             // Assert
@@ -118,7 +128,7 @@ class AccountApiTest : AbstractE2ETest() {
         fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             val registeredAccount = restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -132,7 +142,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                accessToken = authResult.accessToken
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken
+                )
             )
 
             // Assert
@@ -175,7 +187,7 @@ class AccountApiTest : AbstractE2ETest() {
         fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             val accountViewResponse = restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -187,7 +199,7 @@ class AccountApiTest : AbstractE2ETest() {
             )
 
             val newEmailAddress = TestDataFactory.createUniqueEmailAddress()
-            val newPassword = "new-${password}"
+            val newPassword = "new-$password"
             val json = """
             {
               "emailAddress": "$newEmailAddress",
@@ -199,8 +211,10 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.patch(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -223,16 +237,17 @@ class AccountApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `should return 400 Bad Request when invalid request (email address is already registered) with valid credentials`() {
+        fun `should return 400 Bad Request when invalid request with valid credentials`() {
+            // invalid request: email address is already registered
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate(
                 emailAddress = emailAddress,
                 password = password,
             )
 
-            val newPassword = "new-${password}"
+            val newPassword = "new-$password"
             val json = """
             {
               "emailAddress": "$emailAddress",
@@ -244,8 +259,10 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.patch(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -271,14 +288,14 @@ class AccountApiTest : AbstractE2ETest() {
         fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             restTemplate.registerAccountAndAuthenticate(
                 emailAddress = emailAddress,
                 password = password,
             )
 
             val newEmailAddress = TestDataFactory.createUniqueEmailAddress()
-            val newPassword = "new-${password}"
+            val newPassword = "new-$password"
             val json = """
             {
               "emailAddress": "$newEmailAddress",
@@ -290,7 +307,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.patch(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                body = json,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                )
             )
 
             // Assert
@@ -310,14 +329,15 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
             assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
             assertNull(response.body)
         }
-
 
         @Test
         fun `should return 401 Unauthorize when valid request with invalid credentials`() {
@@ -327,7 +347,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert

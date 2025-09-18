@@ -13,11 +13,16 @@ import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -71,10 +76,6 @@ class AccountControllerApiTest {
 
         @Bean
         fun deleteAccountUseCase(): DeleteAccountUseCase = mockk()
-    }
-
-    @BeforeEach
-    fun setUp() {
     }
 
     @AfterEach
@@ -140,7 +141,7 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
@@ -226,7 +227,7 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
     }
@@ -289,7 +290,7 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 

@@ -4,7 +4,6 @@ import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.support.annotation.UnitTest
 import jakarta.validation.Validation
 import jakarta.validation.Validator
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -19,10 +18,6 @@ class UpdateAccountRequestTest {
     fun setUp() {
         val validatorFactory = Validation.buildDefaultValidatorFactory()
         validator = validatorFactory.validator
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

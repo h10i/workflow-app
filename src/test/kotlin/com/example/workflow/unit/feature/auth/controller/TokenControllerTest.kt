@@ -1,0 +1,62 @@
+package com.example.workflow.unit.feature.auth.controller
+
+import com.example.workflow.feature.auth.controller.TokenController
+import com.example.workflow.feature.auth.model.TokenRequest
+import com.example.workflow.feature.auth.model.TokenResponse
+import com.example.workflow.feature.auth.presenter.TokenPresenter
+import com.example.workflow.feature.auth.usecase.IssueTokenUseCase
+import com.example.workflow.support.annotation.UnitTest
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseCookie
+import org.springframework.http.ResponseEntity
+import kotlin.test.assertEquals
+
+@UnitTest
+class TokenControllerTest {
+    private lateinit var issueTokenUseCase: IssueTokenUseCase
+    private lateinit var tokenPresenter: TokenPresenter
+    private lateinit var tokenController: TokenController
+
+    @BeforeEach
+    fun setUp() {
+        issueTokenUseCase = mockk()
+        tokenPresenter = mockk()
+        tokenController = TokenController(
+            issueTokenUseCase = issueTokenUseCase,
+            tokenPresenter = tokenPresenter,
+        )
+    }
+
+    @Nested
+    inner class TokenFun {
+        @Test
+        fun `should execute IssueTokenUseCase and return token response and cookie including refresh token`() {
+            // Arrange
+            val request = TokenRequest("user@example.com", "test-password")
+            val responseCookie = ResponseCookie.from("refreshToken", "dummy").build()
+            val accessToken = "test-access-token"
+            val tokenResponse = TokenResponse(accessToken)
+            val useCaseResult = IssueTokenUseCase.Result(accessToken, responseCookie)
+            val presenterResult = TokenPresenter.Result(
+                response = tokenResponse,
+                refreshTokenCookie = responseCookie,
+            )
+
+            every { issueTokenUseCase.execute(request) } returns useCaseResult
+            every { tokenPresenter.toResponse(useCaseResult) } returns presenterResult
+
+            // Act
+            val actual: ResponseEntity<TokenResponse> = tokenController.token(request)
+
+            // Assert
+            assertEquals(HttpStatus.OK, actual.statusCode)
+            assertEquals(tokenResponse, actual.body)
+            assertEquals("[refreshToken=dummy]", actual.headers.get("Set-Cookie").toString())
+        }
+    }
+}

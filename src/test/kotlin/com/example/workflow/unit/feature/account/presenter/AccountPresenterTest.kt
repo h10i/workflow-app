@@ -24,10 +24,6 @@ class AccountPresenterTest {
         accountPresenter = AccountPresenter()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class ToResponseFun {
         @BeforeEach

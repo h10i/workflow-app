@@ -12,10 +12,15 @@ import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
 import com.example.workflow.feature.role.usecase.GetRoleUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -69,10 +74,6 @@ class RoleControllerApiTest {
 
         @Bean
         fun deleteRoleUseCase(): DeleteRoleUseCase = mockk()
-    }
-
-    @BeforeEach
-    fun setUp() {
     }
 
     @AfterEach
@@ -191,7 +192,7 @@ class RoleControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .get()
-                .uri("${ApiPath.Role.BASE}/${roleId}")
+                .uri("${ApiPath.Role.BASE}/$roleId")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
 
@@ -276,7 +277,7 @@ class RoleControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .delete()
-                .uri("${ApiPath.Role.BASE}/${roleId}")
+                .uri("${ApiPath.Role.BASE}/$roleId")
                 .exchange()
 
             // Assert

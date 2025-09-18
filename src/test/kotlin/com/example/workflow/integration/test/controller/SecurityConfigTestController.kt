@@ -4,7 +4,11 @@ import com.example.workflow.common.path.ApiPath
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RestController
 
 @Profile("security-test-controller")
 @RestController
@@ -31,8 +35,8 @@ class SecurityConfigTestController {
             // Role
             ApiPath.Role.BASE,
             // Auth
-            "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}",
         ]
     )
     fun post() = ResponseEntity.status(HttpStatus.OK).body("post")
@@ -52,8 +56,8 @@ class SecurityConfigTestController {
             // Role
             "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
             // Auth
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}",
         ]
     )
     fun delete() = ResponseEntity.status(HttpStatus.OK).body("delete")

@@ -7,8 +7,16 @@ import com.example.workflow.feature.role.exception.RoleNotFoundException
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
-import io.mockk.*
-import org.junit.jupiter.api.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -22,10 +30,6 @@ class RoleServiceTest {
     fun setUp() {
         roleRepository = mockk()
         roleService = RoleService(roleRepository)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

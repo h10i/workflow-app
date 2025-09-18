@@ -3,12 +3,11 @@ package com.example.workflow.integration.core.account
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.AccountRole
-import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.config.AssertJComparisonConfig
 import com.example.workflow.support.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -27,14 +26,6 @@ class AccountRepositoryTest {
 
     @Autowired
     private lateinit var accountRepository: AccountRepository
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Nested
     inner class SaveFun {
@@ -74,10 +65,6 @@ class AccountRepositoryTest {
             entityManager.clear()
         }
 
-        @AfterEach
-        fun tearDown() {
-        }
-
         @Test
         fun `should return the account when a email address exists`() {
             // Arrange
@@ -106,7 +93,6 @@ class AccountRepositoryTest {
         }
     }
 
-
     @Nested
     inner class DeleteByIdFun {
         private lateinit var account: Account
@@ -130,10 +116,6 @@ class AccountRepositoryTest {
 
             entityManager.flush()
             entityManager.clear()
-        }
-
-        @AfterEach
-        fun tearDown() {
         }
 
         @Test

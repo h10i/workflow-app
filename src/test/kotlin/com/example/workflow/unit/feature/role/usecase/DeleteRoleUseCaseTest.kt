@@ -3,9 +3,16 @@ package com.example.workflow.unit.feature.role.usecase
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import jakarta.persistence.EntityNotFoundException
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 
 @UnitTest
@@ -19,10 +26,6 @@ class DeleteRoleUseCaseTest {
         deleteRoleUseCase = DeleteRoleUseCase(
             roleService = roleService,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

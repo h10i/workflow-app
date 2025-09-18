@@ -3,6 +3,7 @@ package com.example.workflow.e2e.feature.role
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
+import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.support.annotation.E2ETest
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -12,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 @E2ETest
 class RoleApiTest : AbstractE2ETest() {
@@ -37,8 +42,10 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -69,7 +76,8 @@ class RoleApiTest : AbstractE2ETest() {
         }
 
         @Test
-        fun `should return 400 Bad Request when invalid request (role name is already created) with ADMIN credentials`() {
+        fun `should return 400 Bad Request when invalid request with ADMIN credentials`() {
+            // invalid request: role name is already created
             // Arrange
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
 
@@ -83,8 +91,10 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -122,8 +132,10 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                body = json,
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert
@@ -147,8 +159,10 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -170,7 +184,10 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
-                accessToken = authResultWithAdmin.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResultWithAdmin.accessToken,
+                )
+
             )
 
             // Assert
@@ -200,7 +217,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert
@@ -220,7 +239,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
-                accessToken = authResultWithUser.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResultWithUser.accessToken,
+                )
             )
 
             // Assert
@@ -232,15 +253,16 @@ class RoleApiTest : AbstractE2ETest() {
         fun `should return 404 Not Found when invalid request (non-existent role id) with ADMIN credentials`() {
             // Arrange
             val authResultWithAdmin: E2ETestRestTemplate.AuthResult = restTemplate.authenticateWithAdmin()
-            val roleViewResponse =
-                restTemplate.createRole(name = "ROLE_TO_GET_403", accessToken = authResultWithAdmin.accessToken)
+            restTemplate.createRole(name = "ROLE_TO_GET_403", accessToken = authResultWithAdmin.accessToken)
             val roleId = UUID.randomUUID()
 
             // Act
             val response = restTemplate.get(
                 responseType = String::class.java,
-                path = "${ApiPath.Role.BASE}/${roleId}",
-                accessToken = authResultWithAdmin.accessToken,
+                path = "${ApiPath.Role.BASE}/$roleId",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResultWithAdmin.accessToken,
+                )
             )
 
             // Assert
@@ -274,7 +296,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -309,7 +333,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert
@@ -326,7 +352,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = ApiPath.Role.BASE,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -348,14 +376,15 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
             assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
             assertNull(response.body)
         }
-
 
         @Test
         fun `should return 401 Unauthorized when valid request with invalid credentials`() {
@@ -368,7 +397,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert
@@ -388,7 +419,9 @@ class RoleApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Role.BASE}/${roleViewResponse.id}",
-                accessToken = authResultWithUser.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResultWithUser.accessToken,
+                )
             )
 
             // Assert
@@ -405,8 +438,10 @@ class RoleApiTest : AbstractE2ETest() {
             // Act
             val response = restTemplate.delete(
                 responseType = String::class.java,
-                path = "${ApiPath.Role.BASE}/${roleId}",
-                accessToken = authResult.accessToken,
+                path = "${ApiPath.Role.BASE}/$roleId",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert

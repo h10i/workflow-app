@@ -29,10 +29,6 @@ class GetAccountUseCaseTest {
         getAccountUseCase = GetAccountUseCase(accountServiceMock)
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class ExecuteFun {
         @BeforeEach

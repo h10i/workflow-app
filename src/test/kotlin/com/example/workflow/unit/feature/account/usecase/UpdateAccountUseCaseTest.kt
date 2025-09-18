@@ -8,8 +8,18 @@ import com.example.workflow.feature.account.model.UpdateAccountRequest
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
-import org.junit.jupiter.api.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 import kotlin.test.assertEquals
@@ -28,10 +38,6 @@ class UpdateAccountUseCaseTest {
             accountService = accountService,
             passwordEncoder = passwordEncoder,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested
@@ -120,7 +126,9 @@ class UpdateAccountUseCaseTest {
 
             every { accountService.getCurrentAccountId() } returns originalAccountId
             every { accountService.getAccount(originalAccountId) } returns originalAccount
-            every { accountService.verifyEmailAddressAvailability(newEmailAddress) } throws EmailAddressAlreadyRegisteredException()
+            every {
+                accountService.verifyEmailAddressAvailability(newEmailAddress)
+            } throws EmailAddressAlreadyRegisteredException()
 
             // Act
             // Assert

@@ -24,10 +24,6 @@ class RolePresenterTest {
         rolePresenter = RolePresenter()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
     inner class ToResponseFun {
         @BeforeEach

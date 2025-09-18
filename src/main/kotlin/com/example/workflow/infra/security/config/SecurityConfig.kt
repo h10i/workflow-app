@@ -2,103 +2,28 @@ package com.example.workflow.infra.security.config
 
 import com.example.workflow.common.constants.Role
 import com.example.workflow.common.path.ApiPath
-import com.example.workflow.infra.security.model.RsaKeyProperties
-import com.nimbusds.jose.jwk.JWK
-import com.nimbusds.jose.jwk.JWKSet
-import com.nimbusds.jose.jwk.RSAKey
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.ProviderManager
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.config.annotation.web.AuthorizeHttpRequestsDsl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.jwt.JwtDecoder
-import org.springframework.security.oauth2.jwt.JwtEncoder
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(RsaKeyProperties::class)
-@Suppress("unused")
-class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
+class SecurityConfig {
     @Bean
+    @Suppress("unused")
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                // SpringDoc
-                authorize(ApiPath.SpringDoc.API_DOCS_ALL, permitAll)
-                authorize(ApiPath.SpringDoc.SWAGGER_UI_HTML, permitAll)
-                authorize(ApiPath.SpringDoc.SWAGGER_UI_ALL, permitAll)
-                // Account
-                authorize(
-                    HttpMethod.GET,
-                    "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                    authenticated,
-                )
-                authorize(HttpMethod.POST, ApiPath.Account.BASE, permitAll)
-                authorize(
-                    HttpMethod.PATCH,
-                    "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                    authenticated
-                )
-                authorize(
-                    HttpMethod.DELETE,
-                    "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                    authenticated
-                )
-                // Role
-                authorize(
-                    HttpMethod.POST,
-                    ApiPath.Role.BASE,
-                    hasRole(Role.ADMIN.name)
-                )
-                authorize(
-                    HttpMethod.GET,
-                    "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
-                    hasRole(Role.ADMIN.name)
-                )
-                authorize(HttpMethod.GET, ApiPath.Role.BASE, hasRole(Role.ADMIN.name))
-                authorize(
-                    HttpMethod.DELETE,
-                    "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
-                    hasRole(Role.ADMIN.name)
-                )
-                // Token
-                authorize(
-                    HttpMethod.POST,
-                    "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
-                    permitAll,
-                )
-                // Refresh Token
-                authorize(
-                    HttpMethod.POST,
-                    "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
-                    permitAll,
-                )
-                authorize(
-                    HttpMethod.DELETE,
-                    "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
-                    authenticated,
-                )
-                authorize(
-                    HttpMethod.DELETE,
-                    "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
-                    authenticated,
-                )
-                // Others
+                configureSpringDocAuthorizations()
+                configureAccountAuthorizations()
+                configureRoleAuthorizations()
+                configureAuthAuthorizations()
                 authorize(anyRequest, denyAll)
             }
             oauth2ResourceServer {
@@ -112,38 +37,70 @@ class SecurityConfig(private val rsaKeyProperties: RsaKeyProperties) {
         return http.build()
     }
 
-    @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
-
-    @Bean
-    fun jwtDecoder(): JwtDecoder {
-        return NimbusJwtDecoder.withPublicKey(rsaKeyProperties.publicKey).build()
+    private fun AuthorizeHttpRequestsDsl.configureSpringDocAuthorizations() {
+        authorize(ApiPath.SpringDoc.API_DOCS_ALL, permitAll)
+        authorize(ApiPath.SpringDoc.SWAGGER_UI_HTML, permitAll)
+        authorize(ApiPath.SpringDoc.SWAGGER_UI_ALL, permitAll)
     }
 
-    @Bean
-    fun jwtEncoder(): JwtEncoder {
-        val jwk: JWK = RSAKey.Builder(rsaKeyProperties.publicKey).privateKey(rsaKeyProperties.privateKey).build()
-        return NimbusJwtEncoder(ImmutableJWKSet(JWKSet(jwk)))
+    private fun AuthorizeHttpRequestsDsl.configureAccountAuthorizations() {
+        authorize(
+            HttpMethod.GET,
+            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            authenticated,
+        )
+        authorize(HttpMethod.POST, ApiPath.Account.BASE, permitAll)
+        authorize(
+            HttpMethod.PATCH,
+            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            authenticated
+        )
+        authorize(
+            HttpMethod.DELETE,
+            "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            authenticated
+        )
     }
 
-    @Bean
-    fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
-        val grantedAuthoritiesConverter = JwtGrantedAuthoritiesConverter()
-
-        val jwtAuthenticationConverter = JwtAuthenticationConverter()
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter)
-        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_")
-        return jwtAuthenticationConverter
+    private fun AuthorizeHttpRequestsDsl.configureRoleAuthorizations() {
+        authorize(
+            HttpMethod.POST,
+            ApiPath.Role.BASE,
+            hasRole(Role.ADMIN.name)
+        )
+        authorize(
+            HttpMethod.GET,
+            "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
+            hasRole(Role.ADMIN.name)
+        )
+        authorize(HttpMethod.GET, ApiPath.Role.BASE, hasRole(Role.ADMIN.name))
+        authorize(
+            HttpMethod.DELETE,
+            "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
+            hasRole(Role.ADMIN.name)
+        )
     }
 
-    @Bean
-    fun authenticationManager(
-        userDetailsService: UserDetailsService,
-        passwordEncoder: PasswordEncoder,
-    ): AuthenticationManager {
-        val authenticationProvider = DaoAuthenticationProvider()
-        authenticationProvider.setUserDetailsService(userDetailsService)
-        authenticationProvider.setPasswordEncoder(passwordEncoder)
-        return ProviderManager(authenticationProvider)
+    private fun AuthorizeHttpRequestsDsl.configureAuthAuthorizations() {
+        authorize(
+            HttpMethod.POST,
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}",
+            permitAll,
+        )
+        authorize(
+            HttpMethod.POST,
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}",
+            permitAll,
+        )
+        authorize(
+            HttpMethod.DELETE,
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE}",
+            authenticated,
+        )
+        authorize(
+            HttpMethod.DELETE,
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}",
+            authenticated,
+        )
     }
 }

@@ -7,9 +7,20 @@ import com.example.workflow.feature.account.exception.EmailAddressAlreadyRegiste
 import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.unmockkStatic
+import io.mockk.verify
 import jakarta.persistence.EntityNotFoundException
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
@@ -26,10 +37,6 @@ class AccountServiceTest {
     fun setUp() {
         accountRepositoryMock = mockk()
         accountService = AccountService(accountRepositoryMock)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Nested

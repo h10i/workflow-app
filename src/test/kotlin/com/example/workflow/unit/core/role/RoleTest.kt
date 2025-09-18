@@ -3,8 +3,6 @@ package com.example.workflow.unit.core.role
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.toViewDto
 import com.example.workflow.support.annotation.UnitTest
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -12,13 +10,6 @@ import kotlin.test.assertEquals
 
 @UnitTest
 class RoleTest {
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Nested
     inner class ToViewDtoFun {
