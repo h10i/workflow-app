@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.days
 
 @UnitTest
 class RefreshTokenCookieFactoryTest {
@@ -24,7 +25,7 @@ class RefreshTokenCookieFactoryTest {
         fun `should generate a ResponseCookie with correct properties for the given value`() {
             // Arrange
             val refreshTokenValue = "test-refresh-token-value"
-            val expectedMaxAge = Duration.ofSeconds(30L * 24 * 60 * 60)
+            val expectedMaxAge = Duration.ofSeconds(90.days.inWholeSeconds)
 
             // Act
             val actual = refreshTokenCookieFactory.create(refreshTokenValue)

@@ -4,6 +4,7 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.core.token.RefreshTokenRepository
+import com.example.workflow.feature.token.constants.AuthConstants
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +25,7 @@ class RefreshTokenService(
 
         val refreshToken = RefreshToken(
             value = UUID.randomUUID().toString(),
-            expiryDate = Instant.now().plus(90, ChronoUnit.DAYS),
+            expiryDate = Instant.now().plus(AuthConstants.REFRESH_TOKEN_LIFETIME_DAYS, ChronoUnit.DAYS),
             account = account,
         )
         return refreshTokenRepository.save(refreshToken)

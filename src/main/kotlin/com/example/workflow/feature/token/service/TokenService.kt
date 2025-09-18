@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.service
 
+import com.example.workflow.feature.token.constants.AuthConstants
 import org.springframework.security.oauth2.jwt.JwtClaimsSet
 import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters
@@ -15,7 +16,7 @@ class TokenService(private val jwtEncoder: JwtEncoder) {
         val claims = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
-            .expiresAt(now.plus(30, ChronoUnit.MINUTES))
+            .expiresAt(now.plus(AuthConstants.ACCESS_TOKEN_LIFETIME_MINUTES, ChronoUnit.MINUTES))
             .subject(userId)
             .claim("scope", scope.joinToString(separator = " "))
             .build()

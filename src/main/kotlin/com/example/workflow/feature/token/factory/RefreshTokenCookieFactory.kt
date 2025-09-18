@@ -1,5 +1,6 @@
 package com.example.workflow.feature.token.factory
 
+import com.example.workflow.feature.token.constants.AuthConstants
 import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Component
 
@@ -12,7 +13,7 @@ class RefreshTokenCookieFactory {
             .secure(true)
             .path("/v1/auth/refresh-token")
             .domain("localhost")
-            .maxAge(30 * 24 * 60 * 60)
+            .maxAge(AuthConstants.REFRESH_TOKEN_LIFETIME_SECONDS)
             .sameSite("None")
             .build()
     }
