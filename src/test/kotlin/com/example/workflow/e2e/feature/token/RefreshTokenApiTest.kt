@@ -3,6 +3,7 @@ package com.example.workflow.e2e.feature.token
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
+import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.annotation.E2ETest
 import org.junit.jupiter.api.Nested
@@ -30,8 +31,10 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
                 path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
-                body = "",
-                cookie = cookie,
+                httpRequestOptions = HttpRequestOptions(
+                    body = "",
+                    cookie = cookie,
+                )
             )
 
             // Assert
@@ -48,8 +51,10 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
                 path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
-                body = "",
-                cookie = cookie,
+                httpRequestOptions = HttpRequestOptions(
+                    body = "",
+                    cookie = cookie,
+                )
             )
 
             // Assert
@@ -70,8 +75,10 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
-                accessToken = authResult.accessToken,
-                cookie = cookie,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                    cookie = cookie,
+                )
             )
 
             // Assert
@@ -89,8 +96,10 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
-                accessToken = "invalid-access-token",
-                cookie = cookie,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                    cookie = cookie,
+                )
             )
 
             // Assert
@@ -110,7 +119,9 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -126,7 +137,9 @@ class RefreshTokenApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert

@@ -4,6 +4,7 @@ import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.util.CookieUtil
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
+import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.annotation.E2ETest
 import com.example.workflow.support.util.TestDataFactory
@@ -43,7 +44,9 @@ class TokenApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
                 path = "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
-                body = json
+                httpRequestOptions = HttpRequestOptions(
+                    body = json
+                )
             )
 
             // Assert
@@ -72,7 +75,9 @@ class TokenApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = TokenResponse::class.java,
                 path = "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
-                body = json
+                httpRequestOptions = HttpRequestOptions(
+                    body = json
+                )
             )
 
             // Assert

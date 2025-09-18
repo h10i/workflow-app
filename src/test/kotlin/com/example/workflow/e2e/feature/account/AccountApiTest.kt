@@ -3,6 +3,7 @@ package com.example.workflow.e2e.feature.account
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
+import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.support.annotation.E2ETest
 import com.example.workflow.support.util.TestDataFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -40,7 +41,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Account.BASE,
-                body = json,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                )
             )
 
             // Assert
@@ -94,7 +97,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.post(
                 responseType = String::class.java,
                 path = ApiPath.Account.BASE,
-                body = json,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                )
             )
 
             // Assert
@@ -137,7 +142,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.get(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                accessToken = authResult.accessToken
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken
+                )
             )
 
             // Assert
@@ -204,8 +211,10 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.patch(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -250,8 +259,10 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.patch(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                body = json,
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -296,7 +307,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.patch(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                body = json,
+                httpRequestOptions = HttpRequestOptions(
+                    body = json,
+                )
             )
 
             // Assert
@@ -316,7 +329,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                accessToken = authResult.accessToken,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
             )
 
             // Assert
@@ -332,7 +347,9 @@ class AccountApiTest : AbstractE2ETest() {
             val response = restTemplate.delete(
                 responseType = String::class.java,
                 path = "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
-                accessToken = "invalid-access-token",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
             )
 
             // Assert
