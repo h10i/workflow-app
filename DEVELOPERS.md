@@ -69,33 +69,33 @@ curl -v -X DELETE -H "Authorization: Bearer $JWT" http://localhost:8080/v1/revok
 
 ```mermaid
     gitGraph:
-        commit tag:"v1.0.0"
-        branch develop
-        branch hotfix/A
-        branch feature/B
-        branch feature/C
-        checkout feature/B
-        commit
-        checkout hotfix/A
-        commit
-        checkout feature/B
-        commit
-        checkout feature/C
-        commit
-        checkout main
-        merge hotfix/A tag:"v1.0.1"
-        checkout develop
-        merge hotfix/A
-        checkout develop
-        merge feature/B
-        branch release/v1.1.0
-        commit
-        checkout main
-        merge release/v1.1.0 tag:"v1.1.0"
-        checkout develop
-        merge release/v1.1.0
-        checkout feature/C
-        commit
+    commit tag: "v1.0.0"
+    branch develop
+    branch hotfix/A
+    branch feature/B
+    branch feature/C
+    checkout feature/B
+    commit
+    checkout hotfix/A
+    commit
+    checkout feature/B
+    commit
+    checkout feature/C
+    commit
+    checkout main
+    merge hotfix/A tag: "v1.0.1"
+    checkout develop
+    merge hotfix/A
+    checkout develop
+    merge feature/B
+    branch release/v1.1.0
+    commit
+    checkout main
+    merge release/v1.1.0 tag: "v1.1.0"
+    checkout develop
+    merge release/v1.1.0
+    checkout feature/C
+    commit
 ```
 
 ### Commit Message
@@ -149,4 +149,28 @@ This commit corrects the query and resolves the issue.
 Affected components:
 - User authentication module
 - Database connection
+```
+
+### Git pre-commit
+
+You should run detekt using a Git pre-commit hook.
+
+`workflow-app/.git/hooks/pre-commit`
+
+```bash
+#!/usr/bin/env bash
+echo "Running detekt check..."
+OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew detekt > $OUTPUT
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cat $OUTPUT
+  rm $OUTPUT
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+rm $OUTPUT
 ```
