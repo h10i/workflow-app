@@ -31,5 +31,6 @@ import org.springframework.boot.runApplication
 class WorkflowApplication
 
 fun main(args: Array<String>) {
+    @Suppress("SpreadOperator")
     runApplication<WorkflowApplication>(*args)
 }
