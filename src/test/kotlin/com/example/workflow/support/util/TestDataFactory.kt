@@ -13,11 +13,12 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Instant
 import java.util.*
+import kotlin.random.Random
 
 object TestDataFactory {
     fun createUniqueEmailAddress() = "user-${UUID.randomUUID()}@example.com"
 
-    fun getValidTestPassword() = "P4sSw0rd!"
+    fun createValidTestPassword() = "P4sSw0rd!${Random.nextInt(100).toString().padStart(3, '0')}"
 
     fun createRole(
         id: UUID = UUID.randomUUID(),

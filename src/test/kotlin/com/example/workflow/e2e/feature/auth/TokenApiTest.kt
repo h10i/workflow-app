@@ -27,7 +27,7 @@ class TokenApiTest : AbstractE2ETest() {
         fun `should return 200 OK when valid request`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -59,7 +59,7 @@ class TokenApiTest : AbstractE2ETest() {
         fun `should return 401 Unauthorize when invalid request`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,

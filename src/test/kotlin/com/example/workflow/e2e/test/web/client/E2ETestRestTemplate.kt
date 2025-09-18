@@ -96,7 +96,7 @@ class E2ETestRestTemplate(
 
     fun registerAccount(
         emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
-        password: String = TestDataFactory.getValidTestPassword(),
+        password: String = TestDataFactory.createValidTestPassword(),
     ): AccountViewResponse {
         val json = """
             {
@@ -151,7 +151,7 @@ class E2ETestRestTemplate(
 
     fun registerAccountAndAuthenticate(
         emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
-        password: String = TestDataFactory.getValidTestPassword(),
+        password: String = TestDataFactory.createValidTestPassword(),
     ): AuthResult {
         registerAccount(emailAddress = emailAddress, password = password)
         return authenticate(emailAddress = emailAddress, password = password)

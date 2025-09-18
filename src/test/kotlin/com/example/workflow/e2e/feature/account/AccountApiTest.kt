@@ -80,7 +80,7 @@ class AccountApiTest : AbstractE2ETest() {
             // invalid request: email address is already registered
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -128,7 +128,7 @@ class AccountApiTest : AbstractE2ETest() {
         fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             val registeredAccount = restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -187,7 +187,7 @@ class AccountApiTest : AbstractE2ETest() {
         fun `should return 200 OK when valid request with valid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             val accountViewResponse = restTemplate.registerAccount(
                 emailAddress = emailAddress,
                 password = password,
@@ -241,7 +241,7 @@ class AccountApiTest : AbstractE2ETest() {
             // invalid request: email address is already registered
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             val authResult: E2ETestRestTemplate.AuthResult = restTemplate.registerAccountAndAuthenticate(
                 emailAddress = emailAddress,
                 password = password,
@@ -288,7 +288,7 @@ class AccountApiTest : AbstractE2ETest() {
         fun `should return 401 Unauthorize when valid request with invalid credentials`() {
             // Arrange
             val emailAddress = TestDataFactory.createUniqueEmailAddress()
-            val password = TestDataFactory.getValidTestPassword()
+            val password = TestDataFactory.createValidTestPassword()
             restTemplate.registerAccountAndAuthenticate(
                 emailAddress = emailAddress,
                 password = password,
