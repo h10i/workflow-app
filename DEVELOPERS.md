@@ -151,26 +151,10 @@ Affected components:
 - Database connection
 ```
 
-### Git pre-commit
+### Git hooks
 
 You should run detekt using a Git pre-commit hook.
 
-`workflow-app/.git/hooks/pre-commit`
-
 ```bash
-#!/usr/bin/env bash
-echo "Running detekt check..."
-OUTPUT="/tmp/detekt-$(date +%s)"
-./gradlew detekt > $OUTPUT
-EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ]; then
-  cat $OUTPUT
-  rm $OUTPUT
-  echo "***********************************************"
-  echo "                 detekt failed                 "
-  echo " Please fix the above issues before committing "
-  echo "***********************************************"
-  exit $EXIT_CODE
-fi
-rm $OUTPUT
+git config core.hooksPath .githooks
 ```
