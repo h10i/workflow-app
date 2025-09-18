@@ -1,0 +1,44 @@
+package com.example.workflow.unit.feature.auth.factory
+
+import com.example.workflow.feature.auth.factory.RefreshTokenCookieFactory
+import com.example.workflow.support.annotation.UnitTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import java.time.Duration
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.days
+
+@UnitTest
+class RefreshTokenCookieFactoryTest {
+    private lateinit var refreshTokenCookieFactory: RefreshTokenCookieFactory
+
+    @BeforeEach
+    fun setUp() {
+        refreshTokenCookieFactory = RefreshTokenCookieFactory()
+    }
+
+    @Nested
+    inner class CreateFun {
+        @Test
+        fun `should generate a ResponseCookie with correct properties for the given value`() {
+            // Arrange
+            val refreshTokenValue = "test-refresh-token-value"
+            val expectedMaxAge = Duration.ofSeconds(90.days.inWholeSeconds)
+
+            // Act
+            val actual = refreshTokenCookieFactory.create(refreshTokenValue)
+
+            // Assert
+            assertEquals("refreshToken", actual.name)
+            assertEquals(refreshTokenValue, actual.value)
+            assertTrue(actual.isHttpOnly)
+            assertTrue(actual.isSecure)
+            assertEquals("/v1/auth/refresh-token", actual.path)
+            assertEquals("localhost", actual.domain)
+            assertEquals(expectedMaxAge, actual.maxAge)
+            assertEquals("None", actual.sameSite)
+        }
+    }
+}

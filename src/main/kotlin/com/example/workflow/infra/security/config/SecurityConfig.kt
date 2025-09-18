@@ -23,8 +23,7 @@ class SecurityConfig {
                 configureSpringDocAuthorizations()
                 configureAccountAuthorizations()
                 configureRoleAuthorizations()
-                configureTokenAuthorizations()
-                configureRefreshTokenAuthorizations()
+                configureAuthAuthorizations()
                 authorize(anyRequest, denyAll)
             }
             oauth2ResourceServer {
@@ -82,28 +81,25 @@ class SecurityConfig {
         )
     }
 
-    private fun AuthorizeHttpRequestsDsl.configureTokenAuthorizations() {
+    private fun AuthorizeHttpRequestsDsl.configureAuthAuthorizations() {
         authorize(
             HttpMethod.POST,
-            "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}",
             permitAll,
         )
-    }
-
-    private fun AuthorizeHttpRequestsDsl.configureRefreshTokenAuthorizations() {
         authorize(
             HttpMethod.POST,
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}",
             permitAll,
         )
         authorize(
             HttpMethod.DELETE,
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE}",
             authenticated,
         )
         authorize(
             HttpMethod.DELETE,
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}",
             authenticated,
         )
     }

@@ -2,8 +2,8 @@ package com.example.workflow.support.util
 
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.core.role.Role
-import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.infra.security.model.RsaKeyProperties
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication

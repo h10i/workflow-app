@@ -2,9 +2,9 @@ package com.example.workflow.integration.core.role
 
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.core.role.Role
 import com.example.workflow.core.role.RoleRepository
-import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.util.TestDataFactory
 import org.junit.jupiter.api.Assertions.assertNotNull

@@ -3,7 +3,7 @@ package com.example.workflow.integration.core.account
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.AccountRole
-import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.config.AssertJComparisonConfig
 import com.example.workflow.support.util.TestDataFactory

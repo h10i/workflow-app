@@ -1,6 +1,6 @@
 package com.example.workflow.core.account
 
-import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.feature.account.model.AccountViewDto
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column

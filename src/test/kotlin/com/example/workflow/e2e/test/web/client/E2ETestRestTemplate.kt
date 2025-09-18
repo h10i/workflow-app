@@ -4,8 +4,8 @@ import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.util.CookieUtil
 import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.account.model.AccountViewResponse
+import com.example.workflow.feature.auth.model.TokenResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
-import com.example.workflow.feature.token.model.TokenResponse
 import com.example.workflow.support.util.TestDataFactory
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity

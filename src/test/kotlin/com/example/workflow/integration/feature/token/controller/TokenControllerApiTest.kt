@@ -1,11 +1,11 @@
 package com.example.workflow.integration.feature.token.controller
 
 import com.example.workflow.common.path.ApiPath
-import com.example.workflow.feature.token.controller.TokenController
-import com.example.workflow.feature.token.model.TokenRequest
-import com.example.workflow.feature.token.model.TokenResponse
-import com.example.workflow.feature.token.presenter.TokenPresenter
-import com.example.workflow.feature.token.usecase.IssueTokenUseCase
+import com.example.workflow.feature.auth.controller.TokenController
+import com.example.workflow.feature.auth.model.TokenRequest
+import com.example.workflow.feature.auth.model.TokenResponse
+import com.example.workflow.feature.auth.presenter.TokenPresenter
+import com.example.workflow.feature.auth.usecase.IssueTokenUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
 import io.mockk.clearAllMocks
@@ -81,7 +81,7 @@ class TokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}")
+                .uri("${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
