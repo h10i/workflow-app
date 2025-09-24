@@ -160,13 +160,20 @@ class RoleControllerApiTest {
                 .bodyJson()
                 .isLenientlyEqualTo(
                     """
+                    {
+                      "type": "about:blank",
+                      "title": "Bad Request",
+                      "status": 400,
+                      "instance": "/v1/roles",
+                      "errors": [
                         {
-                            "errors": {
-                                "name": [
-                                    "Name must not be blank"
-                                ]
-                            }
+                          "field": "name",
+                          "rejectedValue": "",
+                          "code": "NotBlank",
+                          "message": "Name must not be blank"
                         }
+                      ]
+                    }
                     """.trimIndent()
                 )
         }

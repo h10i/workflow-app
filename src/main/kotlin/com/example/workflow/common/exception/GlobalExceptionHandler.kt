@@ -1,7 +1,9 @@
 package com.example.workflow.common.exception
 
 import com.example.workflow.common.model.UnifiedErrorResponse
+import com.example.workflow.common.model.ValidationErrorDetail
 import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -12,12 +14,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationErrors(ex: MethodArgumentNotValidException): ResponseEntity<UnifiedErrorResponse> {
-        val errors = ex.bindingResult.fieldErrors
-            .groupBy({ it.field }, { it.defaultMessage ?: "Validation error" })
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(UnifiedErrorResponse(errors))
+    fun handleValidationErrors(ex: MethodArgumentNotValidException): ProblemDetail {
+        val errors = ex.bindingResult.fieldErrors.map {
+            ValidationErrorDetail(
+                field = it.field,
+                rejectedValue = it.rejectedValue,
+                code = it.code,
+                message = it.defaultMessage,
+            )
+        }
+        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST).apply { setProperty("errors", errors) }
     }
 
     @ExceptionHandler(UnauthorizedException::class)
