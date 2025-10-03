@@ -27,8 +27,8 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException::class)
-    fun handleUnauthorizedErrors(ex: UnauthorizedException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    fun handleUnauthorizedErrors(ex: UnauthorizedException): ProblemDetail {
+        return ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED)
     }
 
     @ExceptionHandler(ResourceNotFoundException::class)

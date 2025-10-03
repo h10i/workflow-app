@@ -6,6 +6,7 @@ import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.auth.model.TokenResponse
 import com.example.workflow.support.annotation.E2ETest
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,7 +50,7 @@ class RefreshTokenApiTest : AbstractE2ETest() {
 
             // Act
             val response = restTemplate.post(
-                responseType = TokenResponse::class.java,
+                responseType = String::class.java,
                 path = "${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}",
                 httpRequestOptions = HttpRequestOptions(
                     body = "",
@@ -59,7 +60,19 @@ class RefreshTokenApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                      "type": "about:blank",
+                      "title": "Unauthorized",
+                      "status": 401,
+                      "instance": "/v1/auth/refresh-token"
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
     }
 
