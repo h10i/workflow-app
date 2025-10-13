@@ -18,7 +18,6 @@ object ProblemDetailWriter {
             this.instance = URI.create(request.requestURI)
         }
 
-        response.resetBuffer()
         response.status = status.value()
         response.contentType = MediaType.APPLICATION_PROBLEM_JSON_VALUE
         mapper.writeValue(response.outputStream, problem)
