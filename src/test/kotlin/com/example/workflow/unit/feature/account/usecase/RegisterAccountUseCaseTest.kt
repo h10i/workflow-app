@@ -89,7 +89,7 @@ class RegisterAccountUseCaseTest {
 
             every {
                 accountServiceMock.verifyEmailAddressAvailability(request.emailAddress)
-            } throws EmailAddressAlreadyRegisteredException()
+            } throws EmailAddressAlreadyRegisteredException(request.emailAddress)
 
             // Act
             // Assert

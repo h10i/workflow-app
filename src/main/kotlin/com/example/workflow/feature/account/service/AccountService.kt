@@ -41,7 +41,7 @@ class AccountService(
     @Transactional
     fun verifyEmailAddressAvailability(emailAddress: String) {
         if (accountRepository.findByEmailAddress(emailAddress) != null) {
-            throw EmailAddressAlreadyRegisteredException()
+            throw EmailAddressAlreadyRegisteredException(emailAddress)
         }
     }
 }

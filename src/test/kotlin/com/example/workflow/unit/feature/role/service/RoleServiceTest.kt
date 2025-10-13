@@ -162,7 +162,7 @@ class RoleServiceTest {
             val actualException = assertThrows<RoleNameAlreadyCreatedException> {
                 roleService.verifyRoleNameAvailability(roleName)
             }
-            assertEquals(Role::name.name, actualException.field)
+            assertEquals(Role::name.name, actualException.errors[0].field)
             assertEquals("This role name is already created.", actualException.message)
         }
 

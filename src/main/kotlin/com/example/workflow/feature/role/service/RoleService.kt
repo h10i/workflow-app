@@ -42,7 +42,7 @@ class RoleService(
     @Transactional
     fun verifyRoleNameAvailability(name: String) {
         if (roleRepository.findByName(name) != null) {
-            throw RoleNameAlreadyCreatedException()
+            throw RoleNameAlreadyCreatedException(name)
         }
     }
 }

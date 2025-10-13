@@ -1,6 +1,7 @@
 package com.example.workflow.e2e.feature.account
 
 import com.example.workflow.common.path.ApiPath
+import com.example.workflow.core.account.Account
 import com.example.workflow.e2e.test.base.AbstractE2ETest
 import com.example.workflow.e2e.test.web.client.E2ETestRestTemplate
 import com.example.workflow.e2e.test.web.model.HttpRequestOptions
@@ -109,11 +110,18 @@ class AccountApiTest : AbstractE2ETest() {
             val expectedBody = mapper.readTree(
                 """
                 {
-                    "errors": {
-                        "emailAddress": [
-                            "This email address is already registered."
-                        ]
-                    }
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "instance": "${ApiPath.Account.BASE}",
+                    "errors": [
+                        {
+                            "field": "${Account::emailAddress.name}",
+                            "rejectedValue": "$emailAddress",
+                            "code": "Duplicate",
+                            "message": "This email address is already registered."
+                        }
+                    ]
                 }
                 """
             )
@@ -272,11 +280,18 @@ class AccountApiTest : AbstractE2ETest() {
             val expectedBody = mapper.readTree(
                 """
                 {
-                    "errors": {
-                        "emailAddress": [
-                            "This email address is already registered."
-                        ]
-                    }
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "instance": "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+                    "errors": [
+                        {
+                            "field": "${Account::emailAddress.name}",
+                            "rejectedValue": "$emailAddress",
+                            "code": "Duplicate",
+                            "message": "This email address is already registered."
+                        }
+                    ]
                 }
                 """
             )

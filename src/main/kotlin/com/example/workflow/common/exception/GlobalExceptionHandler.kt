@@ -1,10 +1,8 @@
 package com.example.workflow.common.exception
 
-import com.example.workflow.common.model.UnifiedErrorResponse
 import com.example.workflow.common.model.ValidationErrorDetail
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -42,11 +40,9 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException::class)
-    fun handleBusinessErrors(ex: BusinessException): ResponseEntity<UnifiedErrorResponse> {
-        val errorKey = ex.field ?: "general"
-        val errorsMap = mapOf(errorKey to ex.messages)
-        return ResponseEntity
-            .status(ex.httpStatus)
-            .body(UnifiedErrorResponse(errorsMap))
+    fun handleBusinessErrors(ex: BusinessException): ProblemDetail {
+        return ProblemDetail.forStatus(ex.httpStatus).apply {
+            setProperty("errors", ex.errors)
+        }
     }
 }
