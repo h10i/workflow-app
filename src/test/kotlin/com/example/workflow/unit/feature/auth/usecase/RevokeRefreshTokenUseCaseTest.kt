@@ -1,0 +1,49 @@
+package com.example.workflow.unit.feature.auth.usecase
+
+import com.example.workflow.feature.account.service.AccountService
+import com.example.workflow.feature.auth.service.RefreshTokenService
+import com.example.workflow.feature.auth.usecase.RevokeRefreshTokenUseCase
+import com.example.workflow.support.annotation.UnitTest
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import java.util.*
+
+@UnitTest
+class RevokeRefreshTokenUseCaseTest {
+    private lateinit var accountServiceMock: AccountService
+    private lateinit var refreshTokenServiceMock: RefreshTokenService
+    private lateinit var revokeRefreshTokenUseCase: RevokeRefreshTokenUseCase
+
+    @BeforeEach
+    fun setUp() {
+        accountServiceMock = mockk()
+        refreshTokenServiceMock = mockk()
+        revokeRefreshTokenUseCase = RevokeRefreshTokenUseCase(
+            accountService = accountServiceMock,
+            refreshTokenService = refreshTokenServiceMock
+        )
+    }
+
+    @Nested
+    inner class ExecuteFun {
+        @Test
+        fun `should revoke a refresh token`() {
+            // Arrange
+            val tokenValue = "revoked-token"
+            val accountId = UUID.randomUUID()
+
+            every { accountServiceMock.getCurrentAccountId() } returns accountId
+            every { refreshTokenServiceMock.revokeRefreshToken(accountId, tokenValue) } returns 1
+
+            // Act
+            revokeRefreshTokenUseCase.execute(tokenValue)
+
+            // Assert
+            verify { refreshTokenServiceMock.revokeRefreshToken(accountId, tokenValue) }
+        }
+    }
+}

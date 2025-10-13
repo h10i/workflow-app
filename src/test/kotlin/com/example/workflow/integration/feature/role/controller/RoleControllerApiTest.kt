@@ -3,15 +3,24 @@ package com.example.workflow.integration.feature.role.controller
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.role.controller.RoleController
 import com.example.workflow.feature.role.model.CreateRoleRequest
+import com.example.workflow.feature.role.model.RoleViewListResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
-import com.example.workflow.feature.role.presenter.CreateRolePresenter
+import com.example.workflow.feature.role.presenter.RolePresenter
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
+import com.example.workflow.feature.role.usecase.DeleteRoleUseCase
+import com.example.workflow.feature.role.usecase.GetAllRolesUseCase
+import com.example.workflow.feature.role.usecase.GetRoleUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,27 +38,42 @@ import kotlin.test.assertEquals
 @IntegrationTest
 @WebMvcTest(RoleController::class)
 @Import(RoleControllerApiTest.MockConfig::class, NoSecurityConfig::class)
+@Suppress("unused")
 class RoleControllerApiTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
 
     @Autowired
+    private lateinit var rolePresenter: RolePresenter
+
+    @Autowired
     private lateinit var createRoleUseCase: CreateRoleUseCase
 
     @Autowired
-    private lateinit var createRolePresenter: CreateRolePresenter
+    private lateinit var getRoleUseCase: GetRoleUseCase
+
+    @Autowired
+    private lateinit var getAllRolesUseCase: GetAllRolesUseCase
+
+    @Autowired
+    private lateinit var deleteRoleUseCase: DeleteRoleUseCase
 
     @TestConfiguration
     class MockConfig {
         @Bean
+        fun rolePresenter(): RolePresenter = mockk()
+
+        @Bean
         fun createRoleUseCase(): CreateRoleUseCase = mockk()
 
         @Bean
-        fun createRolePresenter(): CreateRolePresenter = mockk()
-    }
+        fun getRoleUseCase(): GetRoleUseCase = mockk()
 
-    @BeforeEach
-    fun setUp() {
+        @Bean
+        fun getAllRolesUseCase(): GetAllRolesUseCase = mockk()
+
+        @Bean
+        fun deleteRoleUseCase(): DeleteRoleUseCase = mockk()
     }
 
     @AfterEach
@@ -58,9 +82,9 @@ class RoleControllerApiTest {
     }
 
     @Nested
-    inner class CreateRole {
+    inner class CreateRoleApi {
         @Test
-        fun `POST v1_roles should return created role information with valid request`() {
+        fun `should return the role information when valid request`() {
             // Arrange
             val roleName = "EXAMPLE"
 
@@ -71,12 +95,12 @@ class RoleControllerApiTest {
             )
 
             val useCaseResult: CreateRoleUseCase.Result = mockk()
-            val presenterResult: CreateRolePresenter.Result = CreateRolePresenter.Result(
+            val presenterResult = RolePresenter.Result(
                 response = roleViewResponse,
             )
 
             every { createRoleUseCase.execute(any()) } returns useCaseResult
-            every { createRolePresenter.toResponse(useCaseResult) } returns presenterResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -112,7 +136,7 @@ class RoleControllerApiTest {
         }
 
         @Test
-        fun `POST v1_roles should return created role information with invalid request`() {
+        fun `should return the role information when invalid request`() {
             // Arrange
             val roleName = ""
 
@@ -145,6 +169,119 @@ class RoleControllerApiTest {
                         }
                     """.trimIndent()
                 )
+        }
+    }
+
+    @Nested
+    inner class GetRoleApi {
+        @Test
+        fun `should return the role information when valid request`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            val useCaseResult: GetRoleUseCase.Result = mockk()
+            val presenterResult = RolePresenter.Result(
+                response = RoleViewResponse(
+                    id = roleId,
+                    name = "EXAMPLE_ROLE",
+                )
+            )
+
+            every { getRoleUseCase.execute(roleId) } returns useCaseResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDto) } returns presenterResult
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .get()
+                .uri("${ApiPath.Role.BASE}/$roleId")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+
+            // Assert
+            assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                        {
+                            "id": "${presenterResult.response.id}",
+                            "name": "${presenterResult.response.name}"
+                        }
+                    """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class GetAllRolesApi {
+        @Test
+        fun `should return the all roles information when valid request`() {
+            // Arrange
+            val useCaseResult: GetAllRolesUseCase.Result = mockk()
+            val roleViewResponseList: List<RoleViewResponse> = listOf(
+                RoleViewResponse(
+                    id = UUID.randomUUID(),
+                    name = "EXAMPLE_01",
+                ),
+                RoleViewResponse(
+                    id = UUID.randomUUID(),
+                    name = "EXAMPLE_02",
+                ),
+            )
+            val presenterResult = RolePresenter.Result(
+                response = RoleViewListResponse(
+                    roles = roleViewResponseList,
+                )
+            )
+
+            every { getAllRolesUseCase.execute() } returns useCaseResult
+            every { rolePresenter.toResponse(useCaseResult.roleViewDtoList) } returns presenterResult
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .get()
+                .uri(ApiPath.Role.BASE)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+
+            // Assert
+            assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                        {
+                            "roles": [
+                                {
+                                    "id": "${roleViewResponseList[0].id}",
+                                    "name": "${roleViewResponseList[0].name}"
+                                },
+                                {
+                                    "id": "${roleViewResponseList[1].id}",
+                                    "name": "${roleViewResponseList[1].name}"
+                                }
+                            ]
+                        }
+                    """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class DeleteRoleApi {
+        @Test
+        fun `should delete a role and return no content when valid request`() {
+            // Arrange
+            val roleId = UUID.randomUUID()
+            every { deleteRoleUseCase.execute(roleId) } just runs
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .delete()
+                .uri("${ApiPath.Role.BASE}/$roleId")
+                .exchange()
+
+            // Assert
+            assertThat(testResult).hasStatus(HttpStatus.NO_CONTENT)
         }
     }
 }

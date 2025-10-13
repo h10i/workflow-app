@@ -8,8 +8,18 @@ import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
-import org.junit.jupiter.api.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.security.crypto.password.PasswordEncoder
 import kotlin.test.assertEquals
 
@@ -29,12 +39,8 @@ class RegisterAccountUseCaseTest {
         )
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Account::toViewDto)
@@ -46,7 +52,7 @@ class RegisterAccountUseCaseTest {
         }
 
         @Test
-        fun `return account with valid request`() {
+        fun `should return the account when valid request`() {
             // Arrange
             val request = RegisterAccountRequest(
                 emailAddress = "user@example.com",
@@ -74,14 +80,16 @@ class RegisterAccountUseCaseTest {
         }
 
         @Test
-        fun `throw EmailAlreadyRegisteredException with registered email address`() {
+        fun `should throw EmailAlreadyRegisteredException when email address is registered`() {
             // Arrange
             val request = RegisterAccountRequest(
                 emailAddress = "user@example.com",
                 password = "test-password",
             )
 
-            every { accountServiceMock.verifyEmailAddressAvailability(request.emailAddress) } throws EmailAddressAlreadyRegisteredException()
+            every {
+                accountServiceMock.verifyEmailAddressAvailability(request.emailAddress)
+            } throws EmailAddressAlreadyRegisteredException()
 
             // Act
             // Assert

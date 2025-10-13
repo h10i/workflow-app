@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
+@Suppress("unused")
 class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -15,13 +16,21 @@ class GlobalExceptionHandler {
         val errors = ex.bindingResult.fieldErrors
             .groupBy({ it.field }, { it.defaultMessage ?: "Validation error" })
 
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(UnifiedErrorResponse(errors))
     }
 
     @ExceptionHandler(UnauthorizedException::class)
     fun handleUnauthorizedErrors(ex: UnauthorizedException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    }
+
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun handleBusinessErrors(ex: ResourceNotFoundException): ResponseEntity<UnifiedErrorResponse> {
+        val errorsMap = mapOf("general" to listOf(ex.message ?: "Resource not found."))
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(UnifiedErrorResponse(errorsMap))
     }
 
     @ExceptionHandler(BusinessException::class)

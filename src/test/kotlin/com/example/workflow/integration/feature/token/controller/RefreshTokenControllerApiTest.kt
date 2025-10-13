@@ -2,19 +2,24 @@ package com.example.workflow.integration.feature.token.controller
 
 import com.example.workflow.common.exception.UnauthorizedException
 import com.example.workflow.common.path.ApiPath
-import com.example.workflow.feature.token.controller.RefreshTokenController
-import com.example.workflow.feature.token.model.TokenResponse
-import com.example.workflow.feature.token.presenter.RefreshTokenPresenter
-import com.example.workflow.feature.token.usecase.RefreshTokenUseCase
-import com.example.workflow.feature.token.usecase.RevokeAllRefreshTokensUseCase
-import com.example.workflow.feature.token.usecase.RevokeRefreshTokenUseCase
+import com.example.workflow.feature.auth.controller.RefreshTokenController
+import com.example.workflow.feature.auth.model.TokenResponse
+import com.example.workflow.feature.auth.presenter.RefreshTokenPresenter
+import com.example.workflow.feature.auth.usecase.RefreshTokenUseCase
+import com.example.workflow.feature.auth.usecase.RevokeAllRefreshTokensUseCase
+import com.example.workflow.feature.auth.usecase.RevokeRefreshTokenUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import jakarta.servlet.http.Cookie
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,6 +52,7 @@ class RefreshTokenControllerApiTest {
     private lateinit var revokeAllRefreshTokensUseCase: RevokeAllRefreshTokensUseCase
 
     @TestConfiguration
+    @Suppress("unused")
     class MockConfig {
         @Bean
         fun refreshTokenUseCase(): RefreshTokenUseCase = mockk(relaxed = true)
@@ -61,19 +67,15 @@ class RefreshTokenControllerApiTest {
         fun revokeAllRefreshTokensUseCase(): RevokeAllRefreshTokensUseCase = mockk(relaxed = true)
     }
 
-    @BeforeEach
-    fun setUp() {
-    }
-
     @AfterEach
     fun tearDown() {
         clearAllMocks()
     }
 
     @Nested
-    inner class RefreshToken {
+    inner class RefreshTokenApi {
         @Test
-        fun `refreshToken endpoint should return new token on valid refresh token`() {
+        fun `should return a new token when valid refresh token`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
             val useCaseResult: RefreshTokenUseCase.Result = mockk()
@@ -90,7 +92,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}")
+                .uri("${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}")
                 .cookie(Cookie("refreshToken", refreshTokenValue))
                 .exchange()
 
@@ -108,12 +110,12 @@ class RefreshTokenControllerApiTest {
                 {
                     "accessToken": "$accessToken"
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
         @Test
-        fun `refreshToken endpoint should return UNAUTHORIZED when refresh token is invalid`() {
+        fun `should return errors when invalid refresh token`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
 
@@ -122,7 +124,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}")
+                .uri("${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}")
                 .cookie(Cookie("refreshToken", refreshTokenValue))
                 .exchange()
 
@@ -133,9 +135,9 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RevokeRefreshToken() {
+    inner class RevokeRefreshTokenApi {
         @Test
-        fun `revoke endpoint should revoke refresh token and return no content`() {
+        fun `should revoke refresh token and return no content when valid request`() {
             // Arrange
             val refreshTokenValue = "valid-refresh-token"
 
@@ -144,7 +146,7 @@ class RefreshTokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .delete()
-                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}")
+                .uri("${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE}")
                 .cookie(Cookie("refreshToken", refreshTokenValue))
                 .exchange()
 
@@ -160,16 +162,16 @@ class RefreshTokenControllerApiTest {
     }
 
     @Nested
-    inner class RevokeAllRefreshTokens {
+    inner class RevokeAllRefreshTokensApi {
         @Test
-        fun `revokeAll endpoint should revoke all refresh tokens and return no content`() {
+        fun `should revoke the all refresh tokens and return no content when valid request`() {
             // Arrange
             every { revokeAllRefreshTokensUseCase.execute() } just Runs
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .delete()
-                .uri("${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}")
+                .uri("${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}")
                 .exchange()
 
             // Assert
@@ -179,5 +181,4 @@ class RefreshTokenControllerApiTest {
                 .hasStatus(HttpStatus.NO_CONTENT)
         }
     }
-
 }

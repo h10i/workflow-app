@@ -1,8 +1,13 @@
 package com.example.workflow.core.account
 
-import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.feature.account.model.AccountViewDto
-import jakarta.persistence.*
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import java.util.*
 
 @Entity
@@ -38,7 +43,13 @@ data class Account(
     }
 
     override fun toString(): String {
-        return "Account(id=$id, emailAddress='$emailAddress', password='$password', roles=$roles, refreshTokens=$refreshTokens)"
+        return "Account(" +
+            "id=$id, " +
+            "emailAddress='$emailAddress', " +
+            "password='$password', " +
+            "roles=$roles, " +
+            "refreshTokens=$refreshTokens" +
+            ")"
     }
 }
 

@@ -5,9 +5,7 @@ import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.model.UpdateAccountRequest
-import com.example.workflow.feature.account.presenter.GetAccountPresenter
-import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
-import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.presenter.AccountPresenter
 import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
@@ -20,17 +18,21 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(ApiPath.Account.BASE)
 class AccountController(
+    private val accountPresenter: AccountPresenter,
     private val registerAccountUseCase: RegisterAccountUseCase,
-    private val registerAccountPresenter: RegisterAccountPresenter,
     private val getAccountUseCase: GetAccountUseCase,
-    private val getAccountPresenter: GetAccountPresenter,
     private val updateAccountUseCase: UpdateAccountUseCase,
-    private val updateAccountPresenter: UpdateAccountPresenter,
     private val deleteAccountUseCase: DeleteAccountUseCase,
 ) {
     @Operation(
@@ -59,7 +61,8 @@ class AccountController(
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                description = "Invalid request data or a general business validation error occurred." +
+                    " Details are provided in the 'errors' map.",
                 content = [
                     Content(
                         mediaType = "application/json",
@@ -72,13 +75,15 @@ class AccountController(
     @PostMapping
     fun registerAccount(@Valid @RequestBody request: RegisterAccountRequest): ResponseEntity<AccountViewResponse> {
         val useCaseResult: RegisterAccountUseCase.Result = registerAccountUseCase.execute(request)
-        val presenterResult: RegisterAccountPresenter.Result = registerAccountPresenter.toResponse(useCaseResult)
+        val presenterResult: AccountPresenter.Result<AccountViewResponse> =
+            accountPresenter.toResponse(useCaseResult.accountViewDto)
         return ResponseEntity.status(HttpStatus.CREATED).body(presenterResult.response)
     }
 
     @Operation(
         summary = "Get your account information",
-        description = "Retrieves the registered account information for the authenticated user. A valid JWT token is required in the Authorization header.",
+        description = "Retrieves the registered account information for the authenticated user." +
+            " A valid JWT token is required in the Authorization header.",
         security = [SecurityRequirement(name = "bearer-key")],
         responses = [
             ApiResponse(
@@ -104,10 +109,11 @@ class AccountController(
         ],
     )
     @GetMapping(ApiPath.Account.ME)
-    fun get(): ResponseEntity<AccountViewResponse> {
+    fun getAccount(): ResponseEntity<AccountViewResponse> {
         val useCaseResult: GetAccountUseCase.Result = getAccountUseCase.execute()
-        val presenterResult: GetAccountPresenter.Result = getAccountPresenter.toResponse(useCaseResult)
-        return ResponseEntity.ok().body(presenterResult.response)
+        val presenterResult: AccountPresenter.Result<AccountViewResponse> =
+            accountPresenter.toResponse(useCaseResult.accountViewDto)
+        return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 
     @Operation(
@@ -137,7 +143,8 @@ class AccountController(
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "Invalid request data or a general business validation error occurred. Details are provided in the 'errors' map.",
+                description = "Invalid request data or a general business validation error occurred." +
+                    " Details are provided in the 'errors' map.",
                 content = [
                     Content(
                         mediaType = "application/json",
@@ -155,7 +162,8 @@ class AccountController(
     @PatchMapping(ApiPath.Account.ME)
     fun updateAccount(@Valid @RequestBody request: UpdateAccountRequest): ResponseEntity<AccountViewResponse> {
         val useCaseResult: UpdateAccountUseCase.Result = updateAccountUseCase.execute(request)
-        val presenterResult: UpdateAccountPresenter.Result = updateAccountPresenter.toResponse(useCaseResult)
+        val presenterResult: AccountPresenter.Result<AccountViewResponse> =
+            accountPresenter.toResponse(useCaseResult.accountViewDto)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 

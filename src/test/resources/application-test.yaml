@@ -4,11 +4,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
   sql:
     init:
-      mode: always
-      data-locations: classpath:db/test-data.sql
+      mode: never
 rsa:
   private-key: classpath:certs/test-private.pem
   public-key: classpath:certs/test-public.pem

@@ -6,20 +6,23 @@ import com.example.workflow.feature.account.model.AccountViewDto
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
 import com.example.workflow.feature.account.model.UpdateAccountRequest
-import com.example.workflow.feature.account.presenter.GetAccountPresenter
-import com.example.workflow.feature.account.presenter.RegisterAccountPresenter
-import com.example.workflow.feature.account.presenter.UpdateAccountPresenter
+import com.example.workflow.feature.account.presenter.AccountPresenter
 import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.feature.account.usecase.GetAccountUseCase
 import com.example.workflow.feature.account.usecase.RegisterAccountUseCase
 import com.example.workflow.feature.account.usecase.UpdateAccountUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,52 +45,37 @@ class AccountControllerApiTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     @Autowired
-    private lateinit var registerAccountUseCase: RegisterAccountUseCase
+    private lateinit var accountPresenter: AccountPresenter
 
     @Autowired
-    private lateinit var registerAccountPresenter: RegisterAccountPresenter
+    private lateinit var registerAccountUseCase: RegisterAccountUseCase
 
     @Autowired
     private lateinit var getAccountUseCase: GetAccountUseCase
 
     @Autowired
-    private lateinit var getAccountPresenter: GetAccountPresenter
-
-    @Autowired
     private lateinit var updateAccountUseCase: UpdateAccountUseCase
-
-    @Autowired
-    private lateinit var updateAccountPresenter: UpdateAccountPresenter
 
     @Autowired
     private lateinit var deleteAccountUseCase: DeleteAccountUseCase
 
     @TestConfiguration
+    @Suppress("unused")
     class MockConfig {
         @Bean
-        fun registerAccountUseCase(): RegisterAccountUseCase = mockk()
+        fun accountPresenter(): AccountPresenter = mockk()
 
         @Bean
-        fun registerAccountPresenter(): RegisterAccountPresenter = mockk()
+        fun registerAccountUseCase(): RegisterAccountUseCase = mockk()
 
         @Bean
         fun getAccountUseCase(): GetAccountUseCase = mockk()
 
         @Bean
-        fun getAccountPresenter(): GetAccountPresenter = mockk()
-
-        @Bean
         fun updateAccountUseCase(): UpdateAccountUseCase = mockk()
 
         @Bean
-        fun updateAccountPresenter(): UpdateAccountPresenter = mockk()
-
-        @Bean
         fun deleteAccountUseCase(): DeleteAccountUseCase = mockk()
-    }
-
-    @BeforeEach
-    fun setUp() {
     }
 
     @AfterEach
@@ -96,9 +84,9 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class RegisterAccount {
+    inner class RegisterAccountApi {
         @Test
-        fun `POST v1_accounts should return registered account information with valid request`() {
+        fun `should return the account information when valid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "test-password"
@@ -114,12 +102,12 @@ class AccountControllerApiTest {
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
-            val presenterResult = RegisterAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponse
             )
 
             every { registerAccountUseCase.execute(any()) } returns useCaseResult
-            every { registerAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -153,12 +141,12 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
         @Test
-        fun `POST v1_accounts should return errors with invalid request`() {
+        fun `should return errors when invalid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = ""
@@ -197,9 +185,9 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class Get {
+    inner class GetAccountApi {
         @Test
-        fun `GET v1_accounts_me should return account information`() {
+        fun `should return the account information when valid request`() {
             // Arrange
             val accountId = UUID.randomUUID()
             val emailAddress = "user@example.com"
@@ -214,12 +202,12 @@ class AccountControllerApiTest {
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
-            val presenterResult = GetAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponse
             )
 
             every { getAccountUseCase.execute() } returns useCaseResult
-            every { getAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -239,15 +227,15 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
     }
 
     @Nested
-    inner class UpdateAccount {
+    inner class UpdateAccountApi {
         @Test
-        fun `PATCH v1_accounts_me should return updated account information with valid request`() {
+        fun `should return the account information when valid request`() {
             // Arrange
             val emailAddress = "new@example.com"
             val password = "new-test-password"
@@ -263,12 +251,12 @@ class AccountControllerApiTest {
                 emailAddress = emailAddress,
                 roleNames = listOf("USER"),
             )
-            val presenterResult = UpdateAccountPresenter.Result(
+            val presenterResult = AccountPresenter.Result(
                 response = accountViewResponse
             )
 
             every { updateAccountUseCase.execute(any()) } returns useCaseResult
-            every { updateAccountPresenter.toResponse(useCaseResult) } returns presenterResult
+            every { accountPresenter.toResponse(useCaseResult.accountViewDto) } returns presenterResult
 
             // Act
             val testResult: MvcTestResult = mockMvcTester
@@ -302,12 +290,12 @@ class AccountControllerApiTest {
                     "emailAddress": "$emailAddress", 
                     "roleNames": ["USER"]
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
         }
 
         @Test
-        fun `PATCH v1_accounts_me should return errors with invalid request`() {
+        fun `should return errors when invalid request`() {
             // Arrange
             val emailAddress = "user!example.com"
             val password = ""
@@ -346,9 +334,9 @@ class AccountControllerApiTest {
     }
 
     @Nested
-    inner class DeleteAccount {
+    inner class DeleteAccountApi {
         @Test
-        fun `DELETE v1_accounts_me should return no content`() {
+        fun `should delete an account and return no content when valid request`() {
             // Arrange
             every { deleteAccountUseCase.execute() } just runs
 

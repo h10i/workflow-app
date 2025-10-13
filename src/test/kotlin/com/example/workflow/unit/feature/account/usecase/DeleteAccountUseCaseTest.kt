@@ -3,8 +3,11 @@ package com.example.workflow.unit.feature.account.usecase
 import com.example.workflow.feature.account.service.AccountService
 import com.example.workflow.feature.account.usecase.DeleteAccountUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
-import org.junit.jupiter.api.AfterEach
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -24,14 +27,10 @@ class DeleteAccountUseCaseTest {
         )
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @Test
-        fun `should delete account by authenticated id`() {
+        fun `should delete the account by the authenticated id`() {
             // Arrange
             val accountId: UUID = UUID.randomUUID()
             every { accountService.getCurrentAccountId() } returns accountId

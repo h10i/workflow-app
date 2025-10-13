@@ -7,7 +7,10 @@ import com.example.workflow.infra.security.service.CustomUserDetailsService
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import java.util.*
 import kotlin.test.assertEquals
@@ -23,12 +26,8 @@ class CustomUserDetailsServiceTest {
         customUserDetailsService = CustomUserDetailsService(accountRepository)
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
-    inner class LoadUserByUsername {
+    inner class LoadUserByUsernameFun {
         @Test
         fun `returns UserDetails when email address exists`() {
             // Arrange
@@ -67,5 +66,4 @@ class CustomUserDetailsServiceTest {
             assertEquals("Account not found: $emailAddress", exception.message)
         }
     }
-
 }

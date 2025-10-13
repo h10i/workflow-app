@@ -1,17 +1,20 @@
 package com.example.workflow.integration.feature.token.controller
 
 import com.example.workflow.common.path.ApiPath
-import com.example.workflow.feature.token.controller.TokenController
-import com.example.workflow.feature.token.model.TokenRequest
-import com.example.workflow.feature.token.model.TokenResponse
-import com.example.workflow.feature.token.presenter.TokenPresenter
-import com.example.workflow.feature.token.usecase.IssueTokenUseCase
+import com.example.workflow.feature.auth.controller.TokenController
+import com.example.workflow.feature.auth.model.TokenRequest
+import com.example.workflow.feature.auth.model.TokenResponse
+import com.example.workflow.feature.auth.presenter.TokenPresenter
+import com.example.workflow.feature.auth.usecase.IssueTokenUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +31,7 @@ import kotlin.test.assertEquals
 @IntegrationTest
 @WebMvcTest(TokenController::class)
 @Import(TokenControllerApiTest.MockConfig::class, NoSecurityConfig::class)
+@Suppress("unused")
 class TokenControllerApiTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
@@ -47,19 +51,15 @@ class TokenControllerApiTest {
         fun tokenPresenter(): TokenPresenter = mockk(relaxed = true)
     }
 
-    @BeforeEach
-    fun setUp() {
-    }
-
     @AfterEach
     fun tearDown() {
         clearAllMocks()
     }
 
     @Nested
-    inner class TokenMethod {
+    inner class TokenApi {
         @Test
-        fun `GET v1_auth_token should return access token and set cookie to refresh token`() {
+        fun `should return a new access token and set cookie to refresh token when valid request`() {
             // Arrange
             val emailAddress = "user@example.com"
             val password = "P4sSw0rd!"
@@ -81,7 +81,7 @@ class TokenControllerApiTest {
             // Act
             val testResult: MvcTestResult = mockMvcTester
                 .post()
-                .uri("${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}")
+                .uri("${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -108,7 +108,7 @@ class TokenControllerApiTest {
                 {
                     "accessToken": "$accessToken"
                 }
-                """.trimIndent()
+                    """.trimIndent()
                 )
             Assertions.assertThat(testResult).cookies().hasValue("refreshToken", refreshToken)
         }

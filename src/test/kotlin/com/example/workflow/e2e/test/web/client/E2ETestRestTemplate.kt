@@ -2,14 +2,21 @@ package com.example.workflow.e2e.test.web.client
 
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.e2e.test.util.CookieUtil
+import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.account.model.AccountViewResponse
-import com.example.workflow.feature.token.model.TokenResponse
+import com.example.workflow.feature.auth.model.TokenResponse
+import com.example.workflow.feature.role.model.RoleViewResponse
 import com.example.workflow.support.util.TestDataFactory
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.*
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.MediaType
 
 class E2ETestRestTemplate(
-    private val restTemplate: TestRestTemplate
+    internal val restTemplate: TestRestTemplate
 ) {
     data class JsonResponse<T>(
         val body: T?,
@@ -26,25 +33,22 @@ class E2ETestRestTemplate(
         responseType: Class<T>,
         method: HttpMethod,
         path: String,
-        body: Any? = null,
-        accessToken: String? = null,
-        cookie: String? = null,
-        headers: HttpHeaders = HttpHeaders()
+        httpRequestOptions: HttpRequestOptions,
     ): JsonResponse<T> {
-        if (!headers.containsKey(HttpHeaders.ACCEPT)) {
-            headers.accept = listOf(MediaType.APPLICATION_JSON)
+        if (!httpRequestOptions.headers.containsKey(HttpHeaders.ACCEPT)) {
+            httpRequestOptions.headers.accept = listOf(MediaType.APPLICATION_JSON)
         }
-        if (accessToken != null) {
-            headers.setBearerAuth(accessToken)
+        if (httpRequestOptions.accessToken != null) {
+            httpRequestOptions.headers.setBearerAuth(httpRequestOptions.accessToken)
         }
-        if (cookie != null) {
-            headers.add("Cookie", cookie)
+        if (httpRequestOptions.cookie != null) {
+            httpRequestOptions.headers.add("Cookie", httpRequestOptions.cookie)
         }
-        if (body != null && !headers.containsKey(HttpHeaders.CONTENT_TYPE)) {
-            headers.contentType = MediaType.APPLICATION_JSON
+        if (httpRequestOptions.body != null && !httpRequestOptions.headers.containsKey(HttpHeaders.CONTENT_TYPE)) {
+            httpRequestOptions.headers.contentType = MediaType.APPLICATION_JSON
         }
 
-        val request = HttpEntity(body, headers)
+        val request = HttpEntity(httpRequestOptions.body, httpRequestOptions.headers)
 
         val response = restTemplate.exchange(
             path,
@@ -63,64 +67,53 @@ class E2ETestRestTemplate(
     fun <T> get(
         responseType: Class<T>,
         path: String,
-        accessToken: String? = null,
-        cookie: String? = null,
-        headers: HttpHeaders = HttpHeaders()
-    ): JsonResponse<T> = exchange(responseType, HttpMethod.GET, path, null, accessToken, cookie, headers)
+        httpRequestOptions: HttpRequestOptions = HttpRequestOptions()
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.GET, path, httpRequestOptions)
 
     fun <T> post(
         responseType: Class<T>,
         path: String,
-        body: Any,
-        accessToken: String? = null,
-        cookie: String? = null,
-        headers: HttpHeaders = HttpHeaders()
-    ): JsonResponse<T> = exchange(responseType, HttpMethod.POST, path, body, accessToken, cookie, headers)
+        httpRequestOptions: HttpRequestOptions
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.POST, path, httpRequestOptions)
 
     fun <T> put(
         responseType: Class<T>,
         path: String,
-        body: Any,
-        accessToken: String? = null,
-        cookie: String? = null,
-        headers: HttpHeaders = HttpHeaders()
-    ): JsonResponse<T> = exchange(responseType, HttpMethod.PUT, path, body, accessToken, cookie, headers)
+        httpRequestOptions: HttpRequestOptions
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.PUT, path, httpRequestOptions)
 
     fun <T> patch(
         responseType: Class<T>,
         path: String,
-        body: Any,
-        accessToken: String? = null,
-        cookie: String? = null,
-        headers: HttpHeaders = HttpHeaders()
-    ): JsonResponse<T> = exchange(responseType, HttpMethod.PATCH, path, body, accessToken, cookie, headers)
+        httpRequestOptions: HttpRequestOptions
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.PATCH, path, httpRequestOptions)
 
     fun <T> delete(
         responseType: Class<T>,
         path: String,
-        accessToken: String? = null,
-        cookie: String? = null,
-        headers: HttpHeaders = HttpHeaders()
-    ): JsonResponse<T> = exchange(responseType, HttpMethod.DELETE, path, null, accessToken, cookie, headers)
+        httpRequestOptions: HttpRequestOptions
+    ): JsonResponse<T> = exchange(responseType, HttpMethod.DELETE, path, httpRequestOptions)
 
     fun registerAccount(
         emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
-        password: String = TestDataFactory.getValidTestPassword(),
+        password: String = TestDataFactory.createValidTestPassword(),
     ): AccountViewResponse {
         val json = """
             {
               "emailAddress": "$emailAddress",
               "password": "$password"
             }
-            """.trimIndent()
+        """.trimIndent()
 
         val response = post(
             responseType = AccountViewResponse::class.java,
             path = ApiPath.Account.BASE,
-            body = json,
+            httpRequestOptions = HttpRequestOptions(
+                body = json,
+            )
         )
-        if (response.statusCode != HttpStatus.CREATED || response.body == null) {
-            throw IllegalStateException("Failed to register user for test: ${response.statusCode} - ${response.body}")
+        check(response.statusCode == HttpStatus.CREATED && response.body != null) {
+            "Failed to register user for test: ${response.statusCode} - ${response.body}"
         }
         return response.body
     }
@@ -139,13 +132,15 @@ class E2ETestRestTemplate(
         val response = post(
             responseType = TokenResponse::class.java,
             path = "/v1/auth/token",
-            body = json
+            httpRequestOptions = HttpRequestOptions(
+                body = json
+            )
         )
 
         val accessToken = response.body?.accessToken
-            ?: throw IllegalStateException("access token not found")
+            ?: error("access token not found")
         val refreshToken = CookieUtil.extractCookie(response.headers, "refreshToken")
-            ?: throw IllegalArgumentException("refresh token cookie not found")
+            ?: error("refresh token cookie not found")
         return AuthResult(
             accessToken,
             refreshToken,
@@ -156,9 +151,31 @@ class E2ETestRestTemplate(
 
     fun registerAccountAndAuthenticate(
         emailAddress: String = TestDataFactory.createUniqueEmailAddress(),
-        password: String = TestDataFactory.getValidTestPassword(),
+        password: String = TestDataFactory.createValidTestPassword(),
     ): AuthResult {
         registerAccount(emailAddress = emailAddress, password = password)
         return authenticate(emailAddress = emailAddress, password = password)
+    }
+
+    fun createRole(
+        name: String,
+        accessToken: String,
+    ): RoleViewResponse {
+        val json = """
+                {
+                    "name": "$name"
+                }
+        """.trimIndent()
+
+        val response = post(
+            responseType = RoleViewResponse::class.java,
+            path = ApiPath.Role.BASE,
+            httpRequestOptions = HttpRequestOptions(
+                body = json,
+                accessToken = accessToken,
+            )
+        )
+
+        return response.body ?: error("role not found")
     }
 }

@@ -3,12 +3,11 @@ package com.example.workflow.integration.core.account
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRepository
 import com.example.workflow.core.account.AccountRole
-import com.example.workflow.core.token.RefreshToken
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.config.AssertJComparisonConfig
 import com.example.workflow.support.util.TestDataFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,18 +27,10 @@ class AccountRepositoryTest {
     @Autowired
     private lateinit var accountRepository: AccountRepository
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
-    inner class Save {
+    inner class SaveFun {
         @Test
-        fun `returns account when saving new account`() {
+        fun `should return the saved account when saving a new account`() {
             // Arrange
             val account = TestDataFactory.createAccount()
 
@@ -52,7 +43,7 @@ class AccountRepositoryTest {
     }
 
     @Nested
-    inner class FindByEmailAddress {
+    inner class FindByEmailAddressFunc {
         private lateinit var account: Account
 
         @BeforeEach
@@ -74,12 +65,8 @@ class AccountRepositoryTest {
             entityManager.clear()
         }
 
-        @AfterEach
-        fun tearDown() {
-        }
-
         @Test
-        fun `return Account when email address exists`() {
+        fun `should return the account when a email address exists`() {
             // Arrange
             val emailAddress = account.emailAddress
 
@@ -94,7 +81,7 @@ class AccountRepositoryTest {
         }
 
         @Test
-        fun `return null when email address doesn't exists`() {
+        fun `should return null when a email address does not exist`() {
             // Arrange
             val emailAddress = "not.found.${account.emailAddress}"
 
@@ -106,9 +93,8 @@ class AccountRepositoryTest {
         }
     }
 
-
     @Nested
-    inner class DeleteById {
+    inner class DeleteByIdFun {
         private lateinit var account: Account
         private lateinit var accountRole: AccountRole
         private lateinit var refreshToken: RefreshToken
@@ -132,12 +118,8 @@ class AccountRepositoryTest {
             entityManager.clear()
         }
 
-        @AfterEach
-        fun tearDown() {
-        }
-
         @Test
-        fun `should delete data associated with account when account is deleted`() {
+        fun `should delete account-related data when an account is deleted`() {
             // Arrange
 
             // Act

@@ -2,8 +2,13 @@ package com.example.workflow.integration.test.controller
 
 import com.example.workflow.common.path.ApiPath
 import org.springframework.context.annotation.Profile
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RestController
 
 @Profile("security-test-controller")
 @RestController
@@ -16,9 +21,12 @@ class SecurityConfigTestController {
             ApiPath.SpringDoc.SWAGGER_UI_ALL,
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            // Role
+            "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
+            ApiPath.Role.BASE,
         ]
     )
-    fun get() = ResponseEntity.ok("get")
+    fun get() = ResponseEntity.status(HttpStatus.OK).body("get")
 
     @PostMapping(
         path = [
@@ -27,11 +35,11 @@ class SecurityConfigTestController {
             // Role
             ApiPath.Role.BASE,
             // Auth
-            "${ApiPath.Token.BASE}${ApiPath.Token.TOKEN}",
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REFRESH_TOKEN}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}",
         ]
     )
-    fun post() = ResponseEntity.ok("post")
+    fun post() = ResponseEntity.status(HttpStatus.OK).body("post")
 
     @PatchMapping(
         path = [
@@ -39,16 +47,18 @@ class SecurityConfigTestController {
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
         ]
     )
-    fun patch() = ResponseEntity.ok("patch")
+    fun patch() = ResponseEntity.status(HttpStatus.OK).body("patch")
 
     @DeleteMapping(
         path = [
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            // Role
+            "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
             // Auth
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE}",
-            "${ApiPath.RefreshToken.BASE}${ApiPath.RefreshToken.REVOKE_ALL}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE}",
+            "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}",
         ]
     )
-    fun delete() = ResponseEntity.ok("delete")
+    fun delete() = ResponseEntity.status(HttpStatus.OK).body("delete")
 }

@@ -1,5 +1,6 @@
 package com.example.workflow.integration.infra.security.config
 
+import com.example.workflow.infra.security.config.SecurityComponentsConfig
 import com.example.workflow.infra.security.config.SecurityConfig
 import com.example.workflow.integration.test.controller.SecurityConfigTestController
 import com.example.workflow.integration.test.path.AuthenticatedPathsProvider
@@ -28,19 +29,17 @@ import org.springframework.test.web.servlet.assertj.MvcTestResult
 
 @IntegrationTest
 @WebMvcTest(SecurityConfigTestController::class)
-@Import(SecurityConfig::class, SecurityConfigIntegrationTest.MockConfig::class)
+@Import(SecurityConfig::class, SecurityComponentsConfig::class, SecurityConfigIntegrationTest.MockConfig::class)
 @ActiveProfiles("test", "security-test-controller")
 class SecurityConfigIntegrationTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
 
     @TestConfiguration
+    @Suppress("unused")
     class MockConfig {
         @Bean
         fun userDetailsService(): UserDetailsService = mockk(relaxed = true)
-    }
-
-    fun setUp() {
     }
 
     @AfterEach
@@ -52,7 +51,7 @@ class SecurityConfigIntegrationTest {
     inner class PermitAllPaths {
         @ParameterizedTest
         @ArgumentsSource(PermitAllPathsProvider::class)
-        fun `permit all paths returns 200 OK without Authentication`(method: HttpMethod, path: String) {
+        fun `should return 200 OK without credentials`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
@@ -69,7 +68,7 @@ class SecurityConfigIntegrationTest {
         @ParameterizedTest
         @ArgumentsSource(PermitAllPathsProvider::class)
         @WithMockUser
-        fun `permit all paths returns 200 OK with Authentication`(method: HttpMethod, path: String) {
+        fun `should return 200 OK with credentials`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
@@ -88,7 +87,7 @@ class SecurityConfigIntegrationTest {
     inner class AuthenticatedPaths {
         @ParameterizedTest
         @ArgumentsSource(AuthenticatedPathsProvider::class)
-        fun `authenticated paths returns 401 UNAUTHORIZED without Authentication`(method: HttpMethod, path: String) {
+        fun `should return 401 Unauthorized without credentials`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
@@ -105,7 +104,7 @@ class SecurityConfigIntegrationTest {
         @ParameterizedTest
         @ArgumentsSource(AuthenticatedPathsProvider::class)
         @WithMockUser
-        fun `authenticated paths returns 200 OK with Authentication`(method: HttpMethod, path: String) {
+        fun `should return 200 OK with credentials`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
@@ -125,7 +124,7 @@ class SecurityConfigIntegrationTest {
         @ParameterizedTest
         @ArgumentsSource(HasAdminPathsProvider::class)
         @WithMockUser(roles = ["USER"])
-        fun `has admin paths returns 403 Forbidden without ADMIN`(method: HttpMethod, path: String) {
+        fun `should return 403 Forbidden with non-ADMIN credentials`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act
@@ -142,7 +141,7 @@ class SecurityConfigIntegrationTest {
         @ParameterizedTest
         @ArgumentsSource(HasAdminPathsProvider::class)
         @WithMockUser(roles = ["ADMIN"])
-        fun `authenticated paths returns 200 OK with ADMIN`(method: HttpMethod, path: String) {
+        fun `should return 200 OK with ADMIN credentials`(method: HttpMethod, path: String) {
             // Arrange
 
             // Act

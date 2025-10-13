@@ -5,6 +5,7 @@ import com.example.workflow.e2e.test.config.TestcontainersConfiguration
 import org.springframework.boot.fromApplication
 import org.springframework.boot.with
 
+@Suppress("unused")
 class TestWorkflowApplication
 
 fun main(args: Array<String>) {

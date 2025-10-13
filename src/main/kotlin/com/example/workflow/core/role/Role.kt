@@ -2,7 +2,12 @@ package com.example.workflow.core.role
 
 import com.example.workflow.core.account.AccountRole
 import com.example.workflow.feature.role.model.RoleViewDto
-import jakarta.persistence.*
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import java.util.*
 
 @Entity

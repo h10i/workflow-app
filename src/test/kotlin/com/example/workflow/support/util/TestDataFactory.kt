@@ -2,8 +2,8 @@ package com.example.workflow.support.util
 
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
+import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.core.role.Role
-import com.example.workflow.core.token.RefreshToken
 import com.example.workflow.infra.security.model.RsaKeyProperties
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -13,11 +13,12 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Instant
 import java.util.*
+import kotlin.random.Random
 
 object TestDataFactory {
     fun createUniqueEmailAddress() = "user-${UUID.randomUUID()}@example.com"
 
-    fun getValidTestPassword() = "P4sSw0rd!"
+    fun createValidTestPassword() = "P4sSw0rd!${Random.nextInt(100).toString().padStart(3, '0')}"
 
     fun createRole(
         id: UUID = UUID.randomUUID(),

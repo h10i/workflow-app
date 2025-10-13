@@ -12,19 +12,17 @@ object ApiPath {
         const val ME = "/me"
     }
 
-    object RefreshToken {
-        const val BASE = "${ApiVersion.V1}/auth"
-        const val REFRESH_TOKEN = "/refresh-token"
-        const val REVOKE = "/revoke"
-        const val REVOKE_ALL = "${REVOKE}/all"
-    }
-
-    object Token {
+    object Auth {
         const val BASE = "${ApiVersion.V1}/auth"
         const val TOKEN = "/token"
+        const val REFRESH_TOKEN = "/refresh-token"
+        const val REVOKE = "/revoke"
+        const val REVOKE_ALL = "$REVOKE/all"
     }
 
     object Role {
         const val BASE = "${ApiVersion.V1}/roles"
+        const val ID = "/{id}"
+        const val PATH_PATTERN_WITH_ID = "/*"
     }
 }

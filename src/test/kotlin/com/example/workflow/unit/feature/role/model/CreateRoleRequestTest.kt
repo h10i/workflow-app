@@ -4,7 +4,6 @@ import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.support.annotation.UnitTest
 import jakarta.validation.Validation
 import jakarta.validation.Validator
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -21,14 +20,10 @@ class CreateRoleRequestTest {
         validator = validatorFactory.validator
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
-    inner class Name {
+    inner class NameValidation {
         @Test
-        fun `success when name are valid`() {
+        fun `should succeed when name are valid`() {
             // Arrange
             val request = CreateRoleRequest(name = "EXAMPLE")
 
@@ -42,7 +37,7 @@ class CreateRoleRequestTest {
         }
 
         @Test
-        fun `failure when name is blank`() {
+        fun `should fail when name is blank`() {
             // Arrange
             val request = CreateRoleRequest(name = "")
 

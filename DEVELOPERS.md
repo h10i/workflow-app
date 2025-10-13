@@ -52,49 +52,50 @@ curl -v -X DELETE -H "Authorization: Bearer $JWT" http://localhost:8080/v1/revok
 #### Main Branches
 
 | branch    | description                                                                                                                                                                                                                                |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `main`    | The production-ready branch that always reflects the latest released version. Only stable and tested code is merged into `main`, typically from `release` or `hotfix` branches. Tags for production releases are created from this branch. |
 | `develop` | The integration branch for ongoing development. All feature branches are created from and merged back into `develop`. It reflects the latest completed development work that is ready for staging or further testing.                      |
 
 #### Supporting Branches
 
-| branch    | description                                                                                                                                                                                                                                                                                          | example                  |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `feature` | Used for developing new features or enhancements that are planned for a future release. A `feature` branch is created from the `develop` branch.                                                                                                                                                     | `feature/registration`   |
-| `hotfix`  | Used for immediate patches to the production (`main`) branch to fix critical bugs. A `hotfix` branch is created from the `main` branch. After applying the fix, the branch should be merged into both `main` and `develop`.                                                                          | `hotfix/fix-login-crash` |
-| `release` | Used to prepare for a production release by finalizing versioning, testing, and minor bug fixes. A `release` branch is created from `develop` when the development for a new version is feature-complete. It serves as a staging branch. The branch should be merged into both `main` and `develop`. | `release/v1.0.0`         |
+| branch     | description                                                                                                                                                                                                                                                                                          | example                  |
+|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
+| `feature`  | Used for developing new features or enhancements that are planned for a future release. A `feature` branch is created from the `develop` branch.                                                                                                                                                     | `feature/registration`   |
+| `hotfix`   | Used for immediate patches to the production (`main`) branch to fix critical bugs. A `hotfix` branch is created from the `main` branch. After applying the fix, the branch should be merged into both `main` and `develop`.                                                                          | `hotfix/fix-login-crash` |
+| `refactor` | Used for improving the internal structure of the code without changing its external behavior. This includes addressing code smells, improving readability, optimizing performance, and resolving warnings. A `refactor` branch is typically created from the `develop` branch.                       | `refactor/code-cleanup`  |
+| `release`  | Used to prepare for a production release by finalizing versioning, testing, and minor bug fixes. A `release` branch is created from `develop` when the development for a new version is feature-complete. It serves as a staging branch. The branch should be merged into both `main` and `develop`. | `release/v1.0.0`         |
 
 #### Git Graph
 
 ```mermaid
     gitGraph:
-        commit tag:"v1.0.0"
-        branch develop
-        branch hotfix/A
-        branch feature/B
-        branch feature/C
-        checkout feature/B
-        commit
-        checkout hotfix/A
-        commit
-        checkout feature/B
-        commit
-        checkout feature/C
-        commit
-        checkout main
-        merge hotfix/A tag:"v1.0.1"
-        checkout develop
-        merge hotfix/A
-        checkout develop
-        merge feature/B
-        branch release/v1.1.0
-        commit
-        checkout main
-        merge release/v1.1.0 tag:"v1.1.0"
-        checkout develop
-        merge release/v1.1.0
-        checkout feature/C
-        commit
+    commit tag: "v1.0.0"
+    branch develop
+    branch hotfix/A
+    branch feature/B
+    branch feature/C
+    checkout feature/B
+    commit
+    checkout hotfix/A
+    commit
+    checkout feature/B
+    commit
+    checkout feature/C
+    commit
+    checkout main
+    merge hotfix/A tag: "v1.0.1"
+    checkout develop
+    merge hotfix/A
+    checkout develop
+    merge feature/B
+    branch release/v1.1.0
+    commit
+    checkout main
+    merge release/v1.1.0 tag: "v1.1.0"
+    checkout develop
+    merge release/v1.1.0
+    checkout feature/C
+    commit
 ```
 
 ### Commit Message
@@ -112,7 +113,7 @@ Write commit messages in English.
 #### Type
 
 | type     | description                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------------ |
+|----------|--------------------------------------------------------------------------------------------------------|
 | build    | Changes that affect the build system or external dependencies                                          |
 | feat     | A new feature                                                                                          |
 | fix      | A bug fix                                                                                              |
@@ -148,4 +149,12 @@ This commit corrects the query and resolves the issue.
 Affected components:
 - User authentication module
 - Database connection
+```
+
+### Git hooks
+
+You should run detekt using a Git pre-commit hook.
+
+```bash
+git config core.hooksPath .githooks
 ```

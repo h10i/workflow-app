@@ -8,8 +8,18 @@ import com.example.workflow.feature.role.model.RoleViewDto
 import com.example.workflow.feature.role.service.RoleService
 import com.example.workflow.feature.role.usecase.CreateRoleUseCase
 import com.example.workflow.support.annotation.UnitTest
-import io.mockk.*
-import org.junit.jupiter.api.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
 @UnitTest
@@ -25,12 +35,8 @@ class CreateRoleUseCaseTest {
         )
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Nested
-    inner class ExecuteMethod {
+    inner class ExecuteFun {
         @BeforeEach
         fun setUp() {
             mockkStatic(Role::toViewDto)
@@ -42,7 +48,7 @@ class CreateRoleUseCaseTest {
         }
 
         @Test
-        fun `return role with valid request`() {
+        fun `should return the role when valid request`() {
             // Arrange
             val roleName = "EXAMPLE"
             val request = CreateRoleRequest(
@@ -50,7 +56,7 @@ class CreateRoleUseCaseTest {
             )
             val savedRole: Role = mockk()
             val claimsSet = slot<Role>()
-            every { roleService.verifyRoleAvailability(roleName) } just runs
+            every { roleService.verifyRoleNameAvailability(roleName) } just runs
             every { roleService.saveRole(capture(claimsSet)) } returns savedRole
 
             val roleViewDto: RoleViewDto = mockk()
@@ -67,14 +73,14 @@ class CreateRoleUseCaseTest {
         }
 
         @Test
-        fun `return role with invalid request`() {
+        fun `should return the role when invalid request`() {
             // Arrange
             val roleName = "EXAMPLE"
             val request = CreateRoleRequest(
                 name = roleName,
             )
 
-            every { roleService.verifyRoleAvailability(roleName) } throws RoleNameAlreadyCreatedException()
+            every { roleService.verifyRoleNameAvailability(roleName) } throws RoleNameAlreadyCreatedException()
 
             // Act
             // Assert
