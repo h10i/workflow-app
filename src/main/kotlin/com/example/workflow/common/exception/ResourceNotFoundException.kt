@@ -9,7 +9,7 @@ open class ResourceNotFoundException(
             val baseMessage = "$resourceName not found"
             return if (searchCriteria.isNotEmpty()) {
                 val criteriaString = searchCriteria.entries.joinToString(", ") { "${it.key}: ${it.value}" }
-                "$baseMessage with criteria: $criteriaString"
+                "$baseMessage ($criteriaString)"
             } else {
                 "$baseMessage."
             }

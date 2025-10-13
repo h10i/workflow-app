@@ -272,11 +272,11 @@ class RoleApiTest : AbstractE2ETest() {
             val expectedBody = mapper.readTree(
                 """
                     {
-                        "errors":{
-                            "general": [
-                                "Role not found with criteria: id: $roleId"
-                            ]
-                        }
+                      "type": "about:blank",
+                      "title": "Not Found",
+                      "status": 404,
+                      "detail": "Role not found (id: $roleId)",
+                      "instance": "${ApiPath.Role.BASE}/$roleId"
                     }
                 """.trimIndent()
             )
@@ -451,11 +451,11 @@ class RoleApiTest : AbstractE2ETest() {
             val expectedBody = mapper.readTree(
                 """
                     {
-                        "errors":{
-                            "general": [
-                                "Role not found with criteria: id: $roleId"
-                            ]
-                        }
+                      "type": "about:blank",
+                      "title": "Not Found",
+                      "status": 404,
+                      "detail": "Role not found (id: $roleId)",
+                      "instance": "${ApiPath.Role.BASE}/$roleId"
                     }
                 """.trimIndent()
             )

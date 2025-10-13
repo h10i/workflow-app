@@ -129,7 +129,7 @@ class RoleServiceTest {
             val actual = assertThrows<RoleNotFoundException> {
                 roleService.verifyRoleIdAvailability(roleId)
             }
-            assertEquals("Role not found with criteria: id: $roleId", actual.message)
+            assertEquals("Role not found (id: $roleId)", actual.message)
         }
 
         @Test

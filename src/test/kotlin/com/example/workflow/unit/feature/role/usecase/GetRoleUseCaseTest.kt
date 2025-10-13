@@ -72,7 +72,7 @@ class GetRoleUseCaseTest {
             }
 
             // Assert
-            assertEquals("Role not found with criteria: id: $roleId", actual.message)
+            assertEquals("Role not found (id: $roleId)", actual.message)
         }
     }
 }

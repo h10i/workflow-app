@@ -32,11 +32,10 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException::class)
-    fun handleBusinessErrors(ex: ResourceNotFoundException): ResponseEntity<UnifiedErrorResponse> {
-        val errorsMap = mapOf("general" to listOf(ex.message ?: "Resource not found."))
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(UnifiedErrorResponse(errorsMap))
+    fun handleBusinessErrors(ex: ResourceNotFoundException): ProblemDetail {
+        return ProblemDetail.forStatus(HttpStatus.NOT_FOUND).apply {
+            detail = ex.message ?: "Resource not found."
+        }
     }
 
     @ExceptionHandler(BusinessException::class)
