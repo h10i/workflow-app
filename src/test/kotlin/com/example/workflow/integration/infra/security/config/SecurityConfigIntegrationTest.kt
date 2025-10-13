@@ -1,9 +1,9 @@
 package com.example.workflow.integration.infra.security.config
 
-import com.example.workflow.common.exception.ProblemDetailAuthenticationEntryPoint
-import com.example.workflow.common.util.ProblemDetailAccessDeniedHandler
 import com.example.workflow.infra.security.config.SecurityComponentsConfig
 import com.example.workflow.infra.security.config.SecurityConfig
+import com.example.workflow.infra.security.web.ProblemDetailAccessDeniedHandler
+import com.example.workflow.infra.security.web.ProblemDetailAuthenticationEntryPoint
 import com.example.workflow.integration.test.controller.SecurityConfigTestController
 import com.example.workflow.integration.test.path.AuthenticatedPathsProvider
 import com.example.workflow.integration.test.path.HasAdminPathsProvider

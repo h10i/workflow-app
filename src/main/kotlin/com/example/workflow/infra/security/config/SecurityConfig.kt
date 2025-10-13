@@ -1,9 +1,9 @@
 package com.example.workflow.infra.security.config
 
 import com.example.workflow.common.constants.Role
-import com.example.workflow.common.exception.ProblemDetailAuthenticationEntryPoint
 import com.example.workflow.common.path.ApiPath
-import com.example.workflow.common.util.ProblemDetailAccessDeniedHandler
+import com.example.workflow.infra.security.web.ProblemDetailAccessDeniedHandler
+import com.example.workflow.infra.security.web.ProblemDetailAuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
