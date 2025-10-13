@@ -92,7 +92,7 @@ class TokenApiTest : AbstractE2ETest() {
                     "type": "about:blank",
                     "title": "Unauthorized",
                     "status": 401,
-                    "detail": "ユーザ名かパスワードが正しくありません",
+                    "detail": "Bad credentials",
                     "instance": "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}"
                 }
                 """
