@@ -99,12 +99,22 @@ class AccountController(
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid.",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Account not found.",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             )
         ],
     )
@@ -182,7 +192,12 @@ class AccountController(
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid.",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             ),
         ],
     )
