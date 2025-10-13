@@ -149,7 +149,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                    "instance": "${ApiPath.Role.BASE}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
 
         @Test
@@ -176,7 +190,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Forbidden",
+                    "status": 403,
+                    "detail": "Access Denied",
+                    "instance": "${ApiPath.Role.BASE}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
     }
 
@@ -233,7 +261,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                    "instance": "${ApiPath.Role.BASE}/${roleViewResponse.id}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
 
         @Test
@@ -255,7 +297,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Forbidden",
+                    "status": 403,
+                    "detail": "Access Denied",
+                    "instance": "${ApiPath.Role.BASE}/${roleViewResponse.id}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
 
         @Test
@@ -349,7 +405,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                    "instance": "${ApiPath.Role.BASE}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
 
         @Test
@@ -368,7 +438,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Forbidden",
+                    "status": 403,
+                    "detail": "Access Denied",
+                    "instance": "${ApiPath.Role.BASE}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
     }
 
@@ -413,7 +497,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                    "instance": "${ApiPath.Role.BASE}/${roleViewResponse.id}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
 
         @Test
@@ -435,7 +533,21 @@ class RoleApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Forbidden",
+                    "status": 403,
+                    "detail": "Access Denied",
+                    "instance": "${ApiPath.Role.BASE}/${roleViewResponse.id}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
 
         @Test

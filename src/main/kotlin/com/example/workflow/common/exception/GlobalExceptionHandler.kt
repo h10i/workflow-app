@@ -3,6 +3,7 @@ package com.example.workflow.common.exception
 import com.example.workflow.common.model.ValidationErrorDetail
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
+import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -32,6 +33,13 @@ class GlobalExceptionHandler {
         return ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED)
     }
 
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthenticationException(ex: AuthenticationException): ProblemDetail {
+        return ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED).apply {
+            detail = ex.message ?: "Authentication error occurred."
+        }
+    }
+
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleBusinessErrors(ex: ResourceNotFoundException): ProblemDetail {
         return ProblemDetail.forStatus(HttpStatus.NOT_FOUND).apply {
@@ -44,5 +52,12 @@ class GlobalExceptionHandler {
         return ProblemDetail.forStatus(ex.httpStatus).apply {
             setProperty("errors", ex.errors)
         }
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun handleUnexpectedErrors(ex: Exception): ProblemDetail {
+        val problem = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+        problem.detail = ex.message ?: "Unexpected error occurred."
+        return problem
     }
 }

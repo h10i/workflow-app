@@ -184,7 +184,21 @@ class AccountApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "Full authentication is required to access this resource",
+                    "instance": "${ApiPath.Account.BASE}${ApiPath.Account.ME}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
     }
 
@@ -329,7 +343,21 @@ class AccountApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "Full authentication is required to access this resource",
+                    "instance": "${ApiPath.Account.BASE}${ApiPath.Account.ME}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
     }
 
@@ -369,7 +397,21 @@ class AccountApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                    "instance": "${ApiPath.Account.BASE}${ApiPath.Account.ME}"
+                }
+                """
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
         }
     }
 }
