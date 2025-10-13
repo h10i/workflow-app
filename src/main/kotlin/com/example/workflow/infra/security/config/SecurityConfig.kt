@@ -2,6 +2,8 @@ package com.example.workflow.infra.security.config
 
 import com.example.workflow.common.constants.Role
 import com.example.workflow.common.path.ApiPath
+import com.example.workflow.infra.security.web.ProblemDetailAccessDeniedHandler
+import com.example.workflow.infra.security.web.ProblemDetailAuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -14,7 +16,10 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val problemDetailAuthenticationEntryPoint: ProblemDetailAuthenticationEntryPoint,
+    private val problemDetailAccessDeniedHandler: ProblemDetailAccessDeniedHandler,
+) {
     @Bean
     @Suppress("unused")
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -27,7 +32,10 @@ class SecurityConfig {
                 authorize(anyRequest, denyAll)
             }
             oauth2ResourceServer {
-                jwt {}
+                jwt {
+                    authenticationEntryPoint = problemDetailAuthenticationEntryPoint
+                    accessDeniedHandler = problemDetailAccessDeniedHandler
+                }
             }
             csrf { disable() }
             sessionManagement {

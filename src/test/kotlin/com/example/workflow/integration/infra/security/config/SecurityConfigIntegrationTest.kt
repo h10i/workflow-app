@@ -2,6 +2,8 @@ package com.example.workflow.integration.infra.security.config
 
 import com.example.workflow.infra.security.config.SecurityComponentsConfig
 import com.example.workflow.infra.security.config.SecurityConfig
+import com.example.workflow.infra.security.web.ProblemDetailAccessDeniedHandler
+import com.example.workflow.infra.security.web.ProblemDetailAuthenticationEntryPoint
 import com.example.workflow.integration.test.controller.SecurityConfigTestController
 import com.example.workflow.integration.test.path.AuthenticatedPathsProvider
 import com.example.workflow.integration.test.path.HasAdminPathsProvider
@@ -40,6 +42,12 @@ class SecurityConfigIntegrationTest {
     class MockConfig {
         @Bean
         fun userDetailsService(): UserDetailsService = mockk(relaxed = true)
+
+        @Bean
+        fun problemDetailAuthenticationEntryPoint() = ProblemDetailAuthenticationEntryPoint()
+
+        @Bean
+        fun problemDetailAccessDeniedHandler() = ProblemDetailAccessDeniedHandler()
     }
 
     @AfterEach

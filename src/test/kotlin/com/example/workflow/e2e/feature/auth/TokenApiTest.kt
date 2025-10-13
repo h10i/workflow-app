@@ -8,6 +8,7 @@ import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.auth.model.TokenResponse
 import com.example.workflow.support.annotation.E2ETest
 import com.example.workflow.support.util.TestDataFactory
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -73,7 +74,7 @@ class TokenApiTest : AbstractE2ETest() {
 
             // Act
             val response = restTemplate.post(
-                responseType = TokenResponse::class.java,
+                responseType = String::class.java,
                 path = "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}",
                 httpRequestOptions = HttpRequestOptions(
                     body = json
@@ -82,7 +83,21 @@ class TokenApiTest : AbstractE2ETest() {
 
             // Assert
             assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
-            assertNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val actualBody = mapper.readTree(response.body)
+
+            val expectedBody = mapper.readTree(
+                """
+                {
+                    "type": "about:blank",
+                    "title": "Unauthorized",
+                    "status": 401,
+                    "detail": "Bad credentials",
+                    "instance": "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}"
+                }
+                """
+            )
+            assertEquals(expectedBody, actualBody)
             assertNull(CookieUtil.extractCookie(response.headers, "refreshToken"))
         }
     }

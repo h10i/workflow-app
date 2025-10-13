@@ -80,7 +80,7 @@ class CreateRoleUseCaseTest {
                 name = roleName,
             )
 
-            every { roleService.verifyRoleNameAvailability(roleName) } throws RoleNameAlreadyCreatedException()
+            every { roleService.verifyRoleNameAvailability(roleName) } throws RoleNameAlreadyCreatedException(roleName)
 
             // Act
             // Assert

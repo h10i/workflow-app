@@ -8,6 +8,8 @@ spring:
   sql:
     init:
       mode: never
+  web:
+    locale: en_US
 rsa:
   private-key: classpath:certs/test-private.pem
   public-key: classpath:certs/test-public.pem
