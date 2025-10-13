@@ -23,7 +23,10 @@ class GlobalExceptionHandler {
                 message = it.defaultMessage,
             )
         }
-        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST).apply { setProperty("errors", errors) }
+        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST).apply {
+            detail = "Your request is not valid."
+            setProperty("errors", errors)
+        }
     }
 
     @ExceptionHandler(UnauthorizedException::class)

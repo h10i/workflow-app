@@ -176,6 +176,7 @@ class AccountControllerApiTest {
                       "type": "about:blank",
                       "title": "Bad Request",
                       "status": 400,
+                      "detail": "Your request is not valid.",
                       "instance": "/v1/accounts",
                       "errors": [
                         {
@@ -332,6 +333,7 @@ class AccountControllerApiTest {
                       "type": "about:blank",
                       "title": "Bad Request",
                       "status": 400,
+                      "detail": "Your request is not valid.",
                       "instance": "/v1/accounts/me",
                       "errors": [
                         {
