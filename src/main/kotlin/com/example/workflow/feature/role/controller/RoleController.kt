@@ -1,6 +1,5 @@
 package com.example.workflow.feature.role.controller
 
-import com.example.workflow.common.model.UnifiedErrorResponse
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.role.model.CreateRoleRequest
 import com.example.workflow.feature.role.model.RoleViewListResponse
@@ -17,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -66,8 +66,8 @@ class RoleController(
                     " Details are provided in the 'errors' map.",
                 content = [
                     Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = UnifiedErrorResponse::class)
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
             ),
