@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -45,7 +46,12 @@ class RefreshTokenController(
             ApiResponse(
                 responseCode = "401",
                 description = "Refresh token is invalid or expired",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             )
         ],
     )
@@ -70,7 +76,12 @@ class RefreshTokenController(
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             ),
         ],
     )
@@ -94,7 +105,12 @@ class RefreshTokenController(
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             ),
         ],
     )

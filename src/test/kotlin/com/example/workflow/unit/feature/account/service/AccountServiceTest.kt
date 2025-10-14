@@ -183,7 +183,7 @@ class AccountServiceTest {
             val actualException = assertThrows<EmailAddressAlreadyRegisteredException> {
                 accountService.verifyEmailAddressAvailability(emailAddress)
             }
-            assertEquals(Account::emailAddress.name, actualException.field)
+            assertEquals(Account::emailAddress.name, actualException.errors[0].field)
             assertEquals("This email address is already registered.", actualException.message)
         }
 

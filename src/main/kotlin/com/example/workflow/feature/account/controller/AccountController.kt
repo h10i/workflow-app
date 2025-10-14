@@ -1,6 +1,5 @@
 package com.example.workflow.feature.account.controller
 
-import com.example.workflow.common.model.UnifiedErrorResponse
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.account.model.RegisterAccountRequest
@@ -17,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -65,8 +65,8 @@ class AccountController(
                     " Details are provided in the 'errors' map.",
                 content = [
                     Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = UnifiedErrorResponse::class)
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
             )
@@ -99,12 +99,22 @@ class AccountController(
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid.",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Account not found.",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             )
         ],
     )
@@ -147,8 +157,8 @@ class AccountController(
                     " Details are provided in the 'errors' map.",
                 content = [
                     Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = UnifiedErrorResponse::class)
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
             ),
@@ -182,7 +192,12 @@ class AccountController(
             ApiResponse(
                 responseCode = "401",
                 description = "Authentication credentials are missing or invalid.",
-                content = [Content()]
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
             ),
         ],
     )

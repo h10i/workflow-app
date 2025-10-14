@@ -173,11 +173,19 @@ class AccountControllerApiTest {
                 .isLenientlyEqualTo(
                     """
                     {
-                        "errors": {
-                            "password": [
-                                "password must not be blank"
-                            ]
+                      "type": "about:blank",
+                      "title": "Bad Request",
+                      "status": 400,
+                      "detail": "Your request is not valid.",
+                      "instance": "/v1/accounts",
+                      "errors": [
+                        {
+                          "field": "password",
+                          "rejectedValue": "",
+                          "code": "NotBlank",
+                          "message": "password must not be blank"
                         }
+                      ]
                     }
                     """.trimIndent()
                 )
@@ -322,13 +330,21 @@ class AccountControllerApiTest {
                 .isLenientlyEqualTo(
                     """
                     {
-                        "errors": {
-                            "emailAddress": [
-                                "Invalid email address format"
-                            ]
+                      "type": "about:blank",
+                      "title": "Bad Request",
+                      "status": 400,
+                      "detail": "Your request is not valid.",
+                      "instance": "/v1/accounts/me",
+                      "errors": [
+                        {
+                          "field": "emailAddress",
+                          "rejectedValue": "$emailAddress",
+                          "code": "Email",
+                          "message": "Invalid email address format"
                         }
+                      ]
                     }
-                    """.trimIndent()
+                    """
                 )
         }
     }
