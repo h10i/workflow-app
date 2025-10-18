@@ -30,7 +30,7 @@ class JsonNodeConverterTest {
     }
 
     @Nested
-    inner class ConvertToDatabaseColumn {
+    inner class ConvertToDatabaseColumnFun {
         @Test
         fun `should return JSON string when valid JsonNode`() {
             // Arrange
@@ -76,7 +76,7 @@ class JsonNodeConverterTest {
     }
 
     @Nested
-    inner class ConvertToEntityAttribute {
+    inner class ConvertToEntityAttributeFun {
         @Test
         fun `should return JsonNode when valid JSON string`() {
             // Arrange
