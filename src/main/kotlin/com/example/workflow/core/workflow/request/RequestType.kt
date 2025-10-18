@@ -1,0 +1,45 @@
+package com.example.workflow.core.workflow.request
+
+import com.example.workflow.common.persistence.JsonNodeConverter
+import com.fasterxml.jackson.databind.JsonNode
+import jakarta.persistence.Column
+import jakarta.persistence.Convert
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import java.util.*
+
+@Entity
+@Table(name = "request_type")
+data class RequestType(
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    val id: UUID = UUID.randomUUID(),
+
+    @Column(name = "name", nullable = false)
+    var name: String,
+
+    @Column(name = "description", nullable = true)
+    var description: String?,
+
+    @Convert(converter = JsonNodeConverter::class)
+    @Column(name = "schema_definition", columnDefinition = "jsonb", nullable = false)
+    val schemaDefinition: JsonNode,
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RequestType
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return "RequestType(id=$id, name='$name', description=$description, schemaDefinition=$schemaDefinition)"
+    }
+}
