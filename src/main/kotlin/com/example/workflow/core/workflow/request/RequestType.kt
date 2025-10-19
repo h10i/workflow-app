@@ -1,6 +1,7 @@
 package com.example.workflow.core.workflow.request
 
 import com.example.workflow.common.persistence.JsonNodeConverter
+import com.example.workflow.feature.workflow.model.request.RequestTypeViewDto
 import com.fasterxml.jackson.databind.JsonNode
 import jakarta.persistence.Column
 import jakarta.persistence.Convert
@@ -43,3 +44,10 @@ data class RequestType(
         return "RequestType(id=$id, name='$name', description=$description, schemaDefinition=$schemaDefinition)"
     }
 }
+
+fun RequestType.toViewDto() = RequestTypeViewDto(
+    id = id,
+    name = name,
+    description = description,
+    schemaDefinition = schemaDefinition,
+)
