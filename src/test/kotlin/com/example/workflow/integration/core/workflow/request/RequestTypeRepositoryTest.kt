@@ -24,6 +24,21 @@ class RequestTypeRepositoryTest {
     private lateinit var requestTypeRepository: RequestTypeRepository
 
     @Nested
+    inner class SaveFun {
+        @Test
+        fun `should return the saved request type when saving a new request type`() {
+            // Arrange
+            val requestType = TestDataFactory.createRequestType()
+
+            // Act
+            val actual: RequestType = requestTypeRepository.save(requestType)
+
+            // Assert
+            assertEquals(requestType, actual)
+        }
+    }
+
+    @Nested
     inner class FindByIdFun {
         private lateinit var requestType: RequestType
 
