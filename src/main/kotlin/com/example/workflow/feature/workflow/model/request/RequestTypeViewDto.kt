@@ -9,3 +9,10 @@ data class RequestTypeViewDto(
     val description: String?,
     val schemaDefinition: JsonNode,
 )
+
+fun RequestTypeViewDto.toViewResponse() = RequestTypeViewResponse(
+    id = id,
+    name = name,
+    description = description,
+    schemaDefinition = schemaDefinition,
+)
