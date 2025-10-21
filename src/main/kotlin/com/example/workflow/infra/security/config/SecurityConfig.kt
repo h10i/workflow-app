@@ -29,6 +29,7 @@ class SecurityConfig(
                 configureAccountAuthorizations()
                 configureRoleAuthorizations()
                 configureAuthAuthorizations()
+                configureRequestTypeAuthorizations()
                 authorize(anyRequest, denyAll)
             }
             oauth2ResourceServer {
@@ -108,6 +109,14 @@ class SecurityConfig(
         authorize(
             HttpMethod.DELETE,
             "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}",
+            authenticated,
+        )
+    }
+
+    private fun AuthorizeHttpRequestsDsl.configureRequestTypeAuthorizations() {
+        authorize(
+            HttpMethod.POST,
+            ApiPath.RequestType.BASE,
             authenticated,
         )
     }
