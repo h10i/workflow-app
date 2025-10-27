@@ -15,5 +15,7 @@ class AuthenticatedPathsProvider : ArgumentsProvider {
         Arguments.of(HttpMethod.GET, "/v1/accounts/me"),
         Arguments.of(HttpMethod.PATCH, "/v1/accounts/me"),
         Arguments.of(HttpMethod.DELETE, "/v1/accounts/me"),
+        // RequestType
+        Arguments.of(HttpMethod.POST, "/v1/request-types"),
     )
 }

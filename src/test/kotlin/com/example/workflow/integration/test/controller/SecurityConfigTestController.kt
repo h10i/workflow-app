@@ -37,6 +37,8 @@ class SecurityConfigTestController {
             // Auth
             "${ApiPath.Auth.BASE}${ApiPath.Auth.TOKEN}",
             "${ApiPath.Auth.BASE}${ApiPath.Auth.REFRESH_TOKEN}",
+            // RequestType
+            ApiPath.RequestType.BASE
         ]
     )
     fun post() = ResponseEntity.status(HttpStatus.OK).body("post")

@@ -4,7 +4,10 @@ import com.example.workflow.core.account.Account
 import com.example.workflow.core.account.AccountRole
 import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.core.role.Role
+import com.example.workflow.core.workflow.request.RequestType
 import com.example.workflow.infra.security.model.RsaKeyProperties
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -105,4 +108,16 @@ object TestDataFactory {
             privateKey = keyPair.private as RSAPrivateKey
         )
     }
+
+    fun createRequestType(
+        id: UUID = UUID.randomUUID(),
+        name: String = UUID.randomUUID().toString(),
+        description: String? = null,
+        schemaDefinition: JsonNode = jacksonObjectMapper().readTree("""{"foo":"bar"}"""),
+    ): RequestType = RequestType(
+        id = id,
+        name = name,
+        description = description,
+        schemaDefinition = schemaDefinition,
+    )
 }

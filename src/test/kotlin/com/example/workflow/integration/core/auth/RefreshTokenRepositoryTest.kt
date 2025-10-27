@@ -3,6 +3,7 @@ package com.example.workflow.integration.core.auth
 import com.example.workflow.core.account.Account
 import com.example.workflow.core.auth.RefreshToken
 import com.example.workflow.core.auth.RefreshTokenRepository
+import com.example.workflow.support.annotation.CustomDataJpaTest
 import com.example.workflow.support.annotation.IntegrationTest
 import com.example.workflow.support.config.AssertJComparisonConfig
 import com.example.workflow.support.util.TestDataFactory
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.util.*
 import kotlin.test.assertEquals
@@ -19,7 +19,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @IntegrationTest
-@DataJpaTest
+@CustomDataJpaTest
 class RefreshTokenRepositoryTest {
     @Autowired
     private lateinit var entityManager: TestEntityManager
