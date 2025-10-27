@@ -1,13 +1,13 @@
 package com.example.workflow.core.workflow.request
 
-import com.example.workflow.common.persistence.JsonNodeConverter
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewDto
 import com.fasterxml.jackson.databind.JsonNode
 import jakarta.persistence.Column
-import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.util.*
 
 @Entity
@@ -23,7 +23,7 @@ data class RequestType(
     @Column(name = "description", nullable = true)
     var description: String?,
 
-    @Convert(converter = JsonNodeConverter::class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "schema_definition", columnDefinition = "jsonb", nullable = false)
     val schemaDefinition: JsonNode,
 ) {
