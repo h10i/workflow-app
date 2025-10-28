@@ -4,6 +4,7 @@ import com.example.workflow.core.workflow.request.RequestType
 import com.example.workflow.core.workflow.request.RequestTypeRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class RequestTypeService(
@@ -12,5 +13,10 @@ class RequestTypeService(
     @Transactional
     fun saveRequestType(requestType: RequestType): RequestType {
         return requestTypeRepository.save(requestType)
+    }
+
+    @Transactional
+    fun getRequestTypeById(id: UUID): RequestType? {
+        return requestTypeRepository.findById(id).orElse(null)
     }
 }
