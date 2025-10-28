@@ -51,4 +51,36 @@ class RequestTypePresenterTest {
             assertEquals(requestTypeViewResponse, actual.response)
         }
     }
+
+    @Nested
+    inner class ToResponseFunWithList {
+        @BeforeEach
+        fun setUp() {
+            mockkStatic(RequestTypeViewDto::toViewResponse)
+        }
+
+        @AfterEach
+        fun tearDown() {
+            unmockkStatic(RequestTypeViewDto::toViewResponse)
+        }
+
+        @Test
+        fun `should return a presenter result`() {
+            // Arrange
+            val requestTypeViewDtoList: List<RequestTypeViewDto> = listOf(mockk(), mockk())
+            val requestTypeViewResponseList: List<RequestTypeViewResponse> = listOf(mockk(), mockk())
+
+            for (i in 0 until 2) {
+                every { requestTypeViewDtoList[i].toViewResponse() } returns requestTypeViewResponseList[i]
+            }
+
+            // Act
+            val actual = requestTypePresenter.toResponse(requestTypeViewDtoList)
+
+            // Assert
+            for (i in 0 until 2) {
+                assertEquals(requestTypeViewResponseList[i], actual.response.requestTypes[i])
+            }
+        }
+    }
 }
