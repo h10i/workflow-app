@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.util.*
+import kotlin.test.assertTrue
 
 @IntegrationTest
 @CustomDataJpaTest
@@ -74,6 +75,38 @@ class RequestTypeRepositoryTest {
 
             // Assert
             assertNull(actual)
+        }
+    }
+
+    @Nested
+    inner class FindAllFun {
+        @Test
+        fun `should return empty list when a request type does not exist`() {
+            // Arrange
+
+            // Act
+            val actual: List<RequestType> = requestTypeRepository.findAll()
+
+            // Assert
+            assertTrue(actual.isEmpty())
+        }
+
+        @Test
+        fun `should return the request types when two request types exists`() {
+            // Arrange
+            val requestTypes: List<RequestType> = listOf(
+                TestDataFactory.createRequestType(name = "request type name 1"),
+                TestDataFactory.createRequestType(name = "request type name 2"),
+            )
+            requestTypes.forEach { entityManager.persist(it) }
+            entityManager.flush()
+            entityManager.clear()
+
+            // Act
+            val actual: List<RequestType> = requestTypeRepository.findAll()
+
+            // Assert
+            assertEquals(requestTypes.sortedBy { it.id }, actual.sortedBy { it.id })
         }
     }
 }
