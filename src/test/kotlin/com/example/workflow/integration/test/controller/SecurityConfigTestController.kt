@@ -24,6 +24,9 @@ class SecurityConfigTestController {
             // Role
             "${ApiPath.Role.BASE}${ApiPath.Role.PATH_PATTERN_WITH_ID}",
             ApiPath.Role.BASE,
+            // RequestType
+            "${ApiPath.RequestType.BASE}${ApiPath.RequestType.PATH_PATTERN_WITH_ID}",
+            ApiPath.RequestType.BASE,
         ]
     )
     fun get() = ResponseEntity.status(HttpStatus.OK).body("get")

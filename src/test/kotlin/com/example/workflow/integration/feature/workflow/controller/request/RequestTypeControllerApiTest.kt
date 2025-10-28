@@ -3,9 +3,12 @@ package com.example.workflow.integration.feature.workflow.controller.request
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.workflow.controller.request.RequestTypeController
 import com.example.workflow.feature.workflow.model.request.CreateRequestTypeRequest
+import com.example.workflow.feature.workflow.model.request.RequestTypeViewListResponse
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
 import com.example.workflow.feature.workflow.presenter.request.RequestTypePresenter
 import com.example.workflow.feature.workflow.usecase.request.CreateRequestTypeUseCase
+import com.example.workflow.feature.workflow.usecase.request.GetAllRequestTypesUseCase
+import com.example.workflow.feature.workflow.usecase.request.GetRequestTypeUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -42,6 +45,12 @@ class RequestTypeControllerApiTest {
     @Autowired
     private lateinit var createRequestTypeUseCase: CreateRequestTypeUseCase
 
+    @Autowired
+    private lateinit var getRequestTypeUseCase: GetRequestTypeUseCase
+
+    @Autowired
+    private lateinit var getAllRequestTypeUseCase: GetAllRequestTypesUseCase
+
     @TestConfiguration
     @Suppress("unused")
     class MockConfig {
@@ -50,6 +59,12 @@ class RequestTypeControllerApiTest {
 
         @Bean
         fun createRequestTypeUseCase(): CreateRequestTypeUseCase = mockk()
+
+        @Bean
+        fun getRequestTypeUseCase(): GetRequestTypeUseCase = mockk()
+
+        @Bean
+        fun getAllRequestTypeUseCase(): GetAllRequestTypesUseCase = mockk()
     }
 
     @AfterEach
@@ -163,6 +178,112 @@ class RequestTypeControllerApiTest {
                         }
                       ]
                     }
+                    """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class GetRequestTypeApi {
+        @Test
+        fun `should return the request type information when valid request`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+            val useCaseResult: GetRequestTypeUseCase.Result = mockk()
+            val presenterResult = RequestTypePresenter.Result(
+                response = RequestTypeViewResponse(
+                    id = requestTypeId,
+                    name = "request type name",
+                    description = "request type description",
+                    schemaDefinition = jacksonObjectMapper().readTree("""{"type":"object"}"""),
+                )
+            )
+
+            every { getRequestTypeUseCase.execute(requestTypeId) } returns useCaseResult
+            every { requestTypePresenter.toResponse(useCaseResult.requestTypeViewDto) } returns presenterResult
+
+            // Act
+            val testResult = mockMvcTester
+                .get()
+                .uri("${ApiPath.RequestType.BASE}/$requestTypeId")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+
+            // Assert
+            assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                        {
+                            "id": "${presenterResult.response.id}",
+                            "name": "${presenterResult.response.name}",
+                            "description": "${presenterResult.response.description}",
+                            "schemaDefinition": ${presenterResult.response.schemaDefinition}
+                        }
+                    """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class GetAllRequestTypesApi {
+        @Test
+        fun `should return the request type information when valid request`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+            val useCaseResult: GetAllRequestTypesUseCase.Result = mockk()
+            val presenterResult = RequestTypePresenter.Result(
+                response = RequestTypeViewListResponse(
+                    requestTypes = listOf(
+                        RequestTypeViewResponse(
+                            id = requestTypeId,
+                            name = "request type name 1",
+                            description = "request type description 1",
+                            schemaDefinition = jacksonObjectMapper().readTree("""{"type1":"object1"}"""),
+                        ),
+                        RequestTypeViewResponse(
+                            id = requestTypeId,
+                            name = "request type name 2",
+                            description = "request type description 2",
+                            schemaDefinition = jacksonObjectMapper().readTree("""{"type2":"object2"}"""),
+                        ),
+                    )
+                )
+            )
+
+            every { getAllRequestTypeUseCase.execute() } returns useCaseResult
+            every { requestTypePresenter.toResponse(useCaseResult.requestTypeViewDtoList) } returns presenterResult
+
+            // Act
+            val testResult = mockMvcTester
+                .get()
+                .uri(ApiPath.RequestType.BASE)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+
+            // Assert
+            assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                        {
+                            "requestTypes": [
+                                {
+                                    "id": "${presenterResult.response.requestTypes[0].id}",
+                                    "name": "${presenterResult.response.requestTypes[0].name}",
+                                    "description": "${presenterResult.response.requestTypes[0].description}",
+                                    "schemaDefinition": ${presenterResult.response.requestTypes[0].schemaDefinition}
+                                },
+                                {
+                                    "id": "${presenterResult.response.requestTypes[1].id}",
+                                    "name": "${presenterResult.response.requestTypes[1].name}",
+                                    "description": "${presenterResult.response.requestTypes[1].description}",
+                                    "schemaDefinition": ${presenterResult.response.requestTypes[1].schemaDefinition}
+                                }
+                            ]
+                        }
                     """.trimIndent()
                 )
         }

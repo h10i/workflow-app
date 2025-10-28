@@ -28,5 +28,7 @@ object ApiPath {
 
     object RequestType {
         const val BASE = "${ApiVersion.V1}/request-types"
+        const val ID = "/{id}"
+        const val PATH_PATTERN_WITH_ID = "/*"
     }
 }
