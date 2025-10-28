@@ -19,4 +19,9 @@ class RequestTypeService(
     fun getRequestTypeById(id: UUID): RequestType? {
         return requestTypeRepository.findById(id).orElse(null)
     }
+
+    @Transactional
+    fun getAllRequestType(): List<RequestType> {
+        return requestTypeRepository.findAll()
+    }
 }

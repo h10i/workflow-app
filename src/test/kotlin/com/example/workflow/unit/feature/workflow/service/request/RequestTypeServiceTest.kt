@@ -74,4 +74,21 @@ class RequestTypeServiceTest {
             assertNull(actual)
         }
     }
+
+    @Nested
+    inner class GetAllRequestTypesFun {
+        @Test
+        fun `should return a list of all request types`() {
+            // Arrange
+            val requestTypes: List<RequestType> = mockk()
+
+            every { requestTypeRepository.findAll() } returns requestTypes
+
+            // Act
+            val actual: List<RequestType> = requestTypeService.getAllRequestType()
+
+            // Assert
+            assertEquals(requestTypes, actual)
+        }
+    }
 }
