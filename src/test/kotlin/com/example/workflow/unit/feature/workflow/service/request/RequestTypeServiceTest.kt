@@ -4,12 +4,15 @@ import com.example.workflow.core.workflow.request.RequestType
 import com.example.workflow.core.workflow.request.RequestTypeRepository
 import com.example.workflow.feature.workflow.service.request.RequestTypeService
 import com.example.workflow.support.annotation.UnitTest
+import com.example.workflow.support.util.TestDataFactory
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.util.*
+import kotlin.test.assertNull
 
 @UnitTest
 class RequestTypeServiceTest {
@@ -37,6 +40,55 @@ class RequestTypeServiceTest {
 
             // Assert
             assertEquals(savedRequestType, actual)
+        }
+    }
+
+    @Nested
+    inner class GetRequestTypeByIdFun {
+        @Test
+        fun `should return the request type when a role exists`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+            val requestType = TestDataFactory.createRequestType(id = requestTypeId)
+
+            every { requestTypeRepository.findById(requestTypeId) } returns Optional.of(requestType)
+
+            // Act
+            val actual: RequestType? = requestTypeService.getRequestTypeById(requestTypeId)
+
+            // Assert
+            assertEquals(requestType, actual)
+        }
+
+        @Test
+        fun `should return null when a role does not exists`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+
+            every { requestTypeRepository.findById(requestTypeId) } returns Optional.empty()
+
+            // Act
+            val actual: RequestType? = requestTypeService.getRequestTypeById(requestTypeId)
+
+            // Assert
+            assertNull(actual)
+        }
+    }
+
+    @Nested
+    inner class GetAllRequestTypesFun {
+        @Test
+        fun `should return a list of all request types`() {
+            // Arrange
+            val requestTypes: List<RequestType> = mockk()
+
+            every { requestTypeRepository.findAll() } returns requestTypes
+
+            // Act
+            val actual: List<RequestType> = requestTypeService.getAllRequestType()
+
+            // Assert
+            assertEquals(requestTypes, actual)
         }
     }
 }

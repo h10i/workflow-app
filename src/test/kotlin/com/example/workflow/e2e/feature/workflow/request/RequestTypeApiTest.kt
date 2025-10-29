@@ -181,4 +181,211 @@ class RequestTypeApiTest : AbstractE2ETest() {
             assertEquals(expectedBody, actualBody)
         }
     }
+
+    @Nested
+    inner class GetRequestTypeApi {
+        @Test
+        fun `should return 200 OK when valid request with valid credentials`() {
+            // Arrange
+            val authResult = restTemplate.registerAccountAndAuthenticate()
+            val requestTypeViewResponse = restTemplate.createRequestType(
+                accessToken = authResult.accessToken,
+                name = "request type name 1",
+                description = "request type description 1",
+                schemaDefinition = """{"type":"object"}""",
+            )
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.RequestType.BASE}/${requestTypeViewResponse.id}",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
+            )
+
+            // Assert
+            assertEquals(HttpStatus.OK, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "id":"${requestTypeViewResponse.id}",
+                        "name":"${requestTypeViewResponse.name}",
+                        "description":"${requestTypeViewResponse.description}",
+                        "schemaDefinition":${requestTypeViewResponse.schemaDefinition}
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `should return 401 Unauthorized when valid request with invalid credentials`() {
+            // Arrange
+            val authResult = restTemplate.registerAccountAndAuthenticate()
+            val requestTypeViewResponse = restTemplate.createRequestType(
+                accessToken = authResult.accessToken,
+                name = "request type name 1",
+                description = "request type description 1",
+                schemaDefinition = """{"type":"object"}""",
+            )
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.RequestType.BASE}/${requestTypeViewResponse.id}",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "type": "about:blank",
+                        "title": "Unauthorized",
+                        "status": 401,
+                        "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                        "instance": "${ApiPath.RequestType.BASE}/${requestTypeViewResponse.id}"
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        fun `should return 404 Not Found when invalid request (non-existent request type id) with valid credentials`() {
+            // Arrange
+            val authResult = restTemplate.registerAccountAndAuthenticate()
+            val requestTypeId = UUID.randomUUID()
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = "${ApiPath.RequestType.BASE}/$requestTypeId",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
+            )
+
+            // Assert
+            assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "type": "about:blank",
+                        "title": "Not Found",
+                        "status": 404,
+                            "detail": "Request type not found (id: $requestTypeId)",
+                        "instance": "${ApiPath.RequestType.BASE}/$requestTypeId"
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+    }
+
+    @Nested
+    inner class GetAllRequestTypesApi {
+        @Test
+        @Transactional
+        fun `should return 200 OK when valid request with valid credentials`() {
+            // Arrange
+            val authResult = restTemplate.registerAccountAndAuthenticate()
+            val requestTypeViewResponseList = listOf(
+                restTemplate.createRequestType(
+                    accessToken = authResult.accessToken,
+                    name = "request type name 1",
+                    description = "request type description 1",
+                    schemaDefinition = """{"type1":"object1"}""",
+                ),
+                restTemplate.createRequestType(
+                    accessToken = authResult.accessToken,
+                    name = "request type name 2",
+                    description = "request type description 2",
+                    schemaDefinition = """{"type2":"object2"}""",
+                ),
+            )
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = ApiPath.RequestType.BASE,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
+            )
+
+            // Assert
+            assertEquals(HttpStatus.OK, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "requestTypes": [
+                            {
+                                "id":"${requestTypeViewResponseList[0].id}",
+                                "name":"${requestTypeViewResponseList[0].name}",
+                                "description":"${requestTypeViewResponseList[0].description}",
+                                "schemaDefinition":${requestTypeViewResponseList[0].schemaDefinition}
+                            },
+                            {
+                                "id":"${requestTypeViewResponseList[1].id}",
+                                "name":"${requestTypeViewResponseList[1].name}",
+                                "description":"${requestTypeViewResponseList[1].description}",
+                                "schemaDefinition":${requestTypeViewResponseList[1].schemaDefinition}
+                            }
+                        ]
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+
+        @Test
+        @Transactional
+        fun `should return 401 Unauthorized when valid request with invalid credentials`() {
+            // Arrange
+
+            // Act
+            val response = restTemplate.get(
+                responseType = String::class.java,
+                path = ApiPath.RequestType.BASE,
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = "invalid-access-token",
+                )
+            )
+
+            // Assert
+            assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+            assertNotNull(response.body)
+            val mapper = jacksonObjectMapper()
+            val expectedBody = mapper.readTree(
+                """
+                    {
+                        "type": "about:blank",
+                        "title": "Unauthorized",
+                        "status": 401,
+                        "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                        "instance": "${ApiPath.RequestType.BASE}"
+                    }
+                """.trimIndent()
+            )
+            val actualBody = mapper.readTree(response.body)
+            assertEquals(expectedBody, actualBody)
+        }
+    }
 }

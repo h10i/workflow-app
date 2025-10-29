@@ -6,6 +6,7 @@ import com.example.workflow.e2e.test.web.model.HttpRequestOptions
 import com.example.workflow.feature.account.model.AccountViewResponse
 import com.example.workflow.feature.auth.model.TokenResponse
 import com.example.workflow.feature.role.model.RoleViewResponse
+import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
 import com.example.workflow.support.util.TestDataFactory
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
@@ -177,5 +178,32 @@ class E2ETestRestTemplate(
         )
 
         return response.body ?: error("role not found")
+    }
+
+    fun createRequestType(
+        accessToken: String,
+        name: String,
+        description: String?,
+        schemaDefinition: String,
+    ): RequestTypeViewResponse {
+        val json =
+            """
+                {
+                "name": "$name",
+                "description": "$description",
+                "schemaDefinition": $schemaDefinition
+                }
+            """.trimIndent()
+
+        val response = post(
+            responseType = RequestTypeViewResponse::class.java,
+            path = ApiPath.RequestType.BASE,
+            httpRequestOptions = HttpRequestOptions(
+                body = json,
+                accessToken = accessToken,
+            )
+        )
+
+        return response.body ?: error("request type not found")
     }
 }
