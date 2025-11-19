@@ -109,4 +109,31 @@ class RequestTypeRepositoryTest {
             assertEquals(requestTypes.sortedBy { it.id }, actual.sortedBy { it.id })
         }
     }
+
+    @Nested
+    inner class DeleteByIdFun {
+        private lateinit var requestType: RequestType
+
+        @BeforeEach
+        fun setUp() {
+            requestType = TestDataFactory.createRequestType()
+            entityManager.persist(requestType)
+
+            entityManager.flush()
+            entityManager.clear()
+        }
+
+        @Test
+        fun `should delete a request type when a request type id exists`() {
+            // Arrange
+
+            // Act
+            requestTypeRepository.deleteById(requestType.id)
+            entityManager.flush()
+
+            // Assert
+            val actualRequestType = entityManager.find(RequestType::class.java, requestType.id)
+            assertNull(actualRequestType)
+        }
+    }
 }
