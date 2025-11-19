@@ -24,4 +24,9 @@ class RequestTypeService(
     fun getAllRequestType(): List<RequestType> {
         return requestTypeRepository.findAll()
     }
+
+    @Transactional
+    fun deleteRequestTypeById(id: UUID) {
+        requestTypeRepository.deleteById(id)
+    }
 }

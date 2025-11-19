@@ -6,7 +6,10 @@ import com.example.workflow.feature.workflow.service.request.RequestTypeService
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -89,6 +92,23 @@ class RequestTypeServiceTest {
 
             // Assert
             assertEquals(requestTypes, actual)
+        }
+    }
+
+    @Nested
+    inner class DeleteRequestTypeByIdFun {
+        @Test
+        fun `should delete a request type by id`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+
+            every { requestTypeRepository.deleteById(requestTypeId) } just runs
+
+            // Act
+            requestTypeService.deleteRequestTypeById(requestTypeId)
+
+            // Assert
+            verify(exactly = 1) { requestTypeRepository.deleteById(requestTypeId) }
         }
     }
 }
