@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -386,6 +387,34 @@ class RequestTypeApiTest : AbstractE2ETest() {
             )
             val actualBody = mapper.readTree(response.body)
             assertEquals(expectedBody, actualBody)
+        }
+    }
+
+    @Nested
+    inner class DeleteRequestTypeApi {
+        @Test
+        fun `should return 204 No Content when valid request with ADMIN credentials`() {
+            // Arrange
+            val authResult = restTemplate.registerAccountAndAuthenticate()
+            val requestTypeViewResponse = restTemplate.createRequestType(
+                accessToken = authResult.accessToken,
+                name = "request type name 1",
+                description = "request type description 1",
+                schemaDefinition = """{"type":"object"}""",
+            )
+
+            // Act
+            val response = restTemplate.delete(
+                responseType = String::class.java,
+                path = "${ApiPath.RequestType.BASE}/${requestTypeViewResponse.id}",
+                httpRequestOptions = HttpRequestOptions(
+                    accessToken = authResult.accessToken,
+                )
+            )
+
+            // Assert
+            assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+            assertNull(response.body)
         }
     }
 }
