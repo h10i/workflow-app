@@ -6,6 +6,7 @@ import com.example.workflow.feature.workflow.model.request.RequestTypeViewListRe
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
 import com.example.workflow.feature.workflow.presenter.request.RequestTypePresenter
 import com.example.workflow.feature.workflow.usecase.request.CreateRequestTypeUseCase
+import com.example.workflow.feature.workflow.usecase.request.DeleteRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetAllRequestTypesUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetRequestTypeUseCase
 import io.swagger.v3.oas.annotations.Operation
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -31,7 +33,8 @@ class RequestTypeController(
     private val requestTypePresenter: RequestTypePresenter,
     private val createRequestTypeUseCase: CreateRequestTypeUseCase,
     private val getRequestTypeUseCase: GetRequestTypeUseCase,
-    private val getAllRequestTypesUseCase: GetAllRequestTypesUseCase
+    private val getAllRequestTypesUseCase: GetAllRequestTypesUseCase,
+    private val deleteRequestTypeUseCase: DeleteRequestTypeUseCase,
 ) {
     @Operation(
         summary = "Create a new request type",
@@ -165,5 +168,32 @@ class RequestTypeController(
         val useCaseResult = getAllRequestTypesUseCase.execute()
         val presenterResult = requestTypePresenter.toResponse(useCaseResult.requestTypeViewDtoList)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
+    }
+
+    @Operation(
+        summary = "Delete a request type",
+        description = "Deletes a request type.",
+        security = [SecurityRequirement(name = "bearer-key")],
+        responses = [
+            ApiResponse(
+                responseCode = "204",
+                description = "Successfully deleted a request type",
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
+            ),
+        ],
+    )
+    @DeleteMapping(ApiPath.RequestType.ID)
+    fun deleteRequestType(@PathVariable id: UUID): ResponseEntity<Void> {
+        deleteRequestTypeUseCase.execute(id)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }

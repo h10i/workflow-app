@@ -6,11 +6,15 @@ import com.example.workflow.feature.workflow.model.request.RequestTypeViewListRe
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
 import com.example.workflow.feature.workflow.presenter.request.RequestTypePresenter
 import com.example.workflow.feature.workflow.usecase.request.CreateRequestTypeUseCase
+import com.example.workflow.feature.workflow.usecase.request.DeleteRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetAllRequestTypesUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetRequestTypeUseCase
 import com.example.workflow.support.annotation.UnitTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -24,6 +28,7 @@ class RequestTypeControllerTest {
     private lateinit var createRequestTypeUseCase: CreateRequestTypeUseCase
     private lateinit var getRequestTypeUseCase: GetRequestTypeUseCase
     private lateinit var getAllRequestTypesUseCase: GetAllRequestTypesUseCase
+    private lateinit var deleteRequestTypeUseCase: DeleteRequestTypeUseCase
     private lateinit var requestTypeController: RequestTypeController
 
     @BeforeEach
@@ -32,11 +37,13 @@ class RequestTypeControllerTest {
         createRequestTypeUseCase = mockk()
         getRequestTypeUseCase = mockk()
         getAllRequestTypesUseCase = mockk()
+        deleteRequestTypeUseCase = mockk()
         requestTypeController = RequestTypeController(
             requestTypePresenter = requestTypePresenter,
             createRequestTypeUseCase = createRequestTypeUseCase,
             getRequestTypeUseCase = getRequestTypeUseCase,
             getAllRequestTypesUseCase = getAllRequestTypesUseCase,
+            deleteRequestTypeUseCase = deleteRequestTypeUseCase,
         )
     }
 
@@ -106,6 +113,24 @@ class RequestTypeControllerTest {
             // Assert
             assertEquals(HttpStatus.OK, actual.statusCode)
             assertEquals(response, actual.body)
+        }
+    }
+
+    @Nested
+    inner class DeleteRequestTypeFun {
+        @Test
+        fun `should execute DeleteRequestTypeUseCase and return no content`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+
+            every { deleteRequestTypeUseCase.execute(requestTypeId) } just runs
+
+            // Act
+            val actual = requestTypeController.deleteRequestType(requestTypeId)
+
+            // Assert
+            assertEquals(HttpStatus.NO_CONTENT, actual.statusCode)
+            assertNull(actual.body)
         }
     }
 }
