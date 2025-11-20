@@ -7,6 +7,7 @@ import com.example.workflow.feature.workflow.model.request.RequestTypeViewListRe
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
 import com.example.workflow.feature.workflow.presenter.request.RequestTypePresenter
 import com.example.workflow.feature.workflow.usecase.request.CreateRequestTypeUseCase
+import com.example.workflow.feature.workflow.usecase.request.DeleteRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetAllRequestTypesUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetRequestTypeUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
@@ -14,7 +15,9 @@ import com.example.workflow.support.annotation.IntegrationTest
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -30,6 +33,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.assertj.MockMvcTester
+import org.springframework.test.web.servlet.assertj.MvcTestResult
 import java.util.*
 
 @IntegrationTest
@@ -51,6 +55,9 @@ class RequestTypeControllerApiTest {
     @Autowired
     private lateinit var getAllRequestTypeUseCase: GetAllRequestTypesUseCase
 
+    @Autowired
+    private lateinit var deleteRequestTypeUseCase: DeleteRequestTypeUseCase
+
     @TestConfiguration
     @Suppress("unused")
     class MockConfig {
@@ -65,6 +72,9 @@ class RequestTypeControllerApiTest {
 
         @Bean
         fun getAllRequestTypeUseCase(): GetAllRequestTypesUseCase = mockk()
+
+        @Bean
+        fun deleteRequestTypeUseCase(): DeleteRequestTypeUseCase = mockk()
     }
 
     @AfterEach
@@ -286,6 +296,25 @@ class RequestTypeControllerApiTest {
                         }
                     """.trimIndent()
                 )
+        }
+    }
+
+    @Nested
+    inner class DeleteRequestTypeApi {
+        @Test
+        fun `should delete a request type and return no content when valid request`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+            every { deleteRequestTypeUseCase.execute(requestTypeId) } just runs
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .delete()
+                .uri("${ApiPath.RequestType.BASE}/$requestTypeId")
+                .exchange()
+
+            // Assert
+            assertThat(testResult).hasStatus(HttpStatus.NO_CONTENT)
         }
     }
 }
