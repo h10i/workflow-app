@@ -2,6 +2,7 @@ package com.example.workflow.unit.feature.workflow.service.request
 
 import com.example.workflow.core.workflow.request.RequestType
 import com.example.workflow.core.workflow.request.RequestTypeRepository
+import com.example.workflow.feature.workflow.exception.request.RequestTypeNotFoundException
 import com.example.workflow.feature.workflow.service.request.RequestTypeService
 import com.example.workflow.support.annotation.UnitTest
 import com.example.workflow.support.util.TestDataFactory
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.assertNull
 
@@ -47,7 +49,7 @@ class RequestTypeServiceTest {
     }
 
     @Nested
-    inner class GetRequestTypeByIdFun {
+    inner class FindRequestTypeByIdFun {
         @Test
         fun `should return the request type when a role exists`() {
             // Arrange
@@ -57,7 +59,7 @@ class RequestTypeServiceTest {
             every { requestTypeRepository.findById(requestTypeId) } returns Optional.of(requestType)
 
             // Act
-            val actual: RequestType? = requestTypeService.getRequestTypeById(requestTypeId)
+            val actual: RequestType? = requestTypeService.findRequestTypeById(requestTypeId)
 
             // Assert
             assertEquals(requestType, actual)
@@ -71,10 +73,44 @@ class RequestTypeServiceTest {
             every { requestTypeRepository.findById(requestTypeId) } returns Optional.empty()
 
             // Act
-            val actual: RequestType? = requestTypeService.getRequestTypeById(requestTypeId)
+            val actual: RequestType? = requestTypeService.findRequestTypeById(requestTypeId)
 
             // Assert
             assertNull(actual)
+        }
+    }
+
+    @Nested
+    inner class GetRequestTypeByIdFun {
+        @Test
+        fun `should return the request type when a role exists`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+            val requestType = TestDataFactory.createRequestType(id = requestTypeId)
+
+            every { requestTypeRepository.findById(requestTypeId) } returns Optional.of(requestType)
+
+            // Act
+            val actual: RequestType = requestTypeService.getRequestTypeById(requestTypeId)
+
+            // Assert
+            assertEquals(requestType, actual)
+        }
+
+        @Test
+        fun `should return null when a role does not exists`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+
+            every { requestTypeRepository.findById(requestTypeId) } returns Optional.empty()
+
+            // Act
+            val actual = assertThrows<RequestTypeNotFoundException> {
+                requestTypeService.getRequestTypeById(requestTypeId)
+            }
+
+            // Assert
+            kotlin.test.assertEquals("Request type not found (id: $requestTypeId)", actual.message)
         }
     }
 

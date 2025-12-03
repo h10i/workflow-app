@@ -2,6 +2,7 @@ package com.example.workflow.feature.workflow.service.request
 
 import com.example.workflow.core.workflow.request.RequestType
 import com.example.workflow.core.workflow.request.RequestTypeRepository
+import com.example.workflow.feature.workflow.exception.request.RequestTypeNotFoundException
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*
@@ -16,8 +17,15 @@ class RequestTypeService(
     }
 
     @Transactional
-    fun getRequestTypeById(id: UUID): RequestType? {
+    fun findRequestTypeById(id: UUID): RequestType? {
         return requestTypeRepository.findById(id).orElse(null)
+    }
+
+    @Transactional
+    fun getRequestTypeById(id: UUID): RequestType {
+        return findRequestTypeById(id) ?: throw RequestTypeNotFoundException(
+            mapOf(RequestType::id.name to id.toString())
+        )
     }
 
     @Transactional
