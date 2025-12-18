@@ -50,6 +50,8 @@ class SecurityConfigTestController {
         path = [
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            // RequestType
+            "${ApiPath.RequestType.BASE}${ApiPath.RequestType.PATH_PATTERN_WITH_ID}",
         ]
     )
     fun patch() = ResponseEntity.status(HttpStatus.OK).body("patch")

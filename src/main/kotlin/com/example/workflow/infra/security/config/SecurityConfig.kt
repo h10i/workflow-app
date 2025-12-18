@@ -125,6 +125,11 @@ class SecurityConfig(
             authenticated,
         )
         authorize(
+            HttpMethod.PATCH,
+            "${ApiPath.RequestType.BASE}${ApiPath.RequestType.PATH_PATTERN_WITH_ID}",
+            authenticated,
+        )
+        authorize(
             HttpMethod.GET,
             ApiPath.RequestType.BASE,
             authenticated,
