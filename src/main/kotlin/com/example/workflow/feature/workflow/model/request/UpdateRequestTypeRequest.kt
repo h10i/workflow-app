@@ -6,13 +6,14 @@ data class UpdateRequestTypeRequest(
     @get:Schema(
         description = "Request type name",
         example = "expense",
+        nullable = true,
     )
     val name: String? = null,
 
     @get:Schema(
         description = "Description of the request type",
         example = "use expense",
-        nullable = true
+        nullable = true,
     )
     val description: String? = null,
 )
