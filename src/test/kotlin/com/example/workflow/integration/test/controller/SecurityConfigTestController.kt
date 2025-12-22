@@ -50,6 +50,8 @@ class SecurityConfigTestController {
         path = [
             // Account
             "${ApiPath.Account.BASE}${ApiPath.Account.ME}",
+            // RequestType
+            "${ApiPath.RequestType.BASE}${ApiPath.RequestType.PATH_PATTERN_WITH_ID}",
         ]
     )
     fun patch() = ResponseEntity.status(HttpStatus.OK).body("patch")
@@ -63,6 +65,8 @@ class SecurityConfigTestController {
             // Auth
             "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE}",
             "${ApiPath.Auth.BASE}${ApiPath.Auth.REVOKE_ALL}",
+            // RequestType
+            "${ApiPath.RequestType.BASE}${ApiPath.RequestType.PATH_PATTERN_WITH_ID}",
         ]
     )
     fun delete() = ResponseEntity.status(HttpStatus.OK).body("delete")
