@@ -4,11 +4,13 @@ import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.workflow.model.request.CreateRequestTypeRequest
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewListResponse
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
+import com.example.workflow.feature.workflow.model.request.UpdateRequestTypeRequest
 import com.example.workflow.feature.workflow.presenter.request.RequestTypePresenter
 import com.example.workflow.feature.workflow.usecase.request.CreateRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.DeleteRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetAllRequestTypesUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetRequestTypeUseCase
+import com.example.workflow.feature.workflow.usecase.request.UpdateRequestTypeUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -33,6 +36,7 @@ class RequestTypeController(
     private val requestTypePresenter: RequestTypePresenter,
     private val createRequestTypeUseCase: CreateRequestTypeUseCase,
     private val getRequestTypeUseCase: GetRequestTypeUseCase,
+    private val updateRequestTypeUseCase: UpdateRequestTypeUseCase,
     private val getAllRequestTypesUseCase: GetAllRequestTypesUseCase,
     private val deleteRequestTypeUseCase: DeleteRequestTypeUseCase,
 ) {
@@ -133,6 +137,60 @@ class RequestTypeController(
     fun getRequestType(@PathVariable id: UUID): ResponseEntity<RequestTypeViewResponse> {
         val useCaseResult = getRequestTypeUseCase.execute(id)
         val presenterResult = requestTypePresenter.toResponse(useCaseResult.requestTypeViewDto)
+        return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
+    }
+
+    @Operation(
+        summary = "Update a request type",
+        description = "Updates a request type.",
+        security = [SecurityRequirement(name = "bearer-key")],
+        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Request Type Information",
+            required = true,
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = UpdateRequestTypeRequest::class)
+                )
+            ]
+        ),
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Successfully updated a request type",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = RequestTypeViewResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid request data or a general business validation error occurred." +
+                    " Details are provided in the 'errors' map.",
+                content = [
+                    Content(
+                        mediaType = "application/problem+json",
+                        schema = Schema(implementation = ProblemDetail::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Authentication credentials are missing or invalid.",
+                content = [Content()]
+            ),
+        ],
+    )
+    @PatchMapping(ApiPath.RequestType.ID)
+    fun updateRequestType(
+        @PathVariable id: UUID,
+        @Valid @RequestBody request: UpdateRequestTypeRequest
+    ): ResponseEntity<RequestTypeViewResponse> {
+        val useCaseResult: UpdateRequestTypeUseCase.Result = updateRequestTypeUseCase.execute(id, request)
+        val presenterResult: RequestTypePresenter.Result<RequestTypeViewResponse> =
+            requestTypePresenter.toResponse(useCaseResult.requestTypeViewDto)
         return ResponseEntity.status(HttpStatus.OK).body(presenterResult.response)
     }
 

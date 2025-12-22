@@ -3,13 +3,16 @@ package com.example.workflow.integration.feature.workflow.controller.request
 import com.example.workflow.common.path.ApiPath
 import com.example.workflow.feature.workflow.controller.request.RequestTypeController
 import com.example.workflow.feature.workflow.model.request.CreateRequestTypeRequest
+import com.example.workflow.feature.workflow.model.request.RequestTypeViewDto
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewListResponse
 import com.example.workflow.feature.workflow.model.request.RequestTypeViewResponse
+import com.example.workflow.feature.workflow.model.request.UpdateRequestTypeRequest
 import com.example.workflow.feature.workflow.presenter.request.RequestTypePresenter
 import com.example.workflow.feature.workflow.usecase.request.CreateRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.DeleteRequestTypeUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetAllRequestTypesUseCase
 import com.example.workflow.feature.workflow.usecase.request.GetRequestTypeUseCase
+import com.example.workflow.feature.workflow.usecase.request.UpdateRequestTypeUseCase
 import com.example.workflow.integration.test.config.NoSecurityConfig
 import com.example.workflow.support.annotation.IntegrationTest
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -20,6 +23,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -58,6 +62,9 @@ class RequestTypeControllerApiTest {
     @Autowired
     private lateinit var deleteRequestTypeUseCase: DeleteRequestTypeUseCase
 
+    @Autowired
+    private lateinit var updateRequestTypeUseCase: UpdateRequestTypeUseCase
+
     @TestConfiguration
     @Suppress("unused")
     class MockConfig {
@@ -75,6 +82,9 @@ class RequestTypeControllerApiTest {
 
         @Bean
         fun deleteRequestTypeUseCase(): DeleteRequestTypeUseCase = mockk()
+
+        @Bean
+        fun updateRequestTypeUseCase(): UpdateRequestTypeUseCase = mockk()
     }
 
     @AfterEach
@@ -230,6 +240,75 @@ class RequestTypeControllerApiTest {
                             "name": "${presenterResult.response.name}",
                             "description": "${presenterResult.response.description}",
                             "schemaDefinition": ${presenterResult.response.schemaDefinition}
+                        }
+                    """.trimIndent()
+                )
+        }
+    }
+
+    @Nested
+    inner class UpdateRequestTypeApi {
+        @Test
+        fun `should return the request type information when valid request`() {
+            // Arrange
+            val requestTypeId = UUID.randomUUID()
+            val name = "new name"
+            val description = "new description"
+
+            val requestTypeViewDto: RequestTypeViewDto = mockk()
+            val useCaseResult = UpdateRequestTypeUseCase.Result(
+                requestTypeViewDto = requestTypeViewDto,
+            )
+
+            val schemaDefinition = jacksonObjectMapper().readTree("""{"type":"object"}""")
+            val requestTypeViewResponse = RequestTypeViewResponse(
+                id = requestTypeId,
+                name = name,
+                description = description,
+                schemaDefinition = schemaDefinition,
+            )
+            val presenterResult = RequestTypePresenter.Result(
+                response = requestTypeViewResponse,
+            )
+
+            every { updateRequestTypeUseCase.execute(any(), any()) } returns useCaseResult
+            every { requestTypePresenter.toResponse(useCaseResult.requestTypeViewDto) } returns presenterResult
+
+            // Act
+            val testResult: MvcTestResult = mockMvcTester
+                .patch()
+                .uri("${ApiPath.RequestType.BASE}/$requestTypeId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                    "name": "$name",
+                    "description": "$description"
+                    }
+                    """.trimIndent()
+                )
+                .exchange()
+
+            // Assert
+            val capturingId = slot<UUID>()
+            val capturingRequest = slot<UpdateRequestTypeRequest>()
+            verify { updateRequestTypeUseCase.execute(capture(capturingId), capture(capturingRequest)) }
+            val capturedId = capturingId.captured
+            val capturedRequest = capturingRequest.captured
+            assertEquals(requestTypeId, capturedId)
+            assertEquals(name, capturedRequest.name)
+            assertEquals(description, capturedRequest.description)
+
+            Assertions.assertThat(testResult)
+                .hasStatus(HttpStatus.OK)
+                .bodyJson()
+                .isLenientlyEqualTo(
+                    """
+                        {
+                            "id": "$requestTypeId",
+                            "name": "$name",
+                            "description": "$description",
+                            "schemaDefinition": $schemaDefinition
                         }
                     """.trimIndent()
                 )
